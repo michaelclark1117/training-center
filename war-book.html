@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statement Recovery War Book | Harlow Payments Dallas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0f1f3d;--blue:#1a3a6b;--accent:#2563eb;--accent-light:#dbeafe;
+  --green-bg:#dcfce7;--green-txt:#166534;
+  --amber-bg:#fef9c3;--amber-txt:#854d0e;
+  --orange-bg:#fff7ed;--orange-txt:#9a3412;
+  --red-bg:#fff1f2;--red-txt:#881337;
+  --gray-bg:#f8fafc;--border:#e2e8f0;
+  --text:#0f172a;--muted:#64748b;--light:#94a3b8;
+  --white:#fff;--row-alt:#f8fafc;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f1f5f9;color:var(--text);font-size:13px}
+
+/* TOP BAR */
+.topbar{background:var(--navy);color:#fff;padding:0 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200;box-shadow:0 2px 10px rgba(0,0,0,.3);height:52px}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-logo{background:#1a9fe8;color:#fff;font-size:10px;font-weight:800;letter-spacing:.1em;padding:4px 8px;border-radius:4px}
+.topbar-title{font-size:14px;font-weight:600;color:#fff}
+.topbar-sub{font-size:11px;color:#93c5fd;margin-left:4px}
+.topbar-count{font-size:11px;color:#93c5fd;margin-left:auto;white-space:nowrap}
+.back-link{font-size:11px;color:#93c5fd;text-decoration:none;display:flex;align-items:center;gap:4px;margin-left:auto}
+.back-link:hover{color:#fff}
+
+/* SEARCH + FILTERS */
+.controls{background:var(--blue);padding:10px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:2px solid var(--accent)}
+.search-wrap{position:relative;flex:1;min-width:220px;max-width:400px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:#93c5fd;fill:none;stroke-width:2;pointer-events:none}
+#searchInput{width:100%;padding:8px 10px 8px 34px;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:rgba(255,255,255,.1);color:#fff;font-size:13px;outline:none}
+#searchInput::placeholder{color:#93c5fd}
+#searchInput:focus{border-color:#60a5fa;background:rgba(255,255,255,.15)}
+.pills{display:flex;gap:5px;flex-wrap:wrap}
+.pill{padding:4px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#cbd5e1;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.pill:hover{background:rgba(255,255,255,.12);color:#fff}
+.pill.active{background:#2563eb;border-color:#2563eb;color:#fff}
+.count-badge{font-size:11px;color:#64748b;margin-left:auto;align-self:center;white-space:nowrap}
+
+/* TABS */
+.tabs{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:0}
+.tab{padding:10px 16px;font-size:12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;transition:all .15s;margin-bottom:-1px;white-space:nowrap}
+.tab:hover{color:var(--accent)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* MAIN */
+.main{padding:16px 20px;max-width:1400px;margin:0 auto}
+
+/* PROCESSOR CARDS */
+.proc-list{display:flex;flex-direction:column;gap:6px}
+.proc-card{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.proc-card:hover{border-color:#bfdbfe}
+.proc-card.open{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.proc-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;user-select:none}
+.proc-rank{font-size:10px;font-weight:700;color:var(--light);min-width:20px;text-align:right;flex-shrink:0}
+.proc-name{font-size:13px;font-weight:600;color:var(--text);flex:1}
+.badges{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.bt-Processor{background:#eff6ff;color:#1d4ed8}
+.bt-ISO{background:#f0fdf4;color:#15803d}
+.bt-Aggregator{background:#f5f3ff;color:#6d28d9}
+.bt-POS{background:#fff7ed;color:#c2410c}
+.bt-Gateway{background:#fef2f2;color:#b91c1c}
+.bt-mPOS{background:#fdf4ff;color:#7e22ce}
+.bt-Other{background:#f8fafc;color:#475569}
+.bf-VH{background:#dcfce7;color:#166534}
+.bf-High{background:#dbeafe;color:#1d4ed8}
+.bf-Medium{background:#fef9c3;color:#854d0e}
+.bf-Low{background:#f1f5f9;color:#475569}
+.bv-yes{background:#dcfce7;color:#166534}
+.bv-chk{background:#fef9c3;color:#854d0e}
+.chev{width:14px;height:14px;stroke:var(--light);fill:none;stroke-width:2;flex-shrink:0;transition:transform .2s}
+.open .chev{transform:rotate(180deg)}
+
+/* EXPANDED */
+.proc-detail{display:none;border-top:1px solid var(--border)}
+.open .proc-detail{display:block}
+.detail-inner{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.detail-section{display:flex;flex-direction:column;gap:3px}
+.dlabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--light)}
+.dvalue{font-size:12px;color:var(--text);line-height:1.5}
+.portal-link{color:var(--accent);text-decoration:none;font-size:12px;word-break:break-all}
+.portal-link:hover{text-decoration:underline}
+.copy-btn{padding:2px 7px;border-radius:4px;border:1px solid var(--border);background:var(--white);color:var(--accent);font-size:10px;cursor:pointer;margin-left:6px;transition:all .1s;vertical-align:middle}
+.copy-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.full-row{grid-column:1/-1;border-radius:6px;padding:10px 12px}
+.steps-row{background:#f8fafc}
+.nologin-row{background:var(--orange-bg);border-left:3px solid #f97316}
+.gotcha-row{background:var(--red-bg);border-left:3px solid #f43f5e}
+.row-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.steps-row .row-label{color:var(--light)}
+.nologin-row .row-label{color:#c2410c}
+.gotcha-row .row-label{color:#9f1239}
+.row-text{font-size:12px;line-height:1.7}
+.steps-row .row-text{color:var(--text)}
+.nologin-row .row-text{color:#7c2d12}
+.gotcha-row .row-text{color:#881337}
+
+/* DECODER TABLES */
+.decoder-wrap{background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.decoder-grid{display:grid;grid-template-columns:1fr 30px 1fr}
+.dg-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--light);padding:8px 12px;background:#f8fafc;border-bottom:1px solid var(--border)}
+.dg-cell{padding:8px 12px;font-size:12px;border-bottom:1px solid var(--border)}
+.dg-row-alt .dg-cell{background:#f8fafc}
+.dg-says{font-weight:600;color:var(--text)}
+.dg-arrow{color:var(--light);text-align:center;font-size:14px;font-weight:700}
+.dg-actual{color:var(--accent);font-weight:600}
+
+/* QUICK REF */
+.qref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:8px}
+.qref-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;gap:10px}
+.qref-num{font-size:11px;font-weight:700;color:var(--accent);min-width:22px;flex-shrink:0}
+.qref-body{flex:1;min-width:0}
+.qref-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.qref-url{font-size:11px;color:var(--accent);word-break:break-all;text-decoration:none;display:block}
+.qref-phone{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-title{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text)}
+
+@media(max-width:600px){
+  .detail-inner{grid-template-columns:1fr}
+  .full-row{grid-column:1}
+  .badges .badge:nth-child(n+4){display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <span class="topbar-logo">HPD</span>
+    <span class="topbar-title">Statement Recovery War Book</span>
+    <span class="topbar-sub">BDR Field Reference</span>
+  </div>
+  <span class="topbar-count" id="topCount">75 processors</span>
+  <a class="back-link" href="index.html">← Back to Training Center</a>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search processor name…  ( / to focus )" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="pills">
+    <button class="pill active" data-f="all">All</button>
+    <button class="pill" data-f="Very High">Very High</button>
+    <button class="pill" data-f="High">High</button>
+    <button class="pill" data-f="Medium">Medium</button>
+    <button class="pill" data-f="Low">Low</button>
+    <button class="pill" data-f="verified">Verified</button>
+    <button class="pill" data-f="Processor">Processors</button>
+    <button class="pill" data-f="ISO">ISOs</button>
+    <button class="pill" data-f="Gateway">Gateways</button>
+    <button class="pill" data-f="POS">POS</button>
+  </div>
+  <span class="count-badge" id="countBadge"></span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="lookup">Processor Lookup</div>
+  <div class="tab" data-tab="decoder">Name Decoder</div>
+  <div class="tab" data-tab="descriptor">Deposit Descriptor</div>
+  <div class="tab" data-tab="quickref">Quick Ref</div>
+</div>
+
+<div class="main">
+  <div id="tab-lookup"><div class="proc-list" id="procList"></div></div>
+  <div id="tab-decoder" style="display:none"><div class="decoder-wrap"><div class="decoder-grid" id="decoderGrid"></div></div></div>
+  <div id="tab-descriptor" style="display:none"><div class="decoder-wrap"><div class="decoder-grid" id="descriptorGrid"></div></div></div>
+  <div id="tab-quickref" style="display:none"><div class="qref-grid" id="qrefGrid"></div></div>
+</div>
+
+<script>
+const P=[
+  {r:1,n:"Clover",t:"POS/Processor",f:"Very High",url:"https://www.clover.com/dashboard",ph:"1-855-853-8340",v:true,steps:"Dashboard → Settings (gear) / Account & Setup → Billing & Statements → Monthly Statements → pick month → Download PDF",nologin:"1) Click Forgot password  2) If no email on file, call Clover support to reset  3) Backup: request PDF from their email or sales rep/bank",gotcha:"Most common processor. Merchants often say 'I use Clover' but Clover is the POS — Fiserv may be the actual back-end. Confirm by checking who initiates the bank deposit."},
+  {r:2,n:"Square",t:"Aggregator",f:"Very High",url:"https://squareup.com/dashboard",ph:"1-855-700-6000",v:true,steps:"Dashboard → Reports → Sales Summary → last full month → Export/Print. For checking account: Banking → Checking → Documents → Account statements → Download.",nologin:"1) Click Forgot password  2) Square support can reset if locked out.",gotcha:"Square does NOT produce a traditional statement PDF. Use monthly export + fee summary. If merchant has a separate terminal, that statement is also needed."},
+  {r:3,n:"Stripe",t:"Gateway/Aggregator",f:"Very High",url:"https://dashboard.stripe.com",ph:"support.stripe.com (no phone)",v:true,steps:"Dashboard → Reporting → Balance → pick report → Download CSV. For PDF: browser Print → Save as PDF on the reporting page.",nologin:"1) Click Forgot password  2) Use Stripe support portal for locked accounts.",gotcha:"Stripe uses CSV exports, not traditional PDFs. Request CSV + monthly fee/billing page screenshot as minimum."},
+  {r:4,n:"PayPal",t:"Aggregator",f:"Very High",url:"https://www.paypal.com/signin",ph:"1-888-221-1161",v:true,steps:"paypal.com/reports/accountStatements → Request next to desired month → Download. Alt: Activity/History → Download icon → Custom → Generate → Download.",nologin:"1) Click Forgot password. Account recovery uses phone/email verification.",gotcha:"Statements generated on-demand — may take a few minutes before download link appears."},
+  {r:5,n:"Converge (Elavon gateway)",t:"Processor",f:"Very High",url:"https://www.convergepay.com",ph:"1-800-377-3962",v:true,steps:"Login → Reports → Statements → select month → View/Download PDF",nologin:"1) Click Forgot password  2) Call Elavon/Converge support to reset.",gotcha:"Converge is Elavon's gateway product. Merchants saying 'Converge' are likely Elavon — same support line."},
+  {r:6,n:"MX Merchant",t:"Processor",f:"Very High",url:"https://mxmerchant.com",ph:"1-800-966-5520",v:true,steps:"Login (mxmerchant.com/mx6/login) → Account → Merchant Services → Statements → choose month → Print/Download PDF",nologin:"1) Click Forgot password  2) Support can reset portal access.",gotcha:"Priority Payments also uses MX Merchant portal — if merchant says 'Priority Payments' send them here."},
+  {r:7,n:"Business Track (Fiserv)",t:"Processor",f:"Very High",url:"https://www.businesstrack.com",ph:"1-888-263-1938",v:true,steps:"Login → Reports → Statements → choose month → Download PDF",nologin:"1) Click Forgot password  2) Fiserv support can assist — Business Track is a Fiserv product.",gotcha:"Legacy Fiserv portal. Many older Fiserv merchants still use it. May redirect to Fiserv portal for newer accounts."},
+  {r:8,n:"CardPointe",t:"Processor",f:"High",url:"https://cardpointe.com/login",ph:"1-877-828-0720",v:true,steps:"Login → Reporting → Statements tab → click statement date → Download PDF",nologin:"1) Click Forgot password  2) CardPointe support can reset credentials.",gotcha:"CardPointe is CardConnect's portal. First Merchants Bank processing may also land here."},
+  {r:9,n:"Heartland",t:"Processor",f:"High",url:"https://account.heartland.us",ph:"1-888-963-3600",v:true,steps:"Login at account.heartland.us → Reports → Statements → select month → Download PDF.  NOTE: myheartland.us is outdated — use account.heartland.us",nologin:"1) Click Forgot password  2) Heartland support can reset portal access.",gotcha:"Heartland is owned by Global Payments. Bank descriptor says HEARTLAND or GLOBALPAY."},
+  {r:10,n:"TSYS / TransLink",t:"Processor",f:"High",url:"https://translink.transfirst.com",ph:"1-800-654-9256",v:true,steps:"Login at translink.transfirst.com → Statements in left menu → choose month/year → Create Report → Download PDF.",nologin:"1) Click Forgot password  2) If never registered, call TSYS to set up TransLink credentials. Statements also mailed ~5th–6th each month.",gotcha:"CRITICAL: Portal is translink.transfirst.com — NOT merchantcenter.tsys.com (that is an ISO/partner tool, not the merchant statement portal)."},
+  {r:11,n:"Fiserv",t:"Processor",f:"High",url:"https://merchants.fiserv.com",ph:"1-800-872-1964",v:true,steps:"Login → Reports → Statements (or Billing) → select month → Download PDF",nologin:"1) Click Forgot password  2) Call Fiserv merchant support to reset.",gotcha:"Fiserv processes under many bank brands (BofA, Wells Fargo, Sam's Club, Intuit/QuickBooks). Check the Name Decoder tab if merchant names a bank."},
+  {r:12,n:"Worldpay",t:"Processor",f:"High",url:"https://secure.worldpay.com/sso/public/auth/login.html",ph:"1-833-260-8686",v:true,steps:"Login → Reports → Reports & Statements → Get Statement Report → set date range → Generate → Download",nologin:"1) Click Forgot password  2) Worldpay support can reset merchant portal access.",gotcha:"If merchant says 'Vantiv' send them here — Vantiv was acquired by Worldpay. Also handles Fifth Third Merchant Services."},
+  {r:13,n:"Elavon",t:"Processor",f:"High",url:"https://smb.elavon.com",ph:"1-800-725-1243",v:true,steps:"Login at smb.elavon.com → Your Statements in left nav → select month → Download PDF. Newer accounts use connect.elavon.com.",nologin:"1) Click Forgot password  2) If account predates 2024 and never registered, call Elavon to set up portal access.",gotcha:"Two portals: smb.elavon.com (US SMB) and connect.elavon.com (newer). convergepay.com is Elavon's GATEWAY — NOT the statement portal."},
+  {r:14,n:"Authorize.net",t:"Gateway",f:"High",url:"https://account.authorize.net",ph:"1-877-447-3938",v:true,steps:"Login → Reports → Downloadable Reports → Monthly/Batch summaries → Export PDF/CSV.  NOTE: Full processing statement comes from back-end processor, not this gateway.",nologin:"1) Click Forgot password  2) Authorize.net support can reset access.",gotcha:"IMPORTANT: Authorize.net is a GATEWAY, not a processor. If no full statement here, ask who processes payments on the back end (Fiserv, TSYS, etc.) and look up that processor."},
+  {r:15,n:"NMI",t:"Gateway",f:"High",url:"https://secure.networkmerchants.com",ph:"1-800-617-4850",v:true,steps:"Login → Reports → Processor Reports/Statements → select month → Download PDF/CSV",nologin:"1) Click Forgot password  2) NMI support can assist.",gotcha:"Gateway only. If statements tab is missing, ask who initiates the bank deposits."},
+  {r:16,n:"USAePay",t:"Gateway",f:"High",url:"https://www.usaepay.com/login",ph:"1-866-872-3729",v:false,steps:"Login → Reports → Statements/Batch Reports → select month → Download",nologin:"1) Click Forgot password  2) Contact USAePay support for access reset.",gotcha:"Gateway only — back-end processor statement may also be needed."},
+  {r:17,n:"Global Payments",t:"Processor",f:"High",url:"https://reporting.globalpay.com",ph:"1-800-801-9552",v:true,steps:"Login at reporting.globalpay.com → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) Global Payments/Heartland support can assist.",gotcha:"CORRECTED URL: reporting.globalpay.com — NOT activemerchant.com (that is a developer Ruby gem, not a merchant portal). Global Payments acquired Heartland in 2016."},
+  {r:18,n:"Chase Paymentech",t:"Processor",f:"High",url:"https://orbital.chasepaymentech.com",ph:"1-800-934-7717",v:true,steps:"Login → Reports → Billing → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) Chase Paymentech merchant support can reset.",gotcha:"Orbital is Chase Paymentech's merchant portal. Merchants who say 'Chase' typically mean Chase Paymentech."},
+  {r:19,n:"QuickBooks Payments",t:"Aggregator",f:"High",url:"https://merchantcenter.intuit.com",ph:"1-888-855-5535",v:true,steps:"Merchant Service Center → Activity & Reports → All Statements → View/Download PDF",nologin:"1) Click Forgot password  2) Intuit account recovery uses phone/email.",gotcha:"QuickBooks Payments is processed by Fiserv on the back end. The Intuit Merchant Service Center is where statements live."},
+  {r:20,n:"Shopify Payments",t:"Aggregator",f:"High",url:"https://accounts.shopify.com",ph:"1-888-746-7439",v:true,steps:"Shopify admin → Settings → Payments → View payouts → Export CSV. Uses exports, not traditional statement PDFs.",nologin:"1) Click Forgot password  2) Shopify account recovery via email/phone.",gotcha:"Shopify Payments processes through Stripe on the back end. If merchant has a separate terminal, that statement is also needed."},
+  {r:21,n:"Toast",t:"POS/Processor",f:"High",url:"https://www.toasttab.com/login",ph:"1-617-682-0225",v:true,steps:"Toast Web → Reports → Payments → Processing statements → date/month dropdown → click download icon (down arrow)",nologin:"1) Click Forgot password  2) Toast support can reset portal access.",gotcha:"Restaurant-focused POS. Statement is under Reports → Payments — NOT the generic billing section."},
+  {r:22,n:"Lightspeed",t:"POS",f:"High",url:"https://cloud.lightspeedapp.com",ph:"1-866-932-1801",v:false,steps:"Login → Reports → Payments/Payouts → Statements → Export/Download",nologin:"1) Click Forgot password  2) Lightspeed support can assist.",gotcha:"Processes through Global Payments. Statement detail may be limited in the Lightspeed portal."},
+  {r:23,n:"SpotOn",t:"POS/Processor",f:"High",url:"https://www.spoton.com/login",ph:"1-877-814-4102",v:false,steps:"Login → Reports → Payments/Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) SpotOn support can reset access.",gotcha:"Popular with restaurants and service businesses. Processing is in-house."},
+  {r:24,n:"Shift4",t:"Processor",f:"High",url:"https://sky.shift4.com",ph:"1-888-276-2108",v:false,steps:"Login → Reports → Statements/Fees → select month → Download PDF",nologin:"1) Click Forgot password  2) Shift4 support can reset merchant access.",gotcha:"Shift4 acquired Harbortouch — many restaurant/hospitality accounts."},
+  {r:25,n:"Poynt (GoDaddy)",t:"POS",f:"High",url:"https://poynt.net",ph:"1-855-276-9684",v:false,steps:"Login → Reports → Statements/Deposits → select month → Download",nologin:"1) Click Forgot password  2) Poynt is now GoDaddy Payments — GoDaddy support can assist.",gotcha:"Poynt was acquired by GoDaddy. Confirm which portal is active for the merchant."},
+  {r:26,n:"North American Bancard",t:"ISO",f:"High",url:"https://mynab.com",ph:"1-800-226-2273",v:false,steps:"Login → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) NAB support can reset access.",gotcha:"Large ISO. Back-end processor may be TSYS or Fiserv — full statement should be in mynab.com portal."},
+  {r:27,n:"Priority Payments",t:"ISO",f:"High",url:"https://mxmerchant.com",ph:"1-800-966-5520",v:true,steps:"Same as MX Merchant: Login → Account → Merchant Services → Statements → choose month → Download PDF",nologin:"1) Click Forgot password  2) Priority Payments uses MX Merchant portal.",gotcha:"Priority Payments resells on MX Merchant platform — direct merchants to mxmerchant.com."},
+  {r:28,n:"Stax",t:"ISO",f:"High",url:"https://app.staxpayments.com",ph:"1-855-708-8289",v:false,steps:"Login → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) Stax support can reset access.",gotcha:"Formerly Fattmerchant. Subscription pricing — flat monthly fee + interchange pass-through on statement."},
+  {r:29,n:"Helcim",t:"ISO",f:"High",url:"https://my.helcim.com",ph:"1-877-643-5246",v:false,steps:"Login → Reports → Statements/Fees → select month → Download",nologin:"1) Click Forgot password  2) Helcim support can reset access.",gotcha:"Interchange-plus. Statement shows raw interchange + Helcim markup clearly itemized — excellent for our comparison analysis."},
+  {r:30,n:"Payment Depot",t:"ISO",f:"High",url:"https://dashboard.paymentdepot.com",ph:"1-800-998-2273",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Payment Depot support can assist.",gotcha:"Membership-based ISO. Back-end processor is TSYS/Global Payments."},
+  {r:31,n:"Payline Data",t:"ISO",f:"High",url:"https://my.paylinedata.com",ph:"1-800-930-5419",v:false,steps:"Login → Reporting → Statements → select month → Download",nologin:"1) Click Forgot password  2) Payline support can reset access.",gotcha:"Interchange-plus. Statement shows itemized fees — great for our analysis."},
+  {r:32,n:"National Processing",t:"ISO",f:"High",url:"https://nationalprocessing.com/login",ph:"1-385-218-9760",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Support can reset access.",gotcha:"Smaller ISO. Back-end processor varies."},
+  {r:33,n:"Gravity Payments",t:"ISO",f:"High",url:"https://gravitypayments.com",ph:"1-888-472-7467",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Gravity Payments support can assist.",gotcha:"Seattle-based ISO known for flat-rate pricing model."},
+  {r:34,n:"Merchant One",t:"ISO",f:"High",url:"https://www.merchantone.com/login",ph:"1-888-288-4925",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Merchant One support can reset access.",gotcha:"ISO/reseller. Back-end processor is typically Fiserv."},
+  {r:35,n:"PaymentCloud",t:"ISO",f:"High",url:"https://apply.paymentcloudinc.com",ph:"1-888-506-7859",v:false,steps:"Login → Merchant portal → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) PaymentCloud focuses on high-risk merchants.",gotcha:"High-risk specialist ISO. Back-end processor varies by industry."},
+  {r:36,n:"EVO Payments",t:"Processor",f:"Medium",url:"https://evopayments.com",ph:"1-800-387-3962",v:false,steps:"Login → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) EVO Payments support can reset access.",gotcha:"Acquired by Global Payments 2023. Some merchants may be migrating to Global Payments portal."},
+  {r:37,n:"Clearent",t:"Processor",f:"Medium",url:"https://myclearent.net",ph:"1-866-205-4721",v:false,steps:"Login → Reporting → Statements → select month → Download",nologin:"1) Click Forgot password  2) Clearent support can reset access.",gotcha:"Acquired by Xplor Technologies (formerly TSG). Some rebranding underway."},
+  {r:38,n:"TransFirst",t:"Processor",f:"Medium",url:"https://translink.transfirst.com",ph:"1-800-654-9256",v:true,steps:"Same portal as TSYS: translink.transfirst.com → Statements → select month → Download.",nologin:"1) Click Forgot password  2) Call TSYS support for credential reset.",gotcha:"TransFirst and TSYS share the TransLink portal — same login URL."},
+  {r:39,n:"First American (Fiserv)",t:"Processor",f:"Medium",url:"https://www.businesstrack.com",ph:"1-888-263-1938",v:false,steps:"Login at businesstrack.com → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) First Data/Fiserv support can assist.",gotcha:"First American merged with First Data (now Fiserv). Merchants may use Business Track portal."},
+  {r:40,n:"Total Merchant Services",t:"ISO",f:"Medium",url:"https://www.totalmerchantservices.com",ph:"1-888-848-6825",v:false,steps:"Login → Merchant portal → Reports/Statements → select month → Download",nologin:"1) Click Forgot password  2) TMS support can reset access.",gotcha:"Mid-size ISO. Back-end processor is typically First Data/Fiserv."},
+  {r:41,n:"Flagship Merchant Services",t:"ISO",f:"Medium",url:"https://www.flagshipmerchantservices.com",ph:"1-888-727-4538",v:false,steps:"Login → Merchant portal → Reports/Statements → select month → Download",nologin:"1) Click Forgot password  2) Flagship support can reset access.",gotcha:"Processes through First Data/Fiserv back end."},
+  {r:42,n:"CDG Commerce",t:"ISO",f:"Medium",url:"https://www.cdgcommerce.com",ph:"1-888-908-9991",v:false,steps:"Login → Merchant portal → Reports/Statements → select month → Download",nologin:"1) Click Forgot password  2) CDG support can reset access.",gotcha:"Smaller ISO focused on e-commerce merchants."},
+  {r:43,n:"PayTrace",t:"Gateway",f:"Medium",url:"https://paytrace.net",ph:"1-866-681-4701",v:false,steps:"Login → Reports → Statements/Processing Fees → select month → Export",nologin:"1) Click Forgot password  2) PayTrace support can assist.",gotcha:"Gateway. Full statement from back-end processor may be needed separately."},
+  {r:44,n:"PaymentSpring",t:"Gateway",f:"Medium",url:"https://app.paymentspring.com",ph:"1-855-858-7729",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"1) Click Forgot password  2) PaymentSpring support can reset access.",gotcha:"Gateway. May require identifying back-end processor."},
+  {r:45,n:"TrustCommerce",t:"Gateway",f:"Medium",url:"https://trustcommerce.com",ph:"1-800-915-1245",v:false,steps:"Login → Reports → Statements/Batch Reports → select month → Export",nologin:"1) Click Forgot password  2) TrustCommerce support can assist.",gotcha:"Gateway — back-end processor statement may be needed."},
+  {r:46,n:"EBizCharge",t:"Gateway",f:"Medium",url:"https://ebizcharge.com",ph:"1-877-579-8390",v:false,steps:"Login → Reports → Statements/Fees → select month → Export",nologin:"1) Click Forgot password  2) EBizCharge support can reset access.",gotcha:"Integrates with ERP/accounting. Back-end processor is Century Business Solutions."},
+  {r:47,n:"FreedomPay",t:"Gateway",f:"Medium",url:"https://www.freedompay.com",ph:"1-877-263-5988",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"1) Click Forgot password  2) FreedomPay support can assist.",gotcha:"Enterprise gateway — more common with mid-size/large businesses."},
+  {r:48,n:"CardFlight",t:"mPOS",f:"Medium",url:"https://dashboard.cardflight.com",ph:"1-888-816-2274",v:false,steps:"Login → Reports → Statements/Deposits → select month → Export",nologin:"1) Click Forgot password  2) CardFlight support can reset access.",gotcha:"SwipeSimple mPOS. Statement detail may require contacting back-end ISO/processor."},
+  {r:49,n:"SwipeSimple",t:"mPOS",f:"Medium",url:"https://dashboard.swipesimple.com",ph:"1-855-979-7371",v:false,steps:"Login → Reports → Statements/Deposits → select month → Export",nologin:"1) Click Forgot password  2) SwipeSimple support can assist.",gotcha:"CardFlight product. Back-end processor statement may be needed from the ISO that sold the account."},
+  {r:50,n:"PaySimple",t:"Aggregator",f:"Medium",url:"https://dashboard.paysimple.com",ph:"1-800-466-0992",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"1) Click Forgot password  2) PaySimple support can reset access.",gotcha:"Geared toward service businesses."},
+  {r:51,n:"SumUp",t:"Aggregator",f:"Medium",url:"https://me.sumup.com",ph:"1-888-450-1395",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) SumUp support can assist.",gotcha:"Popular with micro-merchants. Full processing statement may be limited."},
+  {r:52,n:"Zettle (PayPal)",t:"Aggregator",f:"Medium",url:"https://my.zettle.com",ph:"1-888-883-9770",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Owned by PayPal — PayPal support can assist.",gotcha:"iZettle acquired by PayPal. US merchants may be redirected to PayPal business account."},
+  {r:53,n:"Adyen",t:"Other",f:"Low",url:"https://ca-live.adyen.com",ph:"via.adyen.com/support",v:false,steps:"Login → Reports → Statements → select month → Download PDF",nologin:"Adyen account manager required for enterprise access reset.",gotcha:"Enterprise/mid-market only — unlikely in typical SMB cold call territory."},
+  {r:54,n:"Braintree (PayPal)",t:"Gateway",f:"Medium",url:"https://www.braintreegateway.com/login",ph:"1-877-434-2894",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export/Download",nologin:"1) Click Forgot password  2) Owned by PayPal.",gotcha:"Gateway/aggregator. More common with e-commerce and app businesses."},
+  {r:55,n:"CyberSource (Visa)",t:"Gateway",f:"Medium",url:"https://businesscenter.cybersource.com",ph:"enterprise only",v:false,steps:"Login → Reports → Payment reports/Statements → select month → Export",nologin:"Enterprise access — account manager required.",gotcha:"Visa subsidiary gateway. Mostly enterprise — uncommon for street-level SMB."},
+  {r:56,n:"Moneris",t:"Processor",f:"Low",url:"https://www3.moneris.com/mpg",ph:"1-866-319-7450",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Moneris support can assist.",gotcha:"Canada's largest processor — US presence limited. Likely a Canadian or border-region business."},
+  {r:57,n:"Barclaycard",t:"Processor",f:"Low",url:"https://bcol.barclaycard.co.uk",ph:"UK: 0800 408 0867",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) UK-based support only.",gotcha:"UK-based processor. Very unusual in US territory."},
+  {r:58,n:"Payroc",t:"Processor",f:"Medium",url:"https://portal.payroc.com",ph:"1-888-477-4500",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Payroc support can reset access.",gotcha:"Processes through multiple back-end processors. Midwest-heavy market presence."},
+  {r:59,n:"iPayment",t:"Processor",f:"Medium",url:"https://www.ipaymentinc.com",ph:"1-800-530-5756",v:false,steps:"Login → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) iPayment support can assist.",gotcha:"Primarily ISO/reseller channel — merchant may need to contact their sales agent."},
+  {r:60,n:"Vantiv → Worldpay",t:"Processor",f:"Medium",url:"https://secure.worldpay.com/sso/public/auth/login.html",ph:"1-833-260-8686",v:true,steps:"Vantiv acquired by Worldpay. Use Worldpay portal: Login → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) Use Worldpay support line.",gotcha:"Vantiv is now Worldpay. Direct all Vantiv merchants to secure.worldpay.com. Bank descriptor may still say VANTIV."},
+  {r:61,n:"Sage Payments",t:"Processor",f:"Medium",url:"https://www.sage.com/en-us/products/sage-50cloud/payments/",ph:"1-866-656-5913",v:false,steps:"Login via Sage account → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Sage support can reset access.",gotcha:"Integrated into Sage accounting software. Statement access is through the Sage software portal."},
+  {r:62,n:"JetPay (NCR)",t:"Processor",f:"Low",url:"https://www.jetpay.com",ph:"1-888-538-2974",v:false,steps:"Login → Reports → Statements → select month → Download PDF",nologin:"1) Click Forgot password  2) JetPay/NCR support can assist.",gotcha:"JetPay acquired by NCR Voyix. May redirect to NCR payment portal."},
+  {r:63,n:"Payscout",t:"ISO",f:"Medium",url:"https://www.payscout.com",ph:"1-888-729-7268",v:false,steps:"Login → Merchant portal → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) Payscout support can reset access.",gotcha:"Specializes in high-risk merchants. Back-end processor varies."},
+  {r:64,n:"MerchantE",t:"ISO",f:"Medium",url:"https://my.merchante.com",ph:"1-800-696-8000",v:false,steps:"Login → Merchant portal → Reports → Statements → select month → Download",nologin:"1) Click Forgot password  2) MerchantE support can assist.",gotcha:"Integrates with QuickBooks. Back-end processor is typically Elavon."},
+  {r:65,n:"PayJunction",t:"Gateway",f:"Medium",url:"https://login.payjunction.com",ph:"1-800-601-0230",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"1) Click Forgot password  2) PayJunction support can reset access.",gotcha:"Gateway — back-end processor statement may be needed separately."},
+  {r:66,n:"Cardknox",t:"Gateway",f:"Medium",url:"https://www.cardknox.com",ph:"1-888-444-8224",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"1) Click Forgot password  2) Cardknox support can assist.",gotcha:"Gateway platform used by ISOs. Full statement from back-end processor needed."},
+  {r:67,n:"Checkout.com",t:"Gateway",f:"Low",url:"https://hub.checkout.com",ph:"enterprise only",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"Enterprise — account manager required.",gotcha:"Enterprise-focused. Uncommon in SMB cold call territory."},
+  {r:68,n:"BlueSnap",t:"Gateway",f:"Low",url:"https://home.bluesnap.com",ph:"1-866-312-1166",v:false,steps:"Login → Reports → Statements/Settlements → select month → Export",nologin:"1) Click Forgot password  2) BlueSnap support can assist.",gotcha:"Focuses on e-commerce and subscription businesses."},
+  {r:69,n:"WePay (Chase)",t:"Aggregator",f:"Low",url:"https://go.wepay.com",ph:"1-855-469-3729",v:false,steps:"Login → Reports/Statements → select month → Export",nologin:"1) Click Forgot password  2) WePay is owned by JPMorgan Chase.",gotcha:"Powers embedded payments in GoFundMe, Constant Contact, etc. Merchant may not know WePay is their processor."},
+  {r:70,n:"Dwolla",t:"Other",f:"Low",url:"https://dashboard.dwolla.com",ph:"1-515-695-3315",v:false,steps:"Login → Reports → Transfers/Statements → Export",nologin:"1) Click Forgot password  2) Dwolla support can assist.",gotcha:"ACH-ONLY — no credit card processing. Statement here won't show card volume. Need card processor statement separately."},
+  {r:71,n:"Amazon Pay",t:"Aggregator",f:"Low",url:"https://pay.amazon.com",ph:"1-888-280-4331",v:false,steps:"Login → Reports → Statements/Transactions → Export monthly summary",nologin:"1) Click Forgot password  2) Amazon Seller Central support.",gotcha:"Online-only — not the main in-store processor. Get card-present processor statement separately."},
+  {r:72,n:"Google Pay (Wallet)",t:"Other",f:"Low",url:"N/A — not a processor",ph:"N/A",v:true,steps:"Google Pay is a WALLET, NOT a processor. Ask: which processor actually receives your card deposits? Look up that processor for the statement.",nologin:"N/A — no Google Pay merchant processing portal exists.",gotcha:"IMPORTANT: Google Pay, Apple Pay, Samsung Pay are wallets — not processors. Always redirect to the actual processor/gateway behind them."},
+  {r:73,n:"Apple Pay (Wallet)",t:"Other",f:"Low",url:"N/A — not a processor",ph:"N/A",v:true,steps:"Apple Pay is a WALLET, NOT a processor. Ask: which processor actually receives your card deposits? Look up that processor for the statement.",nologin:"N/A — no Apple Pay merchant processing portal exists.",gotcha:"IMPORTANT: Apple Pay is a wallet. Processing statement is with the back-end processor/gateway. Always identify and redirect to the actual processor."},
+  {r:74,n:"Klarna (BNPL)",t:"Other",f:"Low",url:"https://portal.klarna.com",ph:"1-844-552-7621",v:false,steps:"Login → Settlements/Payouts → Reports → Export. NOTE: Klarna BNPL summary only — primary card processor statement also needed.",nologin:"1) Click Forgot password  2) Klarna merchant support can assist.",gotcha:"BNPL statement shows Klarna transactions only, not full card volume. Always request primary card processor statement too."},
+  {r:75,n:"Affirm (BNPL)",t:"Other",f:"Low",url:"https://www.affirm.com/business",ph:"1-855-423-3729",v:false,steps:"Login → Settlements/Payouts → Reports → Export. NOTE: Affirm BNPL summary only — primary card processor statement also needed.",nologin:"1) Click Forgot password  2) Affirm merchant support can assist.",gotcha:"Same as Klarna — BNPL shows Affirm transactions only. Full card processor statement still needed for our analysis."}
+];
+
+const DECODERS=[
+  ["Costco Merchant Services","Elavon","smb.elavon.com"],
+  ["Chase","Chase Paymentech","orbital.chasepaymentech.com"],
+  ["Sam's Club Payments","Fiserv","merchants.fiserv.com"],
+  ["Intuit / QuickBooks","Fiserv (back end)","merchantcenter.intuit.com"],
+  ["Bank of America Merchant Services","Fiserv","merchants.fiserv.com"],
+  ["Wells Fargo Merchant Services","Fiserv or TSYS","merchants.fiserv.com / translink.transfirst.com"],
+  ["US Bank Merchant Services","Elavon","smb.elavon.com"],
+  ["Vantiv","Worldpay","secure.worldpay.com/sso/public/auth/login.html"],
+  ["iZettle","PayPal Zettle","my.zettle.com"],
+  ["First Data","Fiserv","merchants.fiserv.com"],
+  ["Heartland","Global Payments","account.heartland.us"],
+  ["Priority Payments","MX Merchant portal","mxmerchant.com"],
+  ["TransFirst","TSYS TransLink","translink.transfirst.com"],
+  ["Google Pay / Apple Pay / Samsung Pay","NOT a processor","Ask which processor receives card deposits"],
+  ["BBVA Merchant Services","Fiserv","merchants.fiserv.com"],
+  ["Regions Merchant Services","Elavon","smb.elavon.com"],
+  ["Fifth Third Merchant Services","Worldpay","secure.worldpay.com/sso/public/auth/login.html"],
+  ["Clover (POS only)","Ask: who is the back-end processor?","Check bank deposit descriptor tab"],
+];
+
+const DESCRIPTORS=[
+  ["FDMS / FISERV / FIRST DATA","Fiserv","merchants.fiserv.com"],
+  ["NAB / NORTH AMERICAN BANCARD","North American Bancard","mynab.com"],
+  ["ELAVON / ELAVON CONNECT","Elavon","smb.elavon.com"],
+  ["VANTIV / WORLDPAY / WP","Worldpay","secure.worldpay.com/sso/public/auth/login.html"],
+  ["TSYS / TRANSFIRST","TSYS TransLink","translink.transfirst.com"],
+  ["CHASE PAYMENTS / PAYMENTECH","Chase Paymentech","orbital.chasepaymentech.com"],
+  ["HEARTLAND / GLOBALPAY","Heartland / Global Payments","account.heartland.us"],
+  ["CARDCONNECT / CARDPOINTE","CardPointe","cardpointe.com/login"],
+  ["CONVERGE / ELAVON CONVERGE","Converge (Elavon gateway)","convergepay.com"],
+  ["SHIFT4 / HARBORTOUCH","Shift4","sky.shift4.com"],
+  ["SQUARE INC","Square","squareup.com/dashboard"],
+  ["STRIPE","Stripe","dashboard.stripe.com"],
+  ["PAYPAL","PayPal","paypal.com/signin"],
+  ["INTUIT / QUICKBOOKS","QuickBooks Payments","merchantcenter.intuit.com"],
+  ["TOAST","Toast","toasttab.com/login"],
+];
+
+let activeFilter='all', openCard=null, filtered=[...P];
+
+function typeCls(t){
+  const m={'Processor':'Processor','Gateway':'Gateway','Aggregator':'Aggregator','ISO':'ISO',
+    'POS/Processor':'POS','POS':'POS','mPOS':'mPOS','Gateway/Aggregator':'Gateway'};
+  return 'bt-'+(m[t]||'Other');
+}
+function freqCls(f){return 'bf-'+(f==='Very High'?'VH':f);}
+
+function copy(txt,btn){
+  navigator.clipboard.writeText(txt).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1400);});
+}
+
+function renderList(){
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  filtered=P.filter(p=>{
+    const ms=!q||p.n.toLowerCase().includes(q)||p.t.toLowerCase().includes(q)||p.url.toLowerCase().includes(q);
+    let mf=true;
+    if(activeFilter==='all') mf=true;
+    else if(activeFilter==='verified') mf=p.v;
+    else if(['Very High','High','Medium','Low'].includes(activeFilter)) mf=p.f===activeFilter;
+    else mf=p.t.includes(activeFilter);
+    return ms&&mf;
+  });
+  document.getElementById('topCount').textContent=filtered.length+' of 75 processors';
+  document.getElementById('countBadge').textContent=filtered.length+' shown';
+  const list=document.getElementById('procList');
+  if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-title">No processors match.</div><p style="margin-top:6px;font-size:13px">Clear the search or try a different filter.</p></div>';return;}
+  list.innerHTML=filtered.map(p=>`
+    <div class="proc-card" id="pc${p.r}">
+      <div class="proc-header" onclick="toggle(${p.r})">
+        <span class="proc-rank">${p.r}</span>
+        <span class="proc-name">${p.n}</span>
+        <div class="badges">
+          <span class="badge ${typeCls(p.t)}">${p.t}</span>
+          <span class="badge ${freqCls(p.f)}">${p.f}</span>
+          <span class="badge ${p.v?'bv-yes':'bv-chk'}">${p.v?'✓ Verified':'⚠ Check URL'}</span>
+        </div>
+        <svg class="chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="proc-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <span class="dlabel">Portal URL</span>
+            ${p.url.startsWith('N/A')?`<span class="dvalue" style="color:var(--light)">${p.url}</span>`:`<a class="portal-link" href="${p.url}" target="_blank" rel="noopener">${p.url}</a><button class="copy-btn" onclick="copy('${p.url}',this);event.stopPropagation()">Copy</button>`}
+          </div>
+          <div class="detail-section">
+            <span class="dlabel">Support Phone</span>
+            <span class="dvalue">${p.ph}${p.ph!=='N/A'&&!p.ph.includes('only')&&!p.ph.includes('support.')?`<button class="copy-btn" onclick="copy('${p.ph}',this);event.stopPropagation()">Copy</button>`:''}</span>
+          </div>
+          <div class="full-row steps-row">
+            <div class="row-label">▶ Steps to pull statement</div>
+            <div class="row-text">${p.steps}</div>
+          </div>
+          <div class="full-row nologin-row">
+            <div class="row-label">🔓 If merchant has no login</div>
+            <div class="row-text">${p.nologin}</div>
+          </div>
+          <div class="full-row gotcha-row">
+            <div class="row-label">⚠ Gotcha / Notes</div>
+            <div class="row-text">${p.gotcha}</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggle(r){
+  const card=document.getElementById('pc'+r);
+  const wasOpen=card.classList.contains('open');
+  if(openCard&&openCard!==card){openCard.classList.remove('open');openCard.querySelector('.proc-detail').style.display='none';}
+  if(wasOpen){card.classList.remove('open');card.querySelector('.proc-detail').style.display='none';openCard=null;}
+  else{card.classList.add('open');card.querySelector('.proc-detail').style.display='block';openCard=card;card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+
+function renderDecoder(rows,id,h1,h2){
+  document.getElementById(id).innerHTML=
+    `<div class="dg-hdr">${h1}</div><div class="dg-hdr" style="text-align:center">→</div><div class="dg-hdr">${h2}</div>`+
+    rows.map((r,i)=>`<div class="dg-cell dg-says ${i%2?'dg-row-alt':''}">${r[0]}</div><div class="dg-cell dg-arrow ${i%2?'dg-row-alt':''}">→</div><div class="dg-cell dg-actual ${i%2?'dg-row-alt':''}">${r[1]} <span style="color:var(--muted);font-weight:400">— ${r[2]}</span></div>`).join('');
+}
+
+function renderQuickRef(){
+  document.getElementById('qrefGrid').innerHTML=P.map(p=>`
+    <div class="qref-card">
+      <span class="qref-num">${p.r}</span>
+      <div class="qref-body">
+        <div class="qref-name">${p.n}</div>
+        ${p.url.startsWith('N/A')?'<span style="font-size:11px;color:var(--light)">No portal</span>':`<a class="qref-url" href="${p.url}" target="_blank">${p.url}</a>`}
+        <div class="qref-phone">${p.ph}</div>
+      </div>
+    </div>`).join('');
+}
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const name=tab.dataset.tab;
+    ['lookup','decoder','descriptor','quickref'].forEach(id=>document.getElementById('tab-'+id).style.display=id===name?'block':'none');
+  });
+});
+
+document.querySelectorAll('.pill').forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    activeFilter=pill.dataset.f;
+    renderList();
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelector('[data-tab="lookup"]').classList.add('active');
+    ['lookup','decoder','descriptor','quickref'].forEach(id=>document.getElementById('tab-'+id).style.display=id==='lookup'?'block':'none');
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input',renderList);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&document.activeElement!==document.getElementById('searchInput')){e.preventDefault();document.getElementById('searchInput').focus();}
+  if(e.key==='Escape'){document.getElementById('searchInput').value='';renderList();}
+});
+
+renderList();
+renderDecoder(DECODERS,'decoderGrid','Merchant Says','Actual Processor / Portal');
+renderDecoder(DESCRIPTORS,'descriptorGrid','Bank Deposit Descriptor Contains','Processor / Portal');
+renderQuickRef();
+</script>
+</body>
+</html>
