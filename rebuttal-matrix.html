@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industry Rebuttal Matrix — Harlow Payments</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh}
+header{background:#1b3a6b;padding:16px 24px;display:flex;align-items:center;gap:12px}
+header h1{font-size:18px;font-weight:600;color:#fff}
+header span{font-size:13px;color:#aabbdd}
+.container{max-width:860px;margin:0 auto;padding:24px 16px}
+.meta{font-size:13px;color:#666;margin-bottom:20px}
+.ind-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.itab{font-size:13px;font-weight:500;padding:7px 16px;border-radius:20px;border:1px solid #ccc;background:#fff;color:#555;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s}
+.itab:hover{border-color:#999}
+.itab.active{color:#fff;border-color:transparent}
+.obj-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.otab{font-size:12px;padding:5px 14px;border-radius:20px;border:1px solid #ddd;background:#f8f9fa;color:#666;cursor:pointer;transition:all .15s}
+.otab:hover{border-color:#999}
+.otab.active{background:#fff;border-color:#1b3a6b;color:#1b3a6b;font-weight:500}
+.var-row{display:flex;gap:6px;margin-bottom:10px}
+.vtab{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid #ddd;background:#f8f9fa;color:#666;cursor:pointer;transition:all .15s}
+.vtab:hover{border-color:#999}
+.vtab.active{background:#fff;border-color:#1b3a6b;color:#1b3a6b;font-weight:500}
+.crumb{font-size:12px;color:#999;margin-bottom:12px}
+.card{background:#fff;border:1px solid #e0e4ea;border-radius:12px;overflow:hidden}
+.card-top{padding:14px 18px;border-bottom:1px solid #eee}
+.obj-lbl{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#999;margin-bottom:5px}
+.obj-txt{font-size:16px;font-weight:500;color:#1a1a2e;font-style:italic}
+.card-body{padding:18px}
+.slabel{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#999;margin-bottom:7px;margin-top:16px}
+.slabel:first-child{margin-top:0}
+.abox{background:#f0f6ff;border-left:3px solid #378ADD;border-radius:0 8px 8px 0;padding:11px 15px;font-size:14px;color:#444;font-style:italic;line-height:1.65}
+.sbox{background:#f8f9fa;border-radius:8px;border:1px solid #e8ecf0;padding:13px 15px;font-size:14px;color:#1a1a2e;line-height:1.75}
+.rule{margin-top:14px;display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#666;padding:10px 12px;background:#f0faf0;border-radius:8px}
+.rule i{color:#3B6D11;margin-top:1px;flex-shrink:0}
+</style>
+</head>
+<body>
+<header>
+  <i class="ti ti-message-bolt" style="font-size:22px;color:#c8972b"></i>
+  <div>
+    <h1>Industry Rebuttal Matrix</h1>
+    <span>4 industries · 5 objections · 3 analogies each · 60 cards total</span>
+  </div>
+</header>
+
+<div class="container">
+<p class="meta">Select an industry, then an objection, then cycle through the three analogy approaches.</p>
+
+<div class="ind-row" id="ind-row"></div>
+<div class="obj-row" id="obj-row"></div>
+<div class="var-row" id="var-row"></div>
+<p class="crumb" id="crumb"></p>
+<div id="card"></div>
+</div>
+
+<script>
+var inds=[
+  {id:"auto",label:"Auto repair",icon:"ti-engine",color:"#185FA5"},
+  {id:"rest",label:"Restaurant / cafe",icon:"ti-tools-kitchen-2",color:"#993C1D"},
+  {id:"retail",label:"Retail",icon:"ti-shopping-bag",color:"#534AB7"},
+  {id:"svc",label:"Service business",icon:"ti-briefcase",color:"#0F6E56"}
+];
+var objs=["Not interested","I'm busy","We're happy","Not switching","I use a friend"];
+var D={
+auto:{
+"Not interested":[
+{a:"If a parts supplier called and said 'want to check if you're being overcharged on parts invoices?' most shop owners say no. Until the supplier pulls up the invoice and shows a 12% markup hiding in the line items that's been running for two years.",s:"\"I get it — I'd say the same thing on a cold call. But your processing statement has line items just like a parts invoice. There are markups on there — interchange bumps, monthly minimums, batch fees — that most shop owners never review. We're not asking you to change anything today. We just want to show you what's on the invoice. Five minutes and you'll know exactly where you stand.\"",r:"Frame the statement as a parts invoice. Auto shops understand line-item audits."},
+{a:"A shop owner who doesn't check the alignment after a suspension job isn't disinterested in quality — they just haven't had a reason to look yet. Give them a reason.",s:"\"Most shop owners I talk to aren't interested until I tell them the average auto repair business on their volume range is overpaying somewhere between $200 and $600 a month in fees they never see itemized. I'm not saying that's you. But it might be. And a five-minute statement review is the only way to know.\"",r:"Lead with a dollar range specific to their business type. Specificity creates interest where a generic pitch doesn't."},
+{a:"A tech who skips the diagnostic before a repair doesn't know what's wrong yet. You can't know if there's a problem until you run the scan.",s:"\"Saying not interested before we look at the statement is like skipping the diagnostic. You don't know if there's a problem until we run it. We're not selling you anything today — we're just offering to scan the fees. If nothing's off, I'll tell you that. If something is, you'll want to know.\"",r:"Use the diagnostic analogy directly. It's native language for a shop owner and removes sales pressure."}
+],
+"I'm busy":[
+{a:"A shop doesn't stop mid-job to review vendor invoices during a busy day — but they don't ignore the invoices permanently either. Because unreviewed costs are just approved costs.",s:"\"Completely understand — you're running a shop. All I need is 90 seconds to explain what we look at. If it makes sense, we schedule a proper call on your time. If not, I'll move on. Is 90 seconds fair right now?\"",r:"Shrink the ask to 90 seconds. Busy shops respond to efficiency, not pitches."},
+{a:"A tech doesn't pull a car into the bay for a full teardown to find out if there's a problem. They run a quick scan first. That's all we're asking for.",s:"\"Think of this as a quick scan — not a teardown. All I want to do in the next two minutes is explain what we look at on a processing statement so you can decide if a follow-up call is worth your time. If the scan comes back clean, we're done.\"",r:"The 'quick scan not a teardown' framing is native to auto and makes the ask feel proportionate."},
+{a:"The busiest shop on the street still has a slow Tuesday morning. That's not laziness — that's when smart operators do the admin they can't do mid-week.",s:"\"What's your slowest morning this week? I'll call back then, it'll take five minutes, and you'll either have a number worth acting on or confirmation you're already dialed in.\"",r:"Offer to call back at their slow time. Respecting the shop schedule builds more trust than pushing through."}
+],
+"We're happy":[
+{a:"Most shop owners are happy with their parts supplier — until they compare invoices with another shop down the street and realize they've been paying 15% more on the same SKUs for two years.",s:"\"That's great — and I'm not here to change anything that's working. But processors bump rates quietly. They adjust fees mid-contract, add monthly minimums, change interchange tiers. Most shops don't find out until they compare statements side by side. If your setup is solid, a five-minute review confirms it.\"",r:"Happy is emotional. Overcharging is mathematical. Keep them in separate lanes."},
+{a:"A shop that hasn't done a vendor price review in two years isn't unhappy — they just haven't looked. Being satisfied with the relationship doesn't mean the pricing is still competitive.",s:"\"When did you last actually look at your effective rate? Not the rate your processor quoted when you signed — the rate you're actually paying today across all your card types. Most shops have never calculated that number. We can show you in five minutes.\"",r:"Ask when they last reviewed their effective rate. Most can't answer — that's the opening."},
+{a:"A shop that's happy with their oil supplier is still going to notice if the price per quart goes up 20 cents without notice. That's not disloyalty — that's good business.",s:"\"I just want to make sure the happy feeling matches the actual numbers. Processors are good at raising rates in ways that don't show up obviously on the statement. If you're happy AND you're getting a fair deal, that's a win. We just want to confirm the second part.\"",r:"Separate emotional satisfaction from financial accuracy — then offer to verify the math."}
+],
+"Not switching":[
+{a:"Getting a second opinion on a diagnosis doesn't mean you're changing mechanics. It means you want to know if what you're being told is accurate. The review isn't the switch.",s:"\"I'm not asking you to switch anything. Think of it the same way a customer brings a vehicle to a second shop for a second opinion — they're not leaving their regular mechanic, they're just making sure the diagnosis is right. If your current processor is doing right by you, the numbers will show it.\"",r:"The second-opinion analogy is direct and familiar. It removes the switching pressure entirely."},
+{a:"A shop doesn't replace a part without knowing if it's actually bad. You run the test first. Same principle here — look at the data before making any decision.",s:"\"No good tech replaces a part just because someone said to — you test it first. That's all we're doing. Pull the statement, let us analyze it, and then you decide. If the part's fine, you keep it. If it's not, at least now you know.\"",r:"The 'test before you replace' framing keeps the shop owner in control. They're diagnosing, not committing."},
+{a:"A loyal customer who's been coming to your shop for ten years would still expect you to give them an honest estimate. Loyalty and accuracy aren't in conflict.",s:"\"You wouldn't stay with a parts supplier who was overcharging you just because you'd been with them a long time. The relationship is worth keeping if the deal is worth keeping. Let us verify the deal. If it holds up, you've got proof you're with the right processor.\"",r:"Reframe staying as conditional on what the numbers say. Most shop owners respect logic over habit."}
+],
+"I use a friend":[
+{a:"If your buddy who sold you your lift equipment was overcharging on maintenance contracts, you'd want to know — not to end the friendship, but because it's your money.",s:"\"The interchange fees that Visa and Mastercard charge are set by the card networks, not by your friend. Where processors differ is what they add on top. Your friend may have set you up right at the start — but rates drift, and most reps don't call back when they've gone up. We just want to confirm the setup is still competitive.\"",r:"Don't attack the friendship. Separate the relationship from the rate structure underneath it."},
+{a:"A customer who has a friend who's a mechanic still gets a second opinion on a major repair. That's not disrespectful — it's just smart.",s:"\"Does your friend know what your effective rate is right now, today? Not what they quoted when they set it up — what you're actually paying across all card types this month? Most reps set up the account and move on. We want to show you the current number and make sure it's still where it should be.\"",r:"Ask if the friend knows the current effective rate. Most reps don't track it after setup. That's the gap."},
+{a:"Having a buddy who does your books doesn't mean you skip the annual tax review. A friend in the business is a great start — but someone still needs to verify the numbers.",s:"\"Even with a trusted contact, the best thing you can do is verify the numbers independently once a year. We're not replacing that relationship — we're just offering a second set of eyes on the statement. If everything checks out, you've confirmed your friend is doing right by you.\"",r:"Position the review as an annual verification, not a challenge to the friendship."}
+]
+},
+rest:{
+"Not interested":[
+{a:"If your produce supplier called and said 'want to check if you're being overcharged on your weekly delivery?' most owners say no. Until they find out they've been paying a 15% premium over market price on every order for two years.",s:"\"Here's what I'd ask you to consider: you watch food cost numbers because small margins add up fast in this business. Processing fees work the same way. Most restaurants run 2.5 to 3.5% effective rates when they should be at 1.8 to 2.2. On $60k a month in card volume, that gap is real money leaving your margins every single month.\"",r:"Restaurants understand food cost margin. Connect processing fees to food cost — same discipline, same stakes."},
+{a:"A chef who's never costed out a dish doesn't know if they're profitable. A restaurant owner who's never reviewed their processing statement doesn't know what the fees are actually costing them.",s:"\"Most operators I talk to who say not interested have never actually seen their processing fees broken down line by line. Not because they don't care — because nobody offered to show them. That's what we do. Five minutes and you'll know exactly where that cost sits in your P&L.\"",r:"Frame the review as financial visibility, not a sales call. Operators respond to knowing their numbers."},
+{a:"A restaurant that never reviews its vendor invoices doesn't have low costs — it just has unapproved costs running on autopilot.",s:"\"Most restaurant owners aren't interested in switching processors either — and I'm not asking you to. I'm asking if you're interested in knowing what you're actually paying. There's a difference. Your processor sends you a statement every month but it's not designed to be readable. We translate it. That's the whole ask.\"",r:"Separate 'not interested in switching' from 'not interested in knowing.' The statement review is information, not a pitch."}
+],
+"I'm busy":[
+{a:"A restaurant owner doesn't stop during a lunch rush to review a vendor invoice. But they don't ignore invoices permanently — because every dollar of cost is a dollar off the margin.",s:"\"I know you're running a kitchen — I'm not going to take your time right now. All I need is 90 seconds to explain what we look at. What's your slowest window this week — mid-afternoon? I'll call back then.\"",r:"Respect the kitchen schedule. Offer a callback at their slow window — that shows you understand the business."},
+{a:"The best time to review food costs isn't during service. But you still do it — because if you don't, nobody does, and margins bleed quietly.",s:"\"You do food cost reviews even though you're busy, because that's what keeps the business healthy. Processing fees are the same type of cost — they just don't come with a chef calling you about them. If you have two minutes after this week's inventory, I'd love to show you what we look at.\"",r:"Use the food cost review analogy. It's a familiar discipline and validates the ask without pressure."},
+{a:"A sous chef who says 'I'm too busy to check the prep list' ends up with a service problem at 7pm. Small things reviewed early prevent big problems later.",s:"\"Most restaurant owners who tell me they're too busy end up spending a lot more time dealing with fee creep later when they finally look at it. A quick review now is a lot cheaper than two years of overcharges. Is 90 seconds fair?\"",r:"Reframe 'too busy now' as 'more expensive later.' Urgency without pressure."}
+],
+"We're happy":[
+{a:"Most restaurant owners are happy with their food distributor — until they compare invoices with another operator and realize they've been paying 20% more on the same SKUs. Happy with the rep doesn't mean the pricing is right.",s:"\"I'm not here to disrupt anything that's working. But processors raise rates in the fine print. They adjust fees between quarters. Most owners don't find out until they actually look at the statement side by side with a second opinion. If your setup is solid, a five-minute review confirms that.\"",r:"Happy is emotional. Overcharging is mathematical. Don't argue the feeling — verify the number."},
+{a:"A restaurant that's happy with its POS system still checks if the software fee went up at renewal. Being satisfied doesn't mean you stop verifying the terms.",s:"\"When did you last calculate your actual effective rate? Not the rate your processor quoted when you signed — the rate you're paying today across all card types. Most restaurant owners have never calculated that number. If you can pull your last statement, we can show you in five minutes.\"",r:"Ask when they last verified their effective rate. Most can't answer. That's the opening."},
+{a:"A happy regular customer still reads the menu when the prices change. Being loyal doesn't mean you stop paying attention to what things cost.",s:"\"Processors are really good at raising rates in ways that don't show up obviously on the statement. If you're happy and you're getting a fair deal, that's a win. We just want to confirm the second part is true. Because the happy part you already know.\"",r:"Separate the relationship satisfaction from the financial accuracy. Offer to verify the one they haven't checked."}
+],
+"Not switching":[
+{a:"A restaurant that switches suppliers without comparing costs first isn't making a business decision — it's just making a change. The statement review is the comparison, not the switch.",s:"\"I'm not asking you to switch anything. This is the same as getting a second price from a produce vendor before your contract renews — you're not leaving your current supplier, you're just making sure the terms are still competitive. The switch only makes sense if the numbers say it does.\"",r:"Frame the review as a vendor price comparison. Restaurants do this routinely — it normalizes the ask."},
+{a:"A chef doesn't change a recipe without tasting it first. You don't make a decision about your processor without seeing the actual numbers.",s:"\"Right now you're making the decision to stay without knowing what you're actually paying. Let us put the numbers in front of you. If staying is the right call, the statement proves it. If it's not — at least now you're deciding with information instead of assumption.\"",r:"The decision to stay is also a decision. Make sure it's an informed one."},
+{a:"A restaurant that locks in a supplier contract without checking current market prices isn't being loyal — it's just not paying attention.",s:"\"Do you know what your effective rate is right now compared to what's available in the market today? What was competitive two years ago may not be now. We're not asking you to move — we're asking you to look. Most owners who say they're not switching still want to know the number.\"",r:"Reframe 'not switching' as 'not looking.' Most operators don't actually object to knowing — just to changing."}
+],
+"I use a friend":[
+{a:"A friend who sells you your linen service is still going to charge you the market rate on linens. The friendship doesn't change what the cost is.",s:"\"Does your friend know what your effective rate is today? Not what they set it up at — what it is now across all card types after all the fees. Most reps sell the account and move on. Rates drift and nobody calls to tell you when they've gone up. We just want to show you the current number.\"",r:"Ask if the friend knows the current effective rate. Most reps don't track accounts after setup. That's the entry point."},
+{a:"If your buddy who handles your linen account switched you to a more expensive supplier without telling you, you'd want to know — not to end the friendship, but because it's your margin.",s:"\"The interchange rates Visa and Mastercard charge are the same no matter who sold you the account. Where processors differ is what they add on top. Your friend may have built you a clean setup. But what's sitting on top of the interchange right now — that's what we want to look at. If it's clean, your friend looks great.\"",r:"Don't compete with the relationship. Compete with the markup sitting on top of interchange."},
+{a:"A restaurant that uses a friend for accounting still gets a CPA to review the books once a year. That's not distrust — it's just good business.",s:"\"Even with a trusted contact, the best operators verify the numbers independently at least once a year. We're not replacing that relationship — we're offering a second set of eyes on one statement. If everything checks out, you've confirmed your friend is doing right by you.\"",r:"Position the review as annual independent verification. Frame it as something smart operators do regardless of who they use."}
+]
+},
+retail:{
+"Not interested":[
+{a:"If your POS software vendor called and said 'want to see if you're overpaying on your subscription?' most retailers say no. Until they see the side-by-side showing $400 a month in fees they didn't know were there.",s:"\"Most retail businesses we work with had no idea how their processing fees were structured until someone sat down and broke it down line by line. Card fees in retail are volume-driven — small percentage differences on high ticket volume add up to thousands a year. We're not asking for a decision today. We're asking for the statement so we can show you a number.\"",r:"Retail owners think in volume. Show them how small rate differences scale — that's what creates real interest."},
+{a:"A buyer who's never benchmarked a vendor doesn't know if the pricing is good or not. You can't know without the comparison.",s:"\"Do you know what your effective processing rate is right now? Most retailers know their cost of goods, their shrink rate, their margins — but they've never calculated what percentage of every card swipe goes to the processor. That number exists in your statement. We can show it to you in five minutes.\"",r:"Lead with the effective rate question. Most retail owners can't answer it — that uncertainty does more than any pitch."},
+{a:"A retail buyer who says 'not interested' in a vendor meeting doesn't know what the vendor is offering yet. Not interested and not informed are different things.",s:"\"Not interested in what exactly? Switching processors? I'm not asking for that. Not interested in seeing what you're paying? I'd push back on that — because that number is leaving your margin every month whether you look at it or not. We're just offering to make it visible.\"",r:"Break down what 'not interested' actually means. Most of the time they're not interested in switching — not in knowing."}
+],
+"I'm busy":[
+{a:"A retail buyer doesn't stop during a big shipment receiving day to benchmark vendor pricing. But they don't ignore it permanently — because unchecked costs are just approved costs.",s:"\"All I'm asking for is 90 seconds to explain what we look at so you can decide if a follow-up call is worth your time. If yes, we schedule it when it's convenient for you. If no, we're done. Is 90 seconds fair right now?\"",r:"Shrink the ask to 90 seconds. Busy retail operators respect efficiency above everything else."},
+{a:"A store manager who says 'I'm too busy' to check a vendor invoice on a busy Saturday is right. But the invoice still gets reviewed on Monday. It doesn't go away.",s:"\"I'm not asking you to deal with this right now. All I want is a quick 90-second conversation so you know what to look for, then I'll send you a text with exactly what to pull from your processor portal. When you have five minutes this week, you'll have everything you need.\"",r:"Offer the 90-second explanation plus a text follow-up. Remove all friction from the next step."},
+{a:"The busiest retailer on the block still has a quiet Tuesday morning. That's when smart operators do the admin they can't do on Saturday.",s:"\"What's your slowest morning this week? I'll call back then — five minutes, and you'll either have a savings number worth acting on or you'll know you're already in good shape.\"",r:"Ask for the slow morning callback. Shows you understand retail operations and removes pressure from the current moment."}
+],
+"We're happy":[
+{a:"Most retailers are happy with their wholesale vendor — until they compare invoices with a competitor and realize they've been paying a 20% premium on the same product line for two years.",s:"\"Processors raise rates in the fine print. They adjust interchange tiers, add monthly minimums, bump batch fees. Most retailers don't find out until they sit down and actually look at the statement line by line. If your setup is solid, the review confirms it.\"",r:"Happy is an emotion. Rate creep is math. Don't argue the feeling — offer to verify the numbers."},
+{a:"A retailer who hasn't benchmarked their merchant account in two years isn't unhappy — they just haven't compared. Being content doesn't mean the pricing is still competitive.",s:"\"When did you last actually look at your effective processing rate? Not the rate your processor quoted when you signed — the rate you're paying today across all card types. Most retailers have never calculated that number. We can show it to you in five minutes.\"",r:"The effective rate question is the opener. Most retailers can't answer it — and that creates the conversation."},
+{a:"A happy customer still reads the receipt before they leave the store. Being satisfied with the experience doesn't mean you stop verifying the charges.",s:"\"I just want to make sure the feeling matches the actual numbers. Processors are good at raising rates in ways that don't show up obviously month to month. You're happy and that's real. We just want to confirm the pricing behind it is equally solid.\"",r:"Separate the relationship satisfaction from the financial accuracy. Offer to verify the one they haven't checked."}
+],
+"Not switching":[
+{a:"Getting a second price from a wholesale vendor doesn't mean you're leaving your current supplier. It means you're a good buyer. Most strong buyers do this quarterly — not to switch, but to keep everyone honest.",s:"\"I'm not asking you to switch anything. Think of this the same way you'd get a second quote from a wholesale vendor — you're not leaving your current source, you're just making sure the terms are still competitive. The switch only makes sense if the numbers say it does.\"",r:"Retail buyers understand vendor benchmarking. Frame the review as standard purchasing practice."},
+{a:"A retailer doesn't reprice their entire inventory without checking current market rates first. Same logic — you look at the data before you make a decision either way.",s:"\"Right now you're making the decision to stay without seeing what you're actually paying. Let us put the number in front of you. If staying is the right call, the statement proves it. If not — at least now you're deciding with information instead of assumption.\"",r:"The decision to stay is also a decision. Make sure it's an informed one."},
+{a:"A retail buyer who locks in a vendor contract without checking current market pricing isn't being loyal — they're just not negotiating.",s:"\"Do you know what your effective rate is right now compared to what's available in the current market? Processing costs have shifted a lot in the last two years. What was competitive when you signed may not be anymore. We're not asking you to move — we're asking you to look.\"",r:"Reframe 'not switching' as 'not looking.' Most retailers don't object to knowing — just to committing."}
+],
+"I use a friend":[
+{a:"A retailer who uses a friend for their POS system still calls the vendor when the system isn't working right. The friendship doesn't exempt the product from working correctly.",s:"\"Does your friend know what your effective rate is today — not when they set it up, today? Most reps sell the account and move on. Rates drift over time and nobody calls to flag it. We just want to show you the current number. If it's clean, your friend looks great.\"",r:"Ask if the friend knows the current effective rate. Most reps don't actively manage accounts post-setup."},
+{a:"If the vendor your friend recommended turned out to be overcharging on every invoice, you'd want to know — not to end the friendship, but because it's your margin.",s:"\"The interchange fees Visa and Mastercard charge are the same regardless of who sold you the account. Where processors differ is what they layer on top. Your friend may have built you a clean setup. But what's sitting on top of the interchange right now — after whatever adjustments have happened — that's what we want to look at.\"",r:"Separate the friend from the rate structure. Interchange is universal — the markup on top is where it varies."},
+{a:"A retailer who uses a friend for bookkeeping still has a CPA review the books at year-end. That's not distrust — that's responsible business.",s:"\"Even with a trusted contact, smart operators verify the numbers independently at least once a year. We're not replacing that relationship — we're offering a second set of eyes on one statement. If everything checks out, you've confirmed your friend is doing right by you.\"",r:"Frame the review as annual independent verification — something every smart operator does regardless of who they use."}
+]
+},
+svc:{
+"Not interested":[
+{a:"If your insurance broker called and said 'want to see if you're overpaying on your liability policy?' most service owners say no. Until the broker pulls up a quote that comes in 18% lower for the same coverage.",s:"\"Your processing fees are a fixed cost in your business, just like insurance or payroll software. Most service businesses we talk to have never had anyone sit down and break down what they're paying line by line. Not because they don't care — because nobody offered. That's what we do. Five minutes and you'll know exactly where that cost sits.\"",r:"Service businesses respond to fixed cost optimization. Position processing fees as just another line item to audit."},
+{a:"A consultant who's never reviewed their software stack doesn't know if they're paying for tools they've outgrown. The review is how you find out.",s:"\"Do you know what your effective processing rate is right now? Most service business owners know their billing rates, their overhead, their utilization — but they've never calculated what percentage of every card payment goes to the processor. That number is in your statement. We can show it to you in five minutes.\"",r:"Lead with the effective rate question. Most service business owners can't answer it — and that creates the conversation."},
+{a:"A service provider who never audits their vendor relationships doesn't have low costs — they just have unchecked costs.",s:"\"Not interested in switching is different from not interested in knowing. Your processing fees are running whether you look at them or not. We're just offering to make them visible. If the number's right, great. If it's not — you'll want to know.\"",r:"Separate 'not interested in switching' from 'not interested in knowing.' The statement review is information, not a commitment."}
+],
+"I'm busy":[
+{a:"A busy consultant doesn't have time to audit every vendor contract mid-project. But they don't let subscriptions run unchecked forever — because unreviewed costs are just approved costs.",s:"\"I respect that — your time is billable. That's exactly why I'm asking for 90 seconds, not an hour. All I want to do is explain what we look at so you can decide if a follow-up call is worth your time. Worst case you've spent 90 seconds. Is that fair right now?\"",r:"For service businesses, time is money — acknowledge it explicitly, then make the 90-second ask feel nearly free."},
+{a:"A service provider who says 'I'm too busy' to review an overhead cost isn't wrong — but unreviewed overhead has a way of quietly compounding until someone looks.",s:"\"I'll keep it to 90 seconds right now and send you a quick text with exactly what to pull from your processor portal. When you have five minutes this week — between calls, end of day — you'll have everything you need to run the review yourself.\"",r:"Offer the 90-second explanation plus a follow-up text with portal instructions. Remove all friction from the next step."},
+{a:"The most efficient operators still schedule time for vendor reviews — because not reviewing is just another form of overpaying.",s:"\"What's your lightest day this week? I'll call back then. Five minutes and you'll either have a number worth acting on or confirmation you're already dialed in. Either way you'll know.\"",r:"Ask for the light-day callback. Shows you respect their time structure and removes all pressure from the current moment."}
+],
+"We're happy":[
+{a:"Most service businesses are happy with their payroll software — until their accountant finds a plan they've outgrown that's been running $200 a month over what they should be paying.",s:"\"Your processing volume changes as you grow, and the pricing tier you were set up on may not be the right one for where you are today. Processors don't proactively move you to a better rate. That's something you have to catch — or have someone catch for you. We're offering to be that second set of eyes.\"",r:"Service businesses grow. Pricing that made sense at $10k/month may be wrong at $50k/month. Use growth as the hook."},
+{a:"A service provider who's satisfied with their CRM subscription still checks the renewal pricing every year. Being happy doesn't mean you stop verifying the terms.",s:"\"When did you last actually calculate your effective processing rate? Not what your processor told you when you signed up — what you're paying today across all card types. Most service business owners have never run that number. We can show it to you in five minutes.\"",r:"The effective rate question is the opener. Most can't answer it — and not knowing creates the conversation."},
+{a:"A happy client still reads the invoice before they pay it. Being satisfied with the relationship doesn't mean you stop verifying the billing.",s:"\"Processors are good at raising rates in ways that don't show up obviously on the monthly statement. If you're happy and the pricing is right, a five-minute review confirms both. If the pricing has drifted — you'll want to know before it runs another year.\"",r:"Separate emotional satisfaction from financial accuracy. Offer to verify the one they haven't checked."}
+],
+"Not switching":[
+{a:"Getting a second quote on a software contract doesn't mean you're leaving your current vendor. It means you're a good operator. Most smart service businesses benchmark their key vendors once a year — not to switch, but to negotiate.",s:"\"I'm not asking you to switch anything. Think of this the same way you'd get a second quote before a software contract renews — you're not committed to leaving, you're just making sure the terms are still competitive. The move only makes sense if the numbers say it does.\"",r:"Service businesses understand vendor benchmarking. Frame the review as standard operational practice."},
+{a:"A service provider who stays with a vendor without checking current pricing isn't being loyal — they're just not negotiating. And processors know which accounts never look.",s:"\"Processors track which accounts review their statements and which ones don't. The ones that never look also absorb rate increases without pushback. You don't have to switch anything. But knowing the number puts you in a different category.\"",r:"Frame inaction as a disadvantage. Processors know who's paying attention — and who isn't."},
+{a:"A consultant who accepts a client's first offer without benchmarking it isn't being agreeable — they're leaving money on the table. Same logic applies to vendor relationships.",s:"\"Right now you're making the decision to stay without knowing what you're actually paying. Let us put the number in front of you. If staying is the right call, the statement proves it. If not — at least now you're deciding with information instead of assumption.\"",r:"The decision to stay is also a decision. Make sure it's an informed one."}
+],
+"I use a friend":[
+{a:"A service provider who uses a friend for bookkeeping still has a CPA review the returns at year-end. That's not distrust — it's just responsible business practice.",s:"\"Does your friend know what your effective rate is right now, today? Not what they set it up at — what it is today across all card types. Most reps sell the account and move on. Rates drift and nobody calls to tell you when they've gone up. We just want to show you the current number. If it's right, your friend looks great.\"",r:"Ask if the friend knows the current effective rate. Most reps don't actively manage accounts post-setup — that's the gap."},
+{a:"If the vendor your friend recommended was quietly overcharging on your monthly subscription, you'd want to know — not to end the friendship, but because it's your money.",s:"\"The interchange fees Visa and Mastercard set are the same for everyone regardless of who sold the account. Where processors differ is what they add on top. Your friend may have set you up clean. But what's sitting on top of the interchange today — after whatever has shifted — that's what we want to look at. If it's right, I'll tell you that.\"",r:"Separate the friend from the rate structure underneath. Interchange is universal — the markup on top is where it varies."},
+{a:"A service provider who refers clients to a trusted colleague still expects that colleague to deliver the right outcome. Trust is earned by results, not just by the relationship.",s:"\"Even with a trusted contact, smart operators verify the numbers at least once a year. We're not here to replace that relationship — we're offering one independent look at the statement. If everything checks out, you've confirmed your friend is doing right by you. That's actually the best outcome of this call.\"",r:"Frame independent verification as validation of the friend's work, not a challenge to it."}
+]
+}
+};
+
+var curInd="auto",curObj=0,curVar=0;
+
+function paint(){
+  var ind=inds.find(function(i){return i.id===curInd;});
+  var key=objs[curObj];
+  var card=D[curInd][key][curVar];
+  document.getElementById("ind-row").innerHTML=inds.map(function(i){
+    var a=i.id===curInd;
+    return '<div class="itab'+(a?' active':'')+'" onclick="selInd(\''+i.id+'\')" style="'+(a?'background:'+i.color+';color:#fff;border-color:'+i.color:'')+'"><i class="ti '+i.icon+'"></i>'+i.label+'</div>';
+  }).join("");
+  document.getElementById("obj-row").innerHTML=objs.map(function(o,i){
+    return '<div class="otab'+(i===curObj?' active':'')+'" onclick="selObj('+i+')">&ldquo;'+o+'&rdquo;</div>';
+  }).join("");
+  document.getElementById("var-row").innerHTML=[1,2,3].map(function(n,i){
+    return '<div class="vtab'+(i===curVar?' active':'')+'" onclick="selVar('+i+')">Analogy '+n+'</div>';
+  }).join("");
+  document.getElementById("crumb").textContent=ind.label+' · "'+key+'" · Analogy '+(curVar+1)+' of 3';
+  document.getElementById("card").innerHTML=
+    '<div class="card"><div class="card-top"><div class="obj-lbl">Objection</div><div class="obj-txt">&ldquo;'+key+'&rdquo;</div></div>'+
+    '<div class="card-body">'+
+    '<div class="slabel">The analogy</div><div class="abox">'+card.a+'</div>'+
+    '<div class="slabel">Script</div><div class="sbox">'+card.s+'</div>'+
+    '<div class="rule"><i class="ti ti-arrow-right"></i><span>'+card.r+'</span></div>'+
+    '</div></div>';
+}
+function selInd(id){curInd=id;curObj=0;curVar=0;paint();}
+function selObj(i){curObj=i;curVar=0;paint();}
+function selVar(i){curVar=i;paint();}
+paint();
+</script>
+</body>
+</html>
