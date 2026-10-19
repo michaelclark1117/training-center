@@ -1,0 +1,1103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Appointment Setter Trainer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+html, body { margin: 0; background: #0A1628; }
+body { padding: 16px; }
+#hpd-trainer * { box-sizing: border-box; }
+#hpd-trainer {
+  --navy-950: #0A1628; --navy-900: #0F1E36; --navy-800: #132844; --navy-700: #1C3A5E; --navy-600: #2A4A73;
+  --gold-500: #C9A24B; --gold-300: #E4C878; --paper: #EDEBE3; --ink-muted: #8FA0B8;
+  --danger: #B85C4A; --success: #4E9A6B;
+  font-family: 'Inter', sans-serif; background: var(--navy-950); color: var(--paper);
+  border-radius: 10px; overflow: hidden; min-height: calc(100vh - 32px); display: flex; flex-direction: column;
+  border: 1px solid var(--navy-700); max-width: 1280px; margin: 0 auto;
+}
+#hpd-trainer .mono { font-family: 'IBM Plex Mono', monospace; }
+#hpd-trainer .disp { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.04em; }
+#hpd-trainer button { font-family: inherit; }
+
+/* top bar */
+#hpd-trainer .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; background: var(--navy-900); border-bottom: 1px solid var(--navy-700); }
+#hpd-trainer .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+#hpd-trainer .brand-mark { width: 26px; height: 26px; flex-shrink: 0; border-radius: 4px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); display: flex; align-items: center; justify-content: center; color: var(--navy-950); font-weight: 700; font-size: 13px; }
+#hpd-trainer .brand-name { font-size: 13px; letter-spacing: 0.12em; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#hpd-trainer .timer { font-size: 13px; color: var(--gold-300); letter-spacing: 0.05em; }
+
+/* start */
+#hpd-trainer .start { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 36px 20px 40px; text-align: center; gap: 20px; }
+#hpd-trainer .start h1 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.03em; font-size: 34px; margin: 0; font-weight: 600; }
+#hpd-trainer .eyebrow { color: var(--gold-500); font-size: 12px; letter-spacing: 0.18em; margin-bottom: 6px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
+#hpd-trainer .lede { color: var(--ink-muted); max-width: 560px; font-size: 14.5px; line-height: 1.55; margin: 0; }
+#hpd-trainer .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 640px; width: 100%; }
+#hpd-trainer .rule { background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 12px; text-align: left; }
+#hpd-trainer .rule .n { font-family: 'Oswald', sans-serif; color: var(--gold-500); font-size: 18px; }
+#hpd-trainer .rule .t { font-size: 12.5px; line-height: 1.4; margin-top: 2px; }
+#hpd-trainer .section-label { font-size: 10.5px; letter-spacing: 0.14em; color: var(--gold-500); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; align-self: center; margin-bottom: -8px; }
+#hpd-trainer .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 640px; }
+#hpd-trainer .vcard { background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 14px 13px; cursor: pointer; text-align: left; transition: border-color .15s, transform .15s; color: var(--paper); }
+#hpd-trainer .vcard:hover { border-color: var(--gold-500); transform: translateY(-2px); }
+#hpd-trainer .vcard.selected { border-color: var(--gold-500); background: var(--navy-700); }
+#hpd-trainer .vcard .vname { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+#hpd-trainer .vcard .vsub { font-size: 11.5px; color: var(--ink-muted); line-height: 1.35; }
+#hpd-trainer .vcard .lvl { display: inline-block; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-top: 7px; font-family: 'IBM Plex Mono', monospace; }
+#hpd-trainer .lvl.easy { background: rgba(78,154,107,.18); color: var(--success); }
+#hpd-trainer .lvl.med { background: rgba(201,162,75,.18); color: var(--gold-300); }
+#hpd-trainer .lvl.hard { background: rgba(184,92,74,.2); color: var(--danger); }
+#hpd-trainer .start-btn { background: var(--gold-500); color: var(--navy-950); border: none; border-radius: 6px; padding: 13px 32px; font-size: 13px; letter-spacing: 0.08em; font-weight: 600; cursor: pointer; font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+#hpd-trainer .start-btn:hover { background: var(--gold-300); }
+#hpd-trainer .start-btn:disabled { opacity: .4; cursor: not-allowed; }
+#hpd-trainer .note { font-size: 11.5px; color: var(--ink-muted); max-width: 560px; border-top: 1px solid var(--navy-700); padding-top: 14px; }
+
+/* api bar */
+#hpd-trainer .api-bar { display: flex; gap: 8px; align-items: center; max-width: 640px; width: 100%; background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 10px 12px; flex-wrap: wrap; }
+#hpd-trainer .api-bar input { flex: 1; min-width: 200px; background: var(--navy-900); border: 1px solid var(--navy-700); border-radius: 6px; color: var(--paper); padding: 9px 12px; font-size: 12.5px; font-family: 'IBM Plex Mono', monospace; }
+#hpd-trainer input:focus, #hpd-trainer select:focus { outline: none; border-color: var(--gold-500); }
+#hpd-trainer .api-bar button, #hpd-trainer .small-btn { background: var(--navy-600); border: none; border-radius: 6px; color: var(--paper); padding: 9px 16px; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+#hpd-trainer .api-bar button:hover, #hpd-trainer .small-btn:hover { background: var(--gold-500); color: var(--navy-950); }
+#hpd-trainer .api-status { flex-basis: 100%; font-size: 11px; color: var(--ink-muted); text-align: left; }
+#hpd-trainer .api-status.ok { color: var(--success); }
+#hpd-trainer .api-status.err { color: var(--danger); }
+
+/* toggle */
+#hpd-trainer .toggle-row { display: flex; align-items: center; gap: 10px; max-width: 640px; width: 100%; background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 12px 14px; cursor: pointer; }
+#hpd-trainer .switch { position: relative; width: 38px; height: 21px; flex-shrink: 0; }
+#hpd-trainer .switch input { opacity: 0; width: 0; height: 0; }
+#hpd-trainer .switch-track { position: absolute; inset: 0; background: var(--navy-700); border-radius: 20px; transition: background .15s; }
+#hpd-trainer .switch-track::before { content: ''; position: absolute; width: 15px; height: 15px; left: 3px; top: 3px; background: var(--ink-muted); border-radius: 50%; transition: transform .15s, background .15s; }
+#hpd-trainer .switch input:checked + .switch-track { background: var(--navy-600); }
+#hpd-trainer .switch input:checked + .switch-track::before { transform: translateX(17px); background: var(--gold-500); }
+#hpd-trainer .toggle-text { text-align: left; }
+#hpd-trainer .toggle-text .tt { font-size: 12.5px; font-weight: 600; }
+#hpd-trainer .toggle-text .ts { font-size: 11px; color: var(--ink-muted); }
+
+/* call screen */
+#hpd-trainer .call-screen { display: none; flex: 1; min-height: 0; }
+#hpd-trainer .call-screen.active { display: flex; }
+#hpd-trainer .col-left { width: 230px; flex-shrink: 0; background: var(--navy-900); border-right: 1px solid var(--navy-700); padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+#hpd-trainer .panel-title { font-size: 10.5px; letter-spacing: 0.14em; color: var(--gold-500); margin-bottom: 8px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
+#hpd-trainer .biz-name { font-size: 18px; font-weight: 600; line-height: 1.2; }
+#hpd-trainer .biz-sub { font-size: 12px; color: var(--ink-muted); margin-top: 3px; }
+#hpd-trainer .stat-row { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--ink-muted); padding: 6px 0; border-bottom: 1px solid var(--navy-700); }
+#hpd-trainer .stat-row span:last-child { color: var(--paper); text-align: right; }
+#hpd-trainer .notepad { width: 100%; min-height: 150px; resize: vertical; background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 6px; color: var(--paper); padding: 9px 10px; font-size: 12.5px; font-family: 'IBM Plex Mono', monospace; line-height: 1.5; }
+#hpd-trainer .notepad:focus { outline: none; border-color: var(--gold-500); }
+#hpd-trainer .hint { font-size: 10.5px; color: var(--ink-muted); margin-top: 4px; }
+
+#hpd-trainer .transcript-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+#hpd-trainer .transcript { flex: 1; overflow-y: auto; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; min-height: 280px; }
+#hpd-trainer .bubble { max-width: 76%; padding: 11px 14px; border-radius: 10px; font-size: 14px; line-height: 1.45; }
+#hpd-trainer .bubble.prospect { background: var(--navy-800); align-self: flex-start; border-top-left-radius: 2px; }
+#hpd-trainer .bubble.prospect.gk { border-left: 2px solid var(--ink-muted); }
+#hpd-trainer .bubble.rep { background: var(--navy-600); align-self: flex-end; border-top-right-radius: 2px; }
+#hpd-trainer .bubble-label { font-size: 10px; letter-spacing: 0.1em; color: var(--ink-muted); margin-bottom: 4px; text-transform: uppercase; }
+#hpd-trainer .sys { align-self: center; color: var(--ink-muted); font-size: 12px; font-style: italic; }
+#hpd-trainer .thinking { align-self: flex-start; color: var(--ink-muted); font-size: 12.5px; font-style: italic; padding-left: 4px; }
+#hpd-trainer .input-row { border-top: 1px solid var(--navy-700); padding: 14px 20px; display: flex; gap: 10px; background: var(--navy-900); }
+#hpd-trainer .input-row input { flex: 1; min-width: 0; background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 6px; color: var(--paper); padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; }
+#hpd-trainer .input-row button { background: var(--gold-500); border: none; border-radius: 6px; color: var(--navy-950); padding: 0 18px; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+#hpd-trainer .input-row button:disabled { opacity: .4; cursor: not-allowed; }
+#hpd-trainer .input-row .end-btn { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 0 14px; }
+
+#hpd-trainer .col-right { width: 250px; flex-shrink: 0; background: var(--navy-900); border-left: 1px solid var(--navy-700); padding: 18px 16px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+#hpd-trainer .step { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--navy-700); }
+#hpd-trainer .step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--navy-700); border: 1px solid var(--navy-600); flex-shrink: 0; transition: all .2s; }
+#hpd-trainer .step.hit .step-dot { background: var(--gold-500); border-color: var(--gold-500); box-shadow: 0 0 8px var(--gold-500); }
+#hpd-trainer .step .sname { font-size: 12.5px; font-weight: 600; }
+#hpd-trainer .step .sdesc { color: var(--ink-muted); font-size: 10.5px; margin-top: 1px; }
+#hpd-trainer .step.hit .sname { color: var(--gold-300); }
+#hpd-trainer .step-group { font-size: 9.5px; letter-spacing: .12em; color: var(--ink-muted); text-transform: uppercase; margin: 10px 0 2px; font-family: 'IBM Plex Mono', monospace; }
+#hpd-trainer .meter-track { height: 8px; background: var(--navy-800); border-radius: 4px; overflow: hidden; border: 1px solid var(--navy-700); }
+#hpd-trainer .meter-fill { height: 100%; background: linear-gradient(90deg, var(--danger), var(--gold-500), var(--success)); width: 35%; transition: width .4s; }
+#hpd-trainer .meter-label { font-size: 11px; color: var(--ink-muted); margin-top: 6px; display: flex; justify-content: space-between; }
+#hpd-trainer .counter { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; }
+#hpd-trainer .counter b { color: var(--gold-300); }
+#hpd-trainer .counter.over b { color: var(--danger); }
+
+/* script drawer */
+#hpd-trainer .drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(460px, 100%); background: var(--navy-900); border-left: 1px solid var(--gold-500); transform: translateX(100%); transition: transform .25s; z-index: 20; overflow-y: auto; padding: 20px 22px 40px; }
+#hpd-trainer .drawer.open { transform: translateX(0); }
+#hpd-trainer .drawer h3 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--gold-300); font-size: 15px; margin: 22px 0 8px; font-weight: 500; }
+#hpd-trainer .drawer .line { background: var(--navy-800); border-left: 3px solid var(--gold-500); border-radius: 4px; padding: 9px 12px; font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
+#hpd-trainer .drawer .tip { font-size: 12px; color: var(--ink-muted); margin-bottom: 8px; line-height: 1.45; }
+#hpd-trainer .drawer table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+#hpd-trainer .drawer td { border-bottom: 1px solid var(--navy-700); padding: 8px 6px; vertical-align: top; line-height: 1.45; }
+#hpd-trainer .drawer td:first-child { font-weight: 600; width: 38%; color: var(--gold-300); }
+#hpd-trainer .drawer-head { display: flex; justify-content: space-between; align-items: center; }
+
+/* handoff sheet */
+#hpd-trainer .sheet { display: none; flex: 1; padding: 28px 32px 40px; overflow-y: auto; }
+#hpd-trainer .sheet.active { display: block; }
+#hpd-trainer .sheet h2, #hpd-trainer .scorecard h2 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: .03em; font-weight: 600; font-size: 26px; margin: 0 0 4px; }
+#hpd-trainer .sheet .sub { color: var(--ink-muted); font-size: 13px; margin-bottom: 20px; max-width: 720px; line-height: 1.5; }
+#hpd-trainer .sheet-layout { display: grid; grid-template-columns: 1fr 280px; gap: 22px; align-items: start; }
+#hpd-trainer .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+#hpd-trainer .field label { display: block; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-500); margin-bottom: 5px; font-family: 'IBM Plex Mono', monospace; }
+#hpd-trainer .field label .src { color: var(--ink-muted); letter-spacing: 0; text-transform: none; font-family: 'Inter', sans-serif; }
+#hpd-trainer .field input { width: 100%; background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 6px; color: var(--paper); padding: 10px 12px; font-size: 13.5px; font-family: 'Inter', sans-serif; color-scheme: dark; }
+#hpd-trainer .field input.missing { border-color: var(--danger); }
+#hpd-trainer .field .fhelp { font-size: 10.5px; color: var(--ink-muted); margin-top: 3px; }
+#hpd-trainer .field.wide { grid-column: 1 / -1; }
+#hpd-trainer .dq-box { background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 14px 16px; margin-top: 18px; }
+#hpd-trainer .dq-box label { display: flex; gap: 9px; align-items: center; font-size: 13px; padding: 5px 0; cursor: pointer; }
+#hpd-trainer .dq-box input { accent-color: #C9A24B; width: 16px; height: 16px; }
+#hpd-trainer .sheet-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+#hpd-trainer .sheet-actions button, #hpd-trainer .score-actions button { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12.5px; font-weight: 600; padding: 12px 22px; border-radius: 6px; cursor: pointer; }
+#hpd-trainer .btn-primary { background: var(--gold-500); border: none; color: var(--navy-950); }
+#hpd-trainer .btn-ghost { background: transparent; border: 1px solid var(--navy-600); color: var(--paper); }
+#hpd-trainer .btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+#hpd-trainer .sheet-warn { color: var(--danger); font-size: 12.5px; margin-top: 10px; min-height: 18px; }
+#hpd-trainer .side-notes { background: var(--navy-900); border: 1px solid var(--navy-700); border-radius: 8px; padding: 14px; position: sticky; top: 0; }
+#hpd-trainer .side-notes pre { white-space: pre-wrap; font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin: 0; color: var(--paper); line-height: 1.5; max-height: 360px; overflow-y: auto; }
+
+/* scorecard */
+#hpd-trainer .scorecard { display: none; flex: 1; padding: 30px 34px 40px; overflow-y: auto; }
+#hpd-trainer .scorecard.active { display: block; }
+#hpd-trainer .score-top { display: flex; align-items: center; gap: 22px; margin-bottom: 22px; flex-wrap: wrap; }
+#hpd-trainer .score-ring { width: 96px; height: 96px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; border: 3px solid var(--gold-500); flex-shrink: 0; }
+#hpd-trainer .score-ring .num { font-family: 'Oswald', sans-serif; font-size: 32px; line-height: 1; }
+#hpd-trainer .score-ring .of { font-size: 10px; color: var(--ink-muted); font-family: 'IBM Plex Mono', monospace; }
+#hpd-trainer .verdict.win { color: var(--gold-300); }
+#hpd-trainer .verdict.loss { color: var(--danger); }
+#hpd-trainer .score-sub { color: var(--ink-muted); font-size: 13px; line-height: 1.5; max-width: 640px; }
+#hpd-trainer .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+#hpd-trainer .score-box { background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 13px 15px; }
+#hpd-trainer .score-box .k { font-size: 10px; letter-spacing: 0.1em; color: var(--gold-500); margin-bottom: 6px; }
+#hpd-trainer .score-box .v { font-size: 15px; font-weight: 600; }
+#hpd-trainer .score-box .v small { font-weight: 400; color: var(--ink-muted); font-size: 11px; }
+#hpd-trainer .check-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 24px; }
+#hpd-trainer .check-table th { text-align: left; font-size: 10px; letter-spacing: .1em; color: var(--gold-500); font-family: 'IBM Plex Mono', monospace; font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--navy-600); text-transform: uppercase; }
+#hpd-trainer .check-table td { padding: 8px; border-bottom: 1px solid var(--navy-700); vertical-align: top; line-height: 1.4; }
+#hpd-trainer .ok { color: var(--success); font-weight: 600; }
+#hpd-trainer .bad { color: var(--danger); font-weight: 600; }
+#hpd-trainer .block { background: var(--navy-800); border: 1px solid var(--navy-700); border-left: 3px solid var(--gold-500); border-radius: 6px; padding: 14px 16px; font-size: 13px; line-height: 1.6; margin-bottom: 22px; }
+#hpd-trainer .block b { color: var(--gold-300); }
+#hpd-trainer .block.red { border-left-color: var(--danger); }
+#hpd-trainer .coach-loading { display: flex; align-items: center; gap: 10px; color: var(--ink-muted); font-size: 13px; padding: 14px 0; }
+#hpd-trainer .coach-loading .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold-500); animation: pulse 1s infinite ease-in-out; }
+#hpd-trainer .coach-loading .dot:nth-child(2) { animation-delay: .15s; }
+#hpd-trainer .coach-loading .dot:nth-child(3) { animation-delay: .3s; }
+@keyframes pulse { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+#hpd-trainer .coach-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+#hpd-trainer .coach-box { background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 8px; padding: 14px 16px; }
+#hpd-trainer .coach-box .k { font-size: 10.5px; letter-spacing: 0.1em; margin-bottom: 8px; }
+#hpd-trainer .coach-box.strengths .k { color: var(--success); }
+#hpd-trainer .coach-box.improve .k { color: var(--danger); }
+#hpd-trainer .coach-box ul { margin: 0; padding-left: 16px; font-size: 12.5px; line-height: 1.6; }
+#hpd-trainer .coach-line-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+#hpd-trainer .coach-line { background: var(--navy-800); border: 1px solid var(--navy-700); border-left: 3px solid var(--navy-600); border-radius: 6px; padding: 10px 14px; }
+#hpd-trainer .coach-line.strong { border-left-color: var(--success); }
+#hpd-trainer .coach-line.okay { border-left-color: var(--gold-500); }
+#hpd-trainer .coach-line.weak { border-left-color: var(--danger); }
+#hpd-trainer .coach-line .cl-text { font-size: 13px; margin-bottom: 4px; }
+#hpd-trainer .coach-line .cl-note { font-size: 11.5px; color: var(--ink-muted); }
+#hpd-trainer .coach-line .cl-better { font-size: 11.5px; color: var(--gold-300); margin-top: 4px; }
+#hpd-trainer .cl-tag { display: inline-block; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; padding: 1px 7px; border-radius: 3px; margin-right: 7px; vertical-align: middle; }
+#hpd-trainer .coach-line.strong .cl-tag { background: rgba(78,154,107,0.18); color: var(--success); }
+#hpd-trainer .coach-line.okay .cl-tag { background: rgba(201,162,75,0.18); color: var(--gold-300); }
+#hpd-trainer .coach-line.weak .cl-tag { background: rgba(184,92,74,0.18); color: var(--danger); }
+#hpd-trainer .score-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+#hpd-trainer ::-webkit-scrollbar { width: 8px; }
+#hpd-trainer ::-webkit-scrollbar-thumb { background: var(--navy-700); border-radius: 4px; }
+
+@media (max-width: 900px) {
+  body { padding: 0; }
+  #hpd-trainer { border-radius: 0; min-height: 100vh; }
+  #hpd-trainer .call-screen.active { flex-direction: column; }
+  #hpd-trainer .col-left, #hpd-trainer .col-right { width: 100%; border: none; border-bottom: 1px solid var(--navy-700); }
+  #hpd-trainer .col-right { order: 3; border-top: 1px solid var(--navy-700); }
+  #hpd-trainer .notepad { min-height: 80px; }
+  #hpd-trainer .transcript { max-height: 60vh; }
+  #hpd-trainer .sheet-layout { grid-template-columns: 1fr; }
+  #hpd-trainer .score-grid { grid-template-columns: 1fr 1fr; }
+  #hpd-trainer .sheet, #hpd-trainer .scorecard { padding: 22px 16px 36px; }
+}
+@media (max-width: 600px) {
+  #hpd-trainer .scenario-grid, #hpd-trainer .rules { grid-template-columns: 1fr; }
+  #hpd-trainer .form-grid, #hpd-trainer .coach-summary { grid-template-columns: 1fr; }
+  #hpd-trainer .start h1 { font-size: 27px; }
+  #hpd-trainer .brand-name { font-size: 11px; }
+  #hpd-trainer .input-row { padding: 12px; gap: 6px; }
+  #hpd-trainer .input-row button { padding: 0 11px; }
+}
+</style>
+</head>
+<body>
+<div id="hpd-trainer">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">HP</div>
+      <div class="brand-name mono">HARLOW PAYMENTS &middot; APPOINTMENT SETTER TRAINER</div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <button class="small-btn" id="scriptBtn" type="button">Script</button>
+      <div class="timer mono" id="timerDisplay">00:00</div>
+    </div>
+  </div>
+
+  <!-- START -->
+  <div class="start" id="startScreen">
+    <div>
+      <div class="eyebrow">Live Roleplay &middot; AI Prospect</div>
+      <h1>Set the appointment.</h1>
+    </div>
+    <p class="lede">Call an AI business owner, run the script, book a time with a manager, and fill out the Qualified Appointment Handoff Sheet. You're graded on the call <em>and</em> on whether the sheet is right, so take notes as you go.</p>
+    <div class="rules">
+      <div class="rule"><div class="n">01</div><div class="t">Word for word. Run the pitch as written.</div></div>
+      <div class="rule"><div class="n">02</div><div class="t">Two-time close: "10 AM, or would 2 PM be better?"</div></div>
+      <div class="rule"><div class="n">03</div><div class="t">Read it back: the phone number and the time.</div></div>
+    </div>
+    <div class="api-bar">
+      <input type="password" id="apiKeyInput" placeholder="Paste your Anthropic API key (sk-ant-...)" autocomplete="off" />
+      <button id="saveKeyBtn" type="button">Save key</button>
+      <div class="api-status" id="apiStatus">Enter your API key to turn on the AI prospect. It's stored only in this browser and only ever sent to Anthropic.</div>
+    </div>
+    <div class="section-label">Pick a call</div>
+    <div class="scenario-grid" id="scenarioGrid"></div>
+    <label class="toggle-row" for="coachToggle">
+      <span class="switch"><input type="checkbox" id="coachToggle" checked /><span class="switch-track"></span></span>
+      <span class="toggle-text"><div class="tt">Coach mode</div><div class="ts">Line-by-line feedback on your call after you hang up</div></span>
+    </label>
+    <button class="start-btn" id="startBtn" disabled type="button">Dial the lead</button>
+    <div class="note">Built from HPD's Appointment Setting Script and Qualified Appointment Handoff Sheet. Some calls hide a disqualifier, and some prospects will give you a better callback number only if you read the number back. Tap <b>Script</b> any time to see the lines.</div>
+  </div>
+
+  <!-- CALL -->
+  <div class="call-screen" id="callScreen">
+    <div class="col-left">
+      <div>
+        <div class="panel-title">Lead card</div>
+        <div class="biz-name" id="bizName">&mdash;</div>
+        <div class="biz-sub" id="bizType">&mdash;</div>
+      </div>
+      <div>
+        <div class="stat-row"><span>Phone</span><span id="leadPhone" class="mono">&mdash;</span></div>
+        <div class="stat-row"><span>Address</span><span id="leadAddr">&mdash;</span></div>
+        <div class="stat-row"><span>City</span><span id="leadCity">&mdash;</span></div>
+        <div class="stat-row"><span>Assigned rep</span><span id="leadRep">&mdash;</span></div>
+        <div class="stat-row"><span>Status</span><span id="statStatus">Ringing</span></div>
+      </div>
+      <div>
+        <div class="panel-title">Your notes</div>
+        <textarea class="notepad" id="notepad" placeholder="Name:&#10;Processor:&#10;Volume:&#10;Email:&#10;Time:&#10;Best #:"></textarea>
+        <div class="hint">You'll need these for the handoff sheet.</div>
+      </div>
+    </div>
+
+    <div class="transcript-col">
+      <div class="transcript" id="transcript"></div>
+      <div class="input-row">
+        <input type="text" id="lineInput" placeholder="Say your next line..." autocomplete="off" />
+        <button id="sendBtn" type="button">Say it</button>
+        <button id="endBtn" class="end-btn" type="button">Hang up</button>
+      </div>
+    </div>
+
+    <div class="col-right">
+      <div>
+        <div class="panel-title">Script tracker</div>
+        <div id="stepList"></div>
+      </div>
+      <div>
+        <div class="panel-title">Rebuttals</div>
+        <div class="counter" id="rebuttalCounter"><span>Objection rebuttals</span><b id="rebuttalCount">0 / 2</b></div>
+        <div class="hint">Acknowledge, one short line, back to the two-time close. Two attempts max, then thank them and move on.</div>
+      </div>
+      <div>
+        <div class="panel-title">Prospect interest</div>
+        <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+        <div class="meter-label mono"><span>Cold</span><span id="meterPct">35%</span><span>Booked</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HANDOFF SHEET -->
+  <div class="sheet" id="sheetScreen">
+    <h2>Qualified Appointment Handoff Sheet</h2>
+    <div class="sub">Fill in every field from what the prospect told you. A setter should not submit an appointment unless every field is filled. If a disqualifier applies, check it and don't submit.</div>
+    <div class="sheet-layout">
+      <div>
+        <div class="form-grid" id="formGrid"></div>
+        <div class="dq-box">
+          <div class="panel-title">Disqualifiers</div>
+          <label><input type="checkbox" id="dq_dm" /> No decision-maker confirmation</label>
+          <label><input type="checkbox" id="dq_vol" /> <span>Monthly volume below the minimum: <b class="mono" id="minVolLabel"></b></span></label>
+          <label><input type="checkbox" id="dq_cards" /> Business does not currently take cards</label>
+        </div>
+        <div class="sheet-actions">
+          <button class="btn-primary" id="submitApptBtn" type="button">Submit appointment</button>
+          <button class="btn-danger" id="noSubmitBtn" type="button">Don't submit (disqualified)</button>
+        </div>
+        <div class="sheet-warn" id="sheetWarn"></div>
+      </div>
+      <div class="side-notes">
+        <div class="panel-title">Your call notes</div>
+        <pre id="sheetNotes"></pre>
+        <div style="margin-top:12px;"><button class="small-btn" id="viewTranscriptBtn" type="button">Peek at transcript</button></div>
+        <div class="hint">Peeking is allowed, but in real life you won't have a transcript. Take notes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORECARD -->
+  <div class="scorecard" id="scorecard">
+    <div class="score-top">
+      <div class="score-ring"><div class="num" id="scoreNum">&mdash;</div><div class="of">/ 100</div></div>
+      <div>
+        <h2 class="verdict" id="scoreVerdict">&mdash;</h2>
+        <div class="score-sub" id="scoreSub">&mdash;</div>
+      </div>
+    </div>
+    <div class="score-grid">
+      <div class="score-box"><div class="k mono">OUTCOME</div><div class="v" id="sbOutcome">&mdash;</div></div>
+      <div class="score-box"><div class="k mono">SCRIPT STEPS</div><div class="v" id="sbSteps">&mdash;</div></div>
+      <div class="score-box"><div class="k mono">HANDOFF SHEET</div><div class="v" id="sbSheet">&mdash;</div></div>
+      <div class="score-box"><div class="k mono">SUBMIT DECISION</div><div class="v" id="sbDecision">&mdash;</div></div>
+    </div>
+    <div class="block" id="decisionBlock"></div>
+    <div id="sheetReview"></div>
+    <div id="coachPanel"></div>
+    <div class="score-actions">
+      <button class="btn-primary" id="callAgainBtn" type="button">Call another lead</button>
+      <button class="btn-ghost" id="sameAgainBtn" type="button">Retry same scenario</button>
+      <button class="btn-ghost" id="reviewBtn" type="button">Review transcript</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT DRAWER -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head"><div class="panel-title" style="margin:0;">Appointment Setting Script</div><button class="small-btn" id="closeDrawer" type="button">Close</button></div>
+    <div class="tip" style="margin-top:8px;"><i>Word for word. Two-time close. Read it back.</i></div>
+    <h3>1. Opener (reach the owner)</h3>
+    <div class="line">"Hi, is the owner or manager available?"</div>
+    <div class="tip">If a gatekeeper asks what it's regarding:</div>
+    <div class="line">"It's about the charges you pay for accepting Visa and Mastercard. Who handles that for the business?"</div>
+    <div class="tip">Get the decision-maker's name even if they aren't available:</div>
+    <div class="line">"What's their first name, and when's the best time to catch them?"</div>
+    <h3>2. The Pitch</h3>
+    <div class="line">"Hi [Prospect Name], this is [Your Name], I'm calling with HPD. The reason for my call is because there's been a change. Now, anytime you accept Visa or Mastercard for payment, the charges you pay can be reduced down to zero.<br><br>Now, we don't want you to do anything right now. We'll have one of our managers give you a call and explain how you can reduce your charges down to zero and give you all the details. There's no obligation.<br><br><b>Can they call you tomorrow at 10 AM, or would 2 PM be a better time?"</b></div>
+    <h3>3. Lock the Time</h3>
+    <div class="tip">Once they pick a time, don't celebrate or add more pitch. Go straight to confirming.</div>
+    <div class="line">"Perfect, [10 AM / 2 PM] tomorrow. Let me just get a couple quick details so they're prepared when they call."</div>
+    <h3>4. Quick Qualifiers</h3>
+    <div class="tip">Conversational, not an interrogation.</div>
+    <table>
+      <tr><td>Current Processor</td><td>"Who do you process with right now, is it Square, Clover, your bank?"</td></tr>
+      <tr><td>Volume</td><td>"Roughly how much do you run in cards a month? Ballpark is fine, under 10,000, 10 to 30, more than that?"</td></tr>
+      <tr><td>Confirms decision-maker</td><td>"And you're the one who makes the call on the processing, correct?"</td></tr>
+      <tr><td>Email</td><td>"What's the best email to send a confirmation to?"</td></tr>
+    </table>
+    <div class="tip" style="margin-top:8px;">The handoff sheet also needs the decision-maker's <b>last name</b>. Get it before you hang up.</div>
+    <h3>5. Confirm &amp; Close</h3>
+    <div class="line">"Great. So [Rep Name] will call you at [time] tomorrow at [phone number], is that the best number? Their name is [Rep Name], so keep an eye out for the call. Thanks, [Prospect Name], have a great day."</div>
+    <div class="tip"><b>Read back the phone number and time.</b> That's the single biggest driver of show rate.</div>
+    <h3>6. Common Objections</h3>
+    <div class="tip"><b>Rule of thumb:</b> acknowledge, give one short line, and go back to the two-time close. Two attempts max, then thank them and move on.</div>
+    <table>
+      <tr><td>"What's the catch?" / "How is it zero?"</td><td>"Great question, and that's exactly what the manager will walk you through. It only takes a few minutes. Does 10 or 2 work better?"</td></tr>
+      <tr><td>"I'm happy with my processor."</td><td>"Totally understand, most people we talk to are. This isn't about switching today. It's just to show you how the charges can go to zero, so you can compare. Would tomorrow at 10 or 2 be better?"</td></tr>
+      <tr><td>"Just send me something."</td><td>"I can, but every business is set up a little differently, so it's a lot quicker for the manager to spend five minutes with you than to guess in an email. Morning or afternoon better?"</td></tr>
+      <tr><td>"I'm busy."</td><td>"That's exactly why we set a time. It's quick. Would early morning or later afternoon be easier?"</td></tr>
+      <tr><td>"I'm under contract."</td><td>"No problem, the manager can look at that too. A lot of times it still makes sense. 10 or 2 tomorrow?"</td></tr>
+    </table>
+    <h3>Disqualifiers (don't submit)</h3>
+    <div class="tip">No decision-maker confirmation &middot; Monthly volume below <b id="minVolDrawer"></b> &middot; Business doesn't currently take cards</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ================= SETTINGS (edit these) =================
+  const MODEL = 'claude-sonnet-5';          // same model as the other HPD trainers
+  const MIN_VOLUME = 5000;                   // minimum monthly card volume to submit
+  const REPS = ['Jordan Reyes', 'Taylor Brooks', 'Chris Nguyen', 'Morgan Hale']; // closers who take the call
+  // =========================================================
+
+  const SCENARIOS = [
+    { id: 'owner', name: 'Owner picks up', sub: 'Decision-maker answers. Run it clean.', lvl: 'easy', gk: false, objections: ['catch'], dq: null },
+    { id: 'gatekeeper', name: 'Gatekeeper first', sub: 'An employee answers and asks what it’s regarding.', lvl: 'med', gk: true, objections: ['busy'], dq: null },
+    { id: 'catch', name: '"What’s the catch?"', sub: 'Skeptical owner. Zero sounds too good to be true.', lvl: 'med', gk: false, objections: ['catch', 'catch'], dq: null },
+    { id: 'sendinfo', name: '"Just send me something"', sub: 'Wants an email instead of a call.', lvl: 'med', gk: false, objections: ['send', 'busy'], dq: null },
+    { id: 'happy', name: 'Happy / under contract', sub: 'Likes their processor and has a contract.', lvl: 'hard', gk: false, objections: ['happy', 'contract'], dq: null },
+    { id: 'hidden', name: 'Hidden disqualifier', sub: 'Will gladly book. Your qualifiers have to catch it.', lvl: 'hard', gk: false, objections: [], dq: 'random' },
+    { id: 'hardno', name: 'Hard no', sub: 'Not booking today. Know when to move on.', lvl: 'hard', gk: false, objections: ['happy', 'busy', 'send'], dq: null, hardNo: true },
+    { id: 'random', name: 'Surprise me', sub: 'Any scenario, any market. Closest to the real dialer.', lvl: 'med', random: true }
+  ];
+
+  const BUSINESSES = [
+    { dba: 'Rosa’s Taqueria', legal: 'Rosa Garcia Foods LLC', type: 'Restaurant', domain: 'rosastaqueria.com' },
+    { dba: 'Lone Star Lube & Tire', legal: 'LSLT Automotive Inc', type: 'Auto repair / oil change', domain: 'lonestarlube.com' },
+    { dba: 'Bloom & Vine Florist', legal: 'Bloom and Vine LLC', type: 'Florist', domain: 'bloomandvinetx.com' },
+    { dba: 'Iron Gate Fitness', legal: 'Iron Gate Athletics LLC', type: 'Gym', domain: 'irongatefit.com' },
+    { dba: 'Pecan Street Bakery', legal: 'Pecan Street Bakehouse LLC', type: 'Bakery / café', domain: 'pecanstreetbakery.com' },
+    { dba: 'Clearwater Dental', legal: 'Clearwater Family Dentistry PLLC', type: 'Dental office', domain: 'clearwaterdentalcare.com' },
+    { dba: 'Big Tex Liquor', legal: 'BTL Spirits Inc', type: 'Liquor store', domain: 'bigtexliquor.com' },
+    { dba: 'Sharp Line Barbershop', legal: 'Sharp Line Grooming LLC', type: 'Barbershop', domain: 'sharplinecuts.com' },
+    { dba: 'Hometown Hardware', legal: 'Hometown Supply Co', type: 'Hardware store', domain: 'hometownhardware.net' },
+    { dba: 'Paws & Claws Grooming', legal: 'P&C Pet Services LLC', type: 'Pet grooming', domain: 'pawsclawsgroom.com' },
+    { dba: 'Smokehouse 75', legal: 'Seventy Five BBQ LLC', type: 'BBQ restaurant', domain: 'smokehouse75.com' },
+    { dba: 'Prime Cut Landscaping', legal: 'Prime Cut Outdoor Services LLC', type: 'Landscaping', domain: 'primecutlawns.com' },
+    { dba: 'Northside Nails', legal: 'Northside Nail Studio LLC', type: 'Nail salon', domain: 'northsidenails.com' },
+    { dba: 'Copperline Coffee', legal: 'Copperline Roasters LLC', type: 'Coffee shop', domain: 'copperlinecoffee.com' }
+  ];
+
+  const MARKETS = [
+    { city: 'Plano', state: 'TX', zip: '75093', ac: ['972','469'], tz: 'Central', abbr: 'CT' },
+    { city: 'McKinney', state: 'TX', zip: '75070', ac: ['972','469'], tz: 'Central', abbr: 'CT' },
+    { city: 'Frisco', state: 'TX', zip: '75034', ac: ['469','972'], tz: 'Central', abbr: 'CT' },
+    { city: 'Dallas', state: 'TX', zip: '75206', ac: ['214','469'], tz: 'Central', abbr: 'CT' },
+    { city: 'Fort Worth', state: 'TX', zip: '76107', ac: ['817','682'], tz: 'Central', abbr: 'CT' },
+    { city: 'Denton', state: 'TX', zip: '76201', ac: ['940'], tz: 'Central', abbr: 'CT' },
+    { city: 'Oklahoma City', state: 'OK', zip: '73102', ac: ['405'], tz: 'Central', abbr: 'CT' },
+    { city: 'Phoenix', state: 'AZ', zip: '85004', ac: ['602','480'], tz: 'Arizona (Mountain Standard, no daylight saving)', abbr: 'MST' },
+    { city: 'Denver', state: 'CO', zip: '80205', ac: ['303','720'], tz: 'Mountain', abbr: 'MT' },
+    { city: 'Atlanta', state: 'GA', zip: '30308', ac: ['404','678'], tz: 'Eastern', abbr: 'ET' },
+    { city: 'Las Vegas', state: 'NV', zip: '89101', ac: ['702'], tz: 'Pacific', abbr: 'PT' }
+  ];
+  const STREETS = ['Main St', 'Preston Rd', 'Elm St', 'Commerce Dr', 'Virginia Pkwy', 'Eldorado Pkwy', 'Camelback Rd', 'Peachtree St', 'Colfax Ave', 'University Dr', 'Belt Line Rd', 'Custer Rd'];
+  const FIRST = ['Danny', 'Marisol', 'Greg', 'Linh', 'Tasha', 'Ray', 'Priya', 'Carlos', 'Ellen', 'Marcus', 'Heather', 'Omar', 'Brenda', 'Kyle'];
+  const LAST = ['Alvarez', 'Whitfield', 'Nguyen', 'Brooks', 'Patel', 'Kowalski', 'Henderson', 'Okafor', 'Delgado', 'Morrison', 'Tran', 'Sullivan', 'Haddad', 'Pruitt'];
+  const GK_NAMES = ['Kayla', 'Josh', 'Maria', 'Tyler', 'Ashley', 'Ben'];
+  const PROCESSORS = [
+    { name: 'Square', keys: ['square'] },
+    { name: 'Clover', keys: ['clover'] },
+    { name: 'Clover through Wells Fargo', keys: ['clover', 'wells'] },
+    { name: 'Chase (their bank)', keys: ['chase'] },
+    { name: 'Heartland', keys: ['heartland'] },
+    { name: 'Toast', keys: ['toast'] },
+    { name: 'Stripe', keys: ['stripe'] },
+    { name: 'Worldpay', keys: ['worldpay', 'world pay'] }
+  ];
+
+  const STEPS = [
+    { id: 'opener', group: 'Open', name: 'Ask for owner / manager', desc: '"Is the owner or manager available?"' },
+    { id: 'pitch', group: 'Pitch', name: 'Deliver the pitch', desc: 'Change, reduced to zero, no obligation' },
+    { id: 'two_time_close', group: 'Pitch', name: 'Two-time close', desc: '10 AM or 2 PM tomorrow' },
+    { id: 'lock', group: 'Lock', name: 'Lock the time', desc: 'Confirm it, no more pitching' },
+    { id: 'q_processor', group: 'Qualify', name: 'Current processor', desc: 'Square, Clover, bank?' },
+    { id: 'q_volume', group: 'Qualify', name: 'Monthly volume', desc: 'Under 10k, 10–30, more?' },
+    { id: 'q_dm', group: 'Qualify', name: 'Confirm decision-maker', desc: '"You make the call on processing?"' },
+    { id: 'q_email', group: 'Qualify', name: 'Email', desc: 'For the confirmation' },
+    { id: 'readback', group: 'Close', name: 'Read it back', desc: 'Rep name, time, phone number' }
+  ];
+
+  const el = id => document.getElementById(id);
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = n => '$' + Math.round(n).toLocaleString('en-US');
+  const fmtPhone = d => `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+
+  let selectedScenario = null;
+  let lastScenarioId = null;
+  let state = null;
+  let timerInterval = null;
+
+  el('minVolLabel').textContent = money(MIN_VOLUME);
+  el('minVolDrawer').textContent = money(MIN_VOLUME);
+
+  // ---------- API key ----------
+  let apiKey = '';
+  try { apiKey = localStorage.getItem('hpd_trainer_key') || ''; } catch(e) {}
+  if (apiKey){ el('apiKeyInput').value = apiKey; setApiStatus('Key loaded from this browser. Ready to dial.', 'ok'); }
+  function saveKey(){
+    const val = el('apiKeyInput').value.trim();
+    if (!val.startsWith('sk-ant-')){ setApiStatus('That doesn’t look like a valid key. It should start with "sk-ant-".', 'err'); return; }
+    apiKey = val;
+    try { localStorage.setItem('hpd_trainer_key', val); } catch(e) {}
+    setApiStatus('Key saved to this browser. Pick a call and dial.', 'ok');
+    updateStartBtn();
+  }
+  function setApiStatus(msg, type){ const s = el('apiStatus'); s.textContent = msg; s.className = 'api-status ' + (type || ''); }
+  function updateStartBtn(){ el('startBtn').disabled = !(apiKey && selectedScenario); }
+
+  // ---------- start screen ----------
+  SCENARIOS.forEach(sc => {
+    const c = document.createElement('div');
+    c.className = 'vcard';
+    c.innerHTML = `<div class="vname">${esc(sc.name)}</div><div class="vsub">${esc(sc.sub)}</div><span class="lvl ${sc.lvl}">${sc.lvl === 'med' ? 'medium' : sc.lvl}</span>`;
+    c.onclick = () => {
+      document.querySelectorAll('#hpd-trainer .vcard').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      selectedScenario = sc.id;
+      updateStartBtn();
+    };
+    el('scenarioGrid').appendChild(c);
+  });
+
+  function buildSteps(){
+    let html = '', g = '';
+    STEPS.forEach(s => {
+      if (s.group !== g){ g = s.group; html += `<div class="step-group">${g}</div>`; }
+      html += `<div class="step" id="step_${s.id}"><div class="step-dot"></div><div><div class="sname">${esc(s.name)}</div><div class="sdesc">${esc(s.desc)}</div></div></div>`;
+    });
+    el('stepList').innerHTML = html;
+  }
+  buildSteps();
+
+  // ---------- dates ----------
+  function isoDate(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+  function niceDate(iso){ if (!iso) return '—'; const [y,m,d] = iso.split('-').map(Number); return new Date(y, m-1, d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }); }
+
+  // ---------- build a lead ----------
+  function makeLead(scenarioId){
+    let sc = SCENARIOS.find(s => s.id === scenarioId);
+    if (sc.random) sc = pick(SCENARIOS.filter(s => !s.random));
+    const biz = pick(BUSINESSES);
+    const market = Math.random() < 0.7 ? pick(MARKETS.filter(m => m.tz === 'Central')) : pick(MARKETS.filter(m => m.tz !== 'Central'));
+    const first = pick(FIRST), last = pick(LAST);
+    const ac = pick(market.ac);
+    const bizPhone = ac + String(rint(200,989)) + String(rint(1000,9999));
+    const hasCell = Math.random() < 0.45;
+    const cellPhone = pick(market.ac) + String(rint(200,989)) + String(rint(1000,9999));
+    const dq = sc.dq === 'random' ? pick(['not_dm', 'low_volume', 'no_cards']) : null;
+    const processor = pick(PROCESSORS);
+    const volume = dq === 'low_volume' ? rint(18, 42) * 100 : rint(9, 70) * 1000 + pick([0, 500]);
+    const emailStyle = Math.random() < 0.55;
+    const email = emailStyle ? `${first.toLowerCase()}@${biz.domain}` : `${first.toLowerCase()}${last.toLowerCase().slice(0,1)}${rint(10,99)}@gmail.com`;
+    const owner = { first, last };
+    // For the not_dm disqualifier, the person who books is a manager; the real owner is someone else.
+    let booker = owner, realOwner = owner;
+    if (dq === 'not_dm'){
+      realOwner = { first: pick(FIRST.filter(f => f !== first)), last: pick(LAST.filter(l => l !== last)) };
+    }
+    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+    const today = new Date();
+    return {
+      scenario: sc,
+      biz, market, owner: booker, realOwner,
+      gk: sc.gk ? pick(GK_NAMES) : null,
+      address: `${rint(100, 9899)} ${pick(STREETS)}`,
+      bizPhone, cellPhone: hasCell ? cellPhone : null,
+      bestPhone: hasCell ? cellPhone : bizPhone,
+      processor, volume, email, dq,
+      rep: pick(REPS),
+      todayIso: isoDate(today), todayNice: today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+      tomorrowIso: isoDate(tomorrow), tomorrowNice: tomorrow.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+    };
+  }
+
+  // ---------- call flow ----------
+  function startCall(scenarioId){
+    lastScenarioId = scenarioId;
+    const lead = makeLead(scenarioId);
+    state = {
+      lead, history: [], log: [], coachMode: el('coachToggle').checked,
+      turn: 0, interest: lead.scenario.hardNo ? 15 : 35, steps: {}, rebuttals: 0,
+      booked: null, ended: false, phase: 'call', startTime: Date.now(),
+      speaker: lead.gk ? 'gatekeeper' : 'decision_maker', sheet: null, decision: null
+    };
+    el('bizName').textContent = lead.biz.dba;
+    el('bizType').textContent = lead.biz.type;
+    el('leadPhone').textContent = fmtPhone(lead.bizPhone);
+    el('leadAddr').textContent = lead.address;
+    el('leadCity').textContent = `${lead.market.city}, ${lead.market.state} ${lead.market.zip}`;
+    el('leadRep').textContent = lead.rep;
+    el('statStatus').textContent = 'On call';
+    el('notepad').value = '';
+    el('transcript').innerHTML = '';
+    el('lineInput').disabled = false; el('sendBtn').disabled = false; el('endBtn').disabled = false;
+    peekFrom = null; el('endBtn').textContent = 'Hang up';
+    document.querySelectorAll('#hpd-trainer .step').forEach(s => s.classList.remove('hit'));
+    el('rebuttalCount').textContent = '0 / 2';
+    el('rebuttalCounter').classList.remove('over');
+    showScreen('call');
+    updateMeter();
+    startTimer();
+    const greeting = lead.gk
+      ? `Thank you for calling ${lead.biz.dba}, this is ${lead.gk}, how can I help you?`
+      : `${lead.biz.dba}, this is ${lead.owner.first}.`;
+    addSys(`Dialing ${fmtPhone(lead.bizPhone)}... ${lead.market.tz !== 'Central' ? `(Lead is in ${lead.market.city}, ${lead.market.tz} time.)` : ''}`);
+    addBubble('prospect', greeting, lead.gk ? 'gatekeeper' : 'decision_maker');
+    state.greeting = greeting;
+    el('lineInput').focus();
+  }
+
+  function showScreen(name){
+    el('startScreen').style.display = name === 'start' ? 'flex' : 'none';
+    el('callScreen').classList.toggle('active', name === 'call');
+    el('sheetScreen').classList.toggle('active', name === 'sheet');
+    el('scorecard').classList.toggle('active', name === 'score');
+    const box = name === 'sheet' ? el('sheetScreen') : name === 'score' ? el('scorecard') : null;
+    if (box) box.scrollTop = 0;
+  }
+
+  function startTimer(){
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      const s = Math.floor((Date.now() - state.startTime) / 1000);
+      el('timerDisplay').textContent = `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+    }, 1000);
+  }
+  function updateMeter(){ el('meterFill').style.width = state.interest + '%'; el('meterPct').textContent = state.interest + '%'; }
+
+  function nameFor(speaker){
+    const L = state.lead;
+    if (speaker === 'gatekeeper') return `${L.gk} (front desk)`;
+    return L.owner.first;
+  }
+  function addBubble(who, text, speaker){
+    const b = document.createElement('div');
+    b.className = 'bubble ' + who + (speaker === 'gatekeeper' ? ' gk' : '');
+    b.innerHTML = `<div class="bubble-label">${esc(who === 'rep' ? 'You' : nameFor(speaker))}</div><div>${esc(text)}</div>`;
+    el('transcript').appendChild(b);
+    el('transcript').scrollTop = el('transcript').scrollHeight;
+    state.log.push({ who, speaker: speaker || null, text });
+  }
+  function addSys(text){
+    const b = document.createElement('div'); b.className = 'sys'; b.textContent = text;
+    el('transcript').appendChild(b); el('transcript').scrollTop = el('transcript').scrollHeight;
+  }
+  function addThinking(){
+    const b = document.createElement('div'); b.className = 'thinking'; b.id = 'thinkingNote';
+    b.textContent = `${nameFor(state.speaker).split(' ')[0]} is responding...`;
+    el('transcript').appendChild(b); el('transcript').scrollTop = el('transcript').scrollHeight;
+  }
+  function removeThinking(){ const n = el('thinkingNote'); if (n) n.remove(); }
+
+  function buildSystemPrompt(){
+    const L = state.lead, sc = L.scenario;
+    const objText = {
+      catch: '"What’s the catch?" or "How is it zero?" (you are skeptical it can really be zero)',
+      happy: '"I’m happy with my processor."',
+      send: '"Just send me something." / "Email me the info."',
+      busy: '"I’m busy." (you are in the middle of work)',
+      contract: '"I’m under contract."'
+    };
+    const objList = sc.objections.length ? sc.objections.map((o, i) => `${i+1}. ${objText[o]}`).join('\n') : 'None in particular. You are friendly and agreeable.';
+    let dqText = 'None. This business is fully qualified.';
+    if (L.dq === 'not_dm') dqText = `You are ${L.owner.first} ${L.owner.last}, the store MANAGER, not the owner. You do NOT make decisions about card processing; the owner, ${L.realOwner.first} ${L.realOwner.last}, handles all of that and is rarely in. You still happily agree to take a call because it sounds good. Do NOT volunteer that you aren't the decision-maker. Only if the setter asks whether you're the one who makes the call on processing (or asks if you're the owner), answer honestly: no, that's ${L.realOwner.first}.`;
+    if (L.dq === 'low_volume') dqText = `Your card volume is small, about ${money(L.volume)} a month (most customers pay cash). Answer honestly if asked about volume, e.g. "oh, not much, maybe ${Math.round(L.volume/100)*100 >= 1000 ? (Math.round(L.volume/500)*500/1000).toString().replace(/\.0$/, '') + ' grand' : money(L.volume)}." Do not volunteer it otherwise.`;
+    if (L.dq === 'no_cards') dqText = `You STOPPED taking cards about a year ago because of the fees; you are cash, check and Zelle only now. The setter's opening about Visa/Mastercard charges makes you curious enough to agree to a call ("if I could take cards for free I'd start again"). Do NOT volunteer that you don't take cards. If the setter asks who you process with, or about card volume, say you don't take cards right now.`;
+
+    const phoneText = L.cellPhone
+      ? `The number on the setter's lead list is the business line ${fmtPhone(L.bizPhone)}. But the best number to actually reach you is your cell, ${fmtPhone(L.cellPhone)}, because nobody reliably answers the shop line. Do NOT volunteer this. Only if the setter reads back a number or asks if this is the best number to reach you, correct them and give your cell, digit by digit if they ask.`
+      : `The best number to reach you is the business line they called, ${fmtPhone(L.bizPhone)}. If they read it back correctly, confirm it.`;
+
+    const gkText = L.gk
+      ? `The call starts with ${L.gk}, a front-desk employee, who already answered: "${state.greeting}". As ${L.gk}: you can't make decisions. If asked for the owner/manager, ask what it's regarding. If the setter gives a clear, reasonable reason (charges for accepting Visa and Mastercard), say "hold on, let me grab ${L.owner.first}" and then the owner comes on. If the setter is vague, pushy, or rude, say ${L.owner.first} is busy and offer to take a message; give the owner's first name and say mornings are best if asked. When the owner comes on, set "speaker" to "decision_maker" and speak as ${L.owner.first}, starting with something like "This is ${L.owner.first}."`
+      : `You (${L.owner.first}) answered the phone yourself: "${state.greeting}".`;
+
+    return `You are role-playing a phone call for a sales training simulator. A new appointment setter from HPD (Harlow Payments Dallas, a merchant services company) is cold-calling a small business to book a short follow-up call with one of their managers about reducing the charges the business pays to accept Visa and Mastercard.
+
+TODAY is ${L.todayNice}. "Tomorrow" means ${L.tomorrowNice} (${L.tomorrowIso}).
+
+THE BUSINESS (hidden facts; reveal each only when the setter actually asks for it):
+- Business: ${L.biz.dba} (legal name ${L.biz.legal}), a ${L.biz.type.toLowerCase()} at ${L.address}, ${L.market.city}, ${L.market.state} ${L.market.zip}. Local time zone: ${L.market.tz}.
+- Decision-maker you play: ${L.owner.first} ${L.owner.last}. Give your first name freely. Give your last name only if asked for it (spell it if asked).
+- Current processor: ${L.processor.name}.
+- Monthly card volume: about ${money(L.volume)}.
+- Email: ${L.email} (spell it out naturally if asked, e.g. "${L.email.replace('@', ' at ').replace(/\./g, ' dot ')}").
+- Callback number: ${phoneText}
+- Disqualifier: ${dqText}
+
+${gkText}
+
+YOUR PERSONALITY AND OBJECTIONS for this call:
+${sc.hardNo
+  ? `You will NOT book a call today no matter what. Use these objections in order, one per setter attempt:\n${objList}\nStay polite but firm. If the setter keeps pushing after two rebuttals, get irritated and hang up (ended true). If the setter gracefully thanks you and wraps up, say goodbye politely (ended true).`
+  : `Raise these objections, roughly in this order, when the setter asks for a time:\n${objList}\nIf the setter acknowledges your objection briefly and goes back to offering two specific times, warm up and pick one of the times. If they over-explain, argue, read a long pitch, sound robotic, or ignore what you said, cool off. If the setter pushes past three rebuttals or is rude, hang up (ended true). When you agree, pick one of the two times they offered.`}
+- Behave like a real, moderately busy small-business owner in that line of work. Short, natural spoken replies (1 to 3 sentences). No monologues. Occasional realistic background detail is fine.
+- You don't know what HPD is. "Reduced down to zero" makes you curious but a bit skeptical.
+- Once a time is agreed, cooperate with the quick questions (processor, volume, decision-maker, email) and answer truthfully per the hidden facts. Don't volunteer facts that weren't asked for.
+- If the setter says goodbye / thanks you and wraps up, say a brief goodbye and set ended true.
+
+Respond ONLY with a raw JSON object (no markdown, no code fences) in exactly this shape:
+{"speaker": "gatekeeper" | "decision_maker", "reply": "<what you say out loud>", "interest": <0-100, how open you are to the call; move gradually>, "booked": null | {"date": "YYYY-MM-DD", "time": "<e.g. 10:00 AM>"}, "ended": <true|false>, "rep_moves": [<ids from the list below that the SETTER'S MOST RECENT LINE clearly accomplished>]}
+
+"booked": set it on the reply where you agree to a specific time, and keep returning the same value on every later reply. Time is in YOUR local time zone. If the setter later changes the time and you agree, return the new value. Before agreement, null.
+
+rep_moves ids (judge the setter's last line only, be strict, include none if none apply):
+- "opener": asked for the owner or manager
+- "pitch": delivered the core pitch (there's been a change; Visa/Mastercard charges can be reduced to zero; a manager will call to explain; no obligation)
+- "two_time_close": offered two specific times for the manager's call (e.g. tomorrow at 10 AM or 2 PM)
+- "lock": after you picked a time, confirmed the time and moved to details without re-pitching
+- "q_processor": asked who you process cards with now
+- "q_volume": asked roughly how much you run in cards per month
+- "q_dm": asked you to confirm you're the one who makes the decision on processing
+- "q_email": asked for your email
+- "readback": read back the appointment time AND a phone number to confirm (and/or the rep's name)
+- "rebuttal": responded to an objection you raised and went back to asking for a time
+
+Never break character in "reply". Never mention that this is a simulation.`;
+  }
+
+  async function api(body){
+    if (!apiKey) throw new Error('No API key saved');
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify(Object.assign({ model: MODEL }, body))
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error((data && data.error && data.error.message) ? data.error.message : `HTTP ${resp.status}`);
+    const tb = (data.content || []).find(b => b.type === 'text');
+    return tb ? tb.text : '';
+  }
+  function parseJSON(raw){
+    raw = String(raw || '').replace(/```json|```/g, '').trim();
+    const a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+    if (a >= 0 && b > a) raw = raw.slice(a, b + 1);
+    return JSON.parse(raw);
+  }
+
+  async function sendLine(){
+    const input = el('lineInput');
+    const text = input.value.trim();
+    if (!text || state.ended || state.phase !== 'call') return;
+    addBubble('rep', text);
+    input.value = '';
+    el('sendBtn').disabled = true; input.disabled = true;
+    addThinking();
+    state.turn++;
+    state.history.push({ role: 'user', content: text });
+    try {
+      const raw = await api({ max_tokens: 700, system: buildSystemPrompt(), messages: state.history });
+      let r;
+      try { r = parseJSON(raw); }
+      catch(e){ r = { speaker: state.speaker, reply: 'Sorry, say that again? I didn’t catch it.', interest: state.interest, booked: state.booked, ended: false, rep_moves: [] }; }
+      state.history.push({ role: 'assistant', content: JSON.stringify(r) });
+      removeThinking();
+      state.speaker = r.speaker === 'gatekeeper' ? 'gatekeeper' : 'decision_maker';
+      addBubble('prospect', r.reply || '...', state.speaker);
+      state.interest = Math.max(0, Math.min(100, Number.isFinite(+r.interest) ? Math.round(+r.interest) : state.interest));
+      updateMeter();
+      (Array.isArray(r.rep_moves) ? r.rep_moves : []).forEach(m => {
+        if (m === 'rebuttal'){
+          state.rebuttals++;
+          el('rebuttalCount').textContent = `${state.rebuttals} / 2`;
+          el('rebuttalCounter').classList.toggle('over', state.rebuttals > 2);
+        } else if (STEPS.some(s => s.id === m)){
+          state.steps[m] = true;
+          const node = el('step_' + m); if (node) node.classList.add('hit');
+        }
+      });
+      if (r.booked && r.booked.time){
+        if (!state.booked) addSys(`Time agreed: ${r.booked.time}, ${niceDate(r.booked.date)}`);
+        state.booked = { date: r.booked.date || state.lead.tomorrowIso, time: r.booked.time };
+        el('statStatus').textContent = 'Booked';
+      }
+      if (r.ended){
+        state.ended = true;
+        el('statStatus').textContent = state.booked ? 'Booked, call ended' : 'Hung up';
+        addSys('Call ended.');
+        setTimeout(afterCall, 1100);
+      }
+    } catch(err){
+      removeThinking();
+      state.history.pop(); state.turn--;
+      addSys(`Connection issue: ${err.message || 'try that line again'}`);
+      input.value = text;
+    }
+    if (!state.ended){ el('sendBtn').disabled = false; input.disabled = false; input.focus(); }
+  }
+
+  function hangUp(){
+    if (state.phase !== 'call') return;
+    if (!state.ended){ state.ended = true; state.hungUpBySetter = true; addSys('You hung up.'); }
+    afterCall();
+  }
+
+  function afterCall(){
+    if (state.phase !== 'call') return;
+    clearInterval(timerInterval);
+    el('lineInput').disabled = true; el('sendBtn').disabled = true; el('endBtn').disabled = true;
+    if (state.booked){ state.phase = 'sheet'; buildSheet(); showScreen('sheet'); }
+    else { state.phase = 'score'; buildScorecard(); showScreen('score'); }
+  }
+
+  // ---------- handoff sheet ----------
+  const FIELDS = [
+    { id: 'biz', label: 'Business Name', help: 'Legal or DBA as the prospect says it' },
+    { id: 'phone', label: 'Phone No', help: 'Read back and confirmed; the number the rep should call' },
+    { id: 'address', label: 'Address', help: 'Street address', wide: true, lead: true },
+    { id: 'city', label: 'City', lead: true },
+    { id: 'state', label: 'State', lead: true },
+    { id: 'zip', label: 'Zip', lead: true },
+    { id: 'name', label: 'Prospect Name', help: 'Decision-maker’s first and last name (not the gatekeeper)' },
+    { id: 'volume', label: 'Volume', help: 'Monthly card volume ballpark, e.g. 20,000' },
+    { id: 'email', label: 'Email', help: 'For the confirmation' },
+    { id: 'date', label: 'Appt Date', help: 'Confirmed with prospect', type: 'date' },
+    { id: 'time', label: 'Appt Time', help: 'Include time zone if outside Central (e.g. 10:00 AM MT)' },
+    { id: 'processor', label: 'Current Processor', help: 'Who they use now (Square, Clover, bank, etc.)' },
+    { id: 'rep', label: 'Rep Name', help: 'Rep assigned to the call' }
+  ];
+  function buildSheet(){
+    const L = state.lead;
+    const pre = { address: L.address, city: L.market.city, state: L.market.state, zip: L.market.zip };
+    el('formGrid').innerHTML = FIELDS.map(f => `
+      <div class="field ${f.wide ? 'wide' : ''}">
+        <label for="f_${f.id}">${esc(f.label)}${f.lead ? ' <span class="src">from lead card</span>' : ''}</label>
+        <input id="f_${f.id}" type="${f.type || 'text'}" value="${esc(pre[f.id] || '')}" autocomplete="off" />
+        ${f.help ? `<div class="fhelp">${esc(f.help)}</div>` : ''}
+      </div>`).join('');
+    ['dq_dm', 'dq_vol', 'dq_cards'].forEach(id => el(id).checked = false);
+    el('sheetWarn').textContent = '';
+    el('sheetNotes').textContent = el('notepad').value.trim() || '(no notes taken)';
+  }
+  function readSheet(){
+    const s = {}; FIELDS.forEach(f => s[f.id] = el('f_' + f.id).value.trim());
+    s.dq = { dm: el('dq_dm').checked, vol: el('dq_vol').checked, cards: el('dq_cards').checked };
+    return s;
+  }
+  function submitSheet(submit){
+    const s = readSheet();
+    FIELDS.forEach(f => el('f_' + f.id).classList.toggle('missing', submit && !s[f.id]));
+    if (submit){
+      const blanks = FIELDS.filter(f => !s[f.id]);
+      if (blanks.length){ el('sheetWarn').textContent = `Every field must be filled before you submit. Missing: ${blanks.map(b => b.label).join(', ')}.`; return; }
+      if (s.dq.dm || s.dq.vol || s.dq.cards){ el('sheetWarn').textContent = 'You checked a disqualifier. A disqualified appointment doesn’t get submitted.'; return; }
+    } else if (!(s.dq.dm || s.dq.vol || s.dq.cards)){
+      el('sheetWarn').textContent = 'Check the disqualifier that applies before marking it not submitted.'; return;
+    }
+    state.sheet = s; state.decision = submit ? 'submit' : 'hold';
+    state.phase = 'score';
+    buildScorecard();
+    showScreen('score');
+  }
+
+  // ---------- grading ----------
+  const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const digits = s => String(s || '').replace(/\D/g, '').slice(-10);
+  function parseVolume(s){
+    s = String(s || '').toLowerCase().replace(/,/g, '');
+    const nums = (s.match(/\d+(\.\d+)?/g) || []).map(Number);
+    if (!nums.length) return null;
+    const hasK = /k|grand|thousand/.test(s);
+    let vals = nums.map(n => (hasK || n < 1000) ? n * 1000 : n);
+    return vals.length > 1 ? (vals[0] + vals[1]) / 2 : vals[0];
+  }
+  const bucket = v => v < 10000 ? 'under 10k' : v <= 30000 ? '10k–30k' : 'over 30k';
+  function parseTime(s){
+    const m = String(s || '').toLowerCase().match(/(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)?/);
+    if (!m) return null;
+    let h = +m[1]; const min = +(m[2] || 0);
+    if (m[3]){ const pm = m[3][0] === 'p'; if (pm && h < 12) h += 12; if (!pm && h === 12) h = 0; }
+    else if (h >= 1 && h <= 6) h += 12;
+    return h * 60 + min;
+  }
+  const TZ_RX = { CT: /\b(ct|cst|cdt|central)\b/i, MT: /\b(mt|mst|mdt|mountain)\b/i, MST: /\b(mst|mt|arizona|az|mountain)\b/i, ET: /\b(et|est|edt|eastern)\b/i, PT: /\b(pt|pst|pdt|pacific)\b/i };
+  const ANY_TZ = /\b(ct|cst|cdt|central|mt|mst|mdt|mountain|arizona|az|et|est|edt|eastern|pt|pst|pdt|pacific)\b/i;
+
+  function gradeSheet(){
+    const L = state.lead, s = state.sheet, B = state.booked;
+    const rows = [];
+    const add = (label, entered, expected, ok, why) => rows.push({ label, entered, expected, ok, why });
+    // business
+    const nb = norm(s.biz), d1 = norm(L.biz.dba), d2 = norm(L.biz.legal);
+    add('Business Name', s.biz, `${L.biz.dba} (or ${L.biz.legal})`, !!nb && (nb === d1 || nb === d2 || (nb.length >= 5 && (d1.includes(nb) || nb.includes(d1)))), '');
+    // phone
+    const pOk = digits(s.phone) === L.bestPhone;
+    add('Phone No', s.phone, fmtPhone(L.bestPhone), pOk,
+      !pOk && L.cellPhone && digits(s.phone) === L.bizPhone ? 'That’s the shop line from the lead list. The prospect’s best number was their cell, which you only get by reading the number back.' : '');
+    add('Address', s.address, L.address, norm(s.address) === norm(L.address), '');
+    add('City', s.city, L.market.city, norm(s.city) === norm(L.market.city), '');
+    add('State', s.state, L.market.state, norm(s.state) === norm(L.market.state) || norm(s.state) === norm({TX:'Texas',OK:'Oklahoma',AZ:'Arizona',CO:'Colorado',GA:'Georgia',NV:'Nevada'}[L.market.state]), '');
+    add('Zip', s.zip, L.market.zip, norm(s.zip) === L.market.zip, '');
+    // name
+    const nn = s.name.toLowerCase();
+    const nameOk = nn.includes(L.owner.first.toLowerCase()) && nn.includes(L.owner.last.toLowerCase());
+    let nameWhy = '';
+    if (!nameOk && L.gk && nn.includes(L.gk.toLowerCase())) nameWhy = 'That’s the gatekeeper, not the decision-maker.';
+    else if (!nameOk && nn.includes(L.owner.first.toLowerCase())) nameWhy = 'Need first AND last name. The script doesn’t ask for it, so ask before you hang up.';
+    add('Prospect Name', s.name, `${L.owner.first} ${L.owner.last}`, nameOk, nameWhy);
+    // volume
+    const v = parseVolume(s.volume);
+    const vOk = v != null && bucket(v) === bucket(L.volume) && ((v >= MIN_VOLUME) === (L.volume >= MIN_VOLUME));
+    add('Volume', s.volume, `~${money(L.volume)} / mo (${bucket(L.volume)})`, L.dq === 'no_cards' ? /none|0|no card|cash/i.test(s.volume) || v === 0 : vOk, '');
+    // email
+    add('Email', s.email, L.email, s.email.toLowerCase().replace(/\s/g, '') === L.email, '');
+    // date
+    add('Appt Date', s.date ? niceDate(s.date) : '', niceDate(B.date), s.date === B.date, '');
+    // time
+    const tEntered = parseTime(s.time), tTruth = parseTime(B.time);
+    let tOk = tEntered != null && tEntered === tTruth, tWhy = '';
+    if (L.market.abbr !== 'CT'){
+      if (!TZ_RX[L.market.abbr].test(s.time)){ tOk = false; tWhy = `Lead is in ${L.market.tz} time. The sheet needs the time zone on any appointment outside Central.`; }
+    } else if (ANY_TZ.test(s.time) && !TZ_RX.CT.test(s.time)){ tOk = false; tWhy = 'Wrong time zone. This lead is Central.'; }
+    add('Appt Time', s.time, `${B.time}${L.market.abbr !== 'CT' ? ' ' + L.market.abbr : ''}`, tOk, tWhy);
+    // processor
+    const pr = s.processor.toLowerCase();
+    const procOk = L.dq === 'no_cards' ? /none|no card|n\/a|cash|don/.test(pr) : L.processor.keys.some(k => pr.includes(k));
+    add('Current Processor', s.processor, L.dq === 'no_cards' ? 'None (doesn’t take cards)' : L.processor.name, procOk, '');
+    // rep
+    add('Rep Name', s.rep, L.rep, norm(s.rep).includes(norm(L.rep.split(' ')[0])), '');
+    return rows;
+  }
+
+  function decisionCorrect(){
+    const L = state.lead;
+    if (!state.booked) return null;
+    if (L.dq){
+      if (state.decision !== 'hold') return false;
+      const s = state.sheet.dq;
+      return (L.dq === 'not_dm' && s.dm) || (L.dq === 'low_volume' && s.vol) || (L.dq === 'no_cards' && s.cards);
+    }
+    return state.decision === 'submit';
+  }
+
+  function buildScorecard(){
+    const L = state.lead, sc = L.scenario;
+    const stepsHit = STEPS.filter(s => state.steps[s.id]).length;
+    // opener step only applies if there was a gatekeeper or the setter needed to ask; credit it if owner answered directly
+    const stepsTotal = STEPS.length;
+    let outcomePts = 0, outcomeText = '', verdict = '', win = false, decisionHtml = '';
+    let sheetPts = 0, sheetText = 'N/A', decisionPts = 0, decisionText = 'N/A';
+    const ownerAnswered = !L.gk;
+    const effHit = stepsHit + (ownerAnswered && !state.steps.opener ? 1 : 0);
+    const stepPts = Math.round(30 * Math.min(effHit, stepsTotal) / stepsTotal);
+
+    if (sc.hardNo){
+      const graceful = !state.booked && state.rebuttals <= 2 && (state.hungUpBySetter || /thank|appreciate|have a great/i.test((state.log.filter(l => l.who === 'rep').slice(-1)[0] || {}).text || ''));
+      outcomePts = graceful ? 40 : (state.booked ? 40 : 10);
+      win = graceful || !!state.booked;
+      verdict = state.booked ? 'You booked a hard no' : graceful ? 'Moved on the right way' : 'Pushed too long';
+      outcomeText = state.booked ? 'Booked' : 'No booking';
+      decisionPts = state.rebuttals <= 2 ? 30 : 0;
+      decisionText = `${state.rebuttals} rebuttal${state.rebuttals === 1 ? '' : 's'}`;
+      decisionHtml = `<b>This prospect was never booking today.</b> The rule is acknowledge, one short line, back to the two-time close, two attempts max, then thank them and move on. You used ${state.rebuttals} rebuttal${state.rebuttals === 1 ? '' : 's'}${state.rebuttals > 2 ? ', which burns time you could spend on the next dial.' : '.'}`;
+      if (state.booked) decisionHtml = `<b>You turned a hard no into a booking. Nice work.</b> Just make sure the rebuttals stayed short and on script.`;
+      sheetText = 'Not required';
+      sheetPts = 0;
+    } else if (!state.booked){
+      verdict = 'No appointment';
+      outcomeText = 'Not booked';
+      outcomePts = 0;
+      decisionHtml = `<b>No time was agreed.</b> ${state.rebuttals > 2 ? 'You went past two rebuttals. Two attempts max, then thank them and move on.' : 'Run the pitch word for word and close on two specific times: "Can they call you tomorrow at 10 AM, or would 2 PM be a better time?"'}`;
+    } else {
+      outcomePts = 10; outcomeText = `Booked ${state.booked.time}`;
+      const rows = gradeSheet();
+      const right = rows.filter(r => r.ok).length;
+      sheetPts = Math.round(40 * right / rows.length);
+      sheetText = `${right} / ${rows.length} <small>fields</small>`;
+      const dc = decisionCorrect();
+      decisionPts = dc ? 20 : 0;
+      decisionText = dc ? '<span class="ok">Correct</span>' : '<span class="bad">Wrong call</span>';
+      win = !!dc;
+      const dqName = { not_dm: 'the person you booked isn’t the decision-maker', low_volume: `volume is below the ${money(MIN_VOLUME)} minimum`, no_cards: 'the business doesn’t currently take cards' }[L.dq];
+      if (L.dq){
+        verdict = dc ? 'Caught the disqualifier' : 'Bad appointment submitted';
+        decisionHtml = dc
+          ? `<b>Good catch.</b> This one looked like an easy booking, but ${dqName}. You held it instead of sending a rep to a dead call.`
+          : `<b>This appointment should not have been submitted:</b> ${dqName}. ${L.dq === 'not_dm' ? `The real owner is ${L.realOwner.first} ${L.realOwner.last}. Asking "And you’re the one who makes the call on the processing, correct?" would have caught it.` : L.dq === 'low_volume' ? 'The volume question catches this. Every bad appointment costs a rep a slot.' : 'The processor question catches this. "Who do you process with right now?" would have surfaced it.'}`;
+      } else {
+        verdict = dc ? (right === rows.length ? 'Clean appointment' : 'Appointment set') : 'Good appointment held back';
+        decisionHtml = dc
+          ? `<b>Qualified appointment submitted.</b> ${right === rows.length ? 'Every field on the sheet is right, so the rep walks in prepared.' : `${rows.length - right} field${rows.length - right === 1 ? ' is' : 's are'} wrong or missing. The rep is calling with bad info, so check the table below.`}`
+          : `<b>This one was qualified and should have been submitted.</b> Don’t leave a good appointment on the table.`;
+      }
+      el('sheetReview').innerHTML = `<div class="panel-title" style="margin-bottom:10px;">Handoff sheet check</div>
+        <table class="check-table"><tr><th>Field</th><th>You entered</th><th>Correct</th><th></th></tr>
+        ${rows.map(r => `<tr><td>${esc(r.label)}</td><td>${esc(r.entered) || '<span class="bad">blank</span>'}</td><td>${esc(r.expected)}${r.why ? `<div class="hint" style="color:var(--gold-300)">${esc(r.why)}</div>` : ''}</td><td class="${r.ok ? 'ok' : 'bad'}">${r.ok ? '✓' : '✗'}</td></tr>`).join('')}
+        </table>`;
+    }
+    if (sc.hardNo || !state.booked) el('sheetReview').innerHTML = '';
+
+    const total = sc.hardNo ? Math.min(100, outcomePts + decisionPts + stepPts) : outcomePts + stepPts + sheetPts + decisionPts;
+    el('scoreNum').textContent = total;
+    el('scoreVerdict').textContent = verdict;
+    el('scoreVerdict').className = 'verdict ' + (win ? 'win' : 'loss');
+    el('scoreSub').textContent = `${sc.name} · ${L.biz.dba}, ${L.market.city} ${L.market.state} · ${state.turn} turns · ${el('timerDisplay').textContent}`;
+    el('sbOutcome').textContent = outcomeText;
+    el('sbSteps').innerHTML = `${Math.min(effHit, stepsTotal)} / ${stepsTotal}`;
+    el('sbSheet').innerHTML = sheetText;
+    el('sbDecision').innerHTML = decisionText;
+    el('decisionBlock').innerHTML = decisionHtml;
+    el('decisionBlock').className = 'block' + (win ? '' : ' red');
+
+    const missed = STEPS.filter(s => !state.steps[s.id] && !(s.id === 'opener' && ownerAnswered));
+    state.missedSteps = missed.map(s => s.name);
+
+    const cp = el('coachPanel');
+    if (state.coachMode && state.log.some(l => l.who === 'rep')){
+      cp.innerHTML = `<div class="panel-title" style="margin-bottom:10px;">Coach notes</div><div class="coach-loading"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;Reviewing your call line by line...</div>`;
+      runCoach();
+    } else cp.innerHTML = missed.length ? `<div class="block red"><b>Script steps you missed:</b> ${missed.map(m => esc(m.name)).join(', ')}.</div>` : '';
+  }
+
+  async function runCoach(){
+    const L = state.lead;
+    const transcript = [`${L.gk ? 'GATEKEEPER' : 'PROSPECT'}: ${state.greeting}`].concat(
+      state.log.slice(1).map(l => `${l.who === 'rep' ? 'SETTER' : (l.speaker === 'gatekeeper' ? 'GATEKEEPER' : 'PROSPECT')}: ${l.text}`)).join('\n');
+    const prompt = `You are a blunt, experienced sales floor coach at HPD (Harlow Payments Dallas) reviewing a new APPOINTMENT SETTER's roleplay call. The setter's only job is to reach the decision-maker, deliver the pitch word for word, book a call with a manager using a two-time close, run four quick qualifiers, and read back the time and phone number. They do NOT sell, explain pricing, or answer how it works; that's the manager's job.
+
+THE SCRIPT (word for word):
+Opener: "Hi, is the owner or manager available?" Gatekeeper asks what it's regarding: "It's about the charges you pay for accepting Visa and Mastercard. Who handles that for the business?" If not available: "What's their first name, and when's the best time to catch them?"
+Pitch: "Hi [Prospect Name], this is [Your Name], I'm calling with HPD. The reason for my call is because there's been a change. Now, anytime you accept Visa or Mastercard for payment, the charges you pay can be reduced down to zero. Now, we don't want you to do anything right now. We'll have one of our managers give you a call and explain how you can reduce your charges down to zero and give you all the details. There's no obligation. Can they call you tomorrow at 10 AM, or would 2 PM be a better time?"
+Lock: once they pick a time, no celebrating or more pitch: "Perfect, [time] tomorrow. Let me just get a couple quick details so they're prepared when they call."
+Qualifiers (conversational): current processor; monthly card volume (under 10,000, 10 to 30, more); "And you're the one who makes the call on the processing, correct?"; best email for confirmation. The handoff sheet also needs the decision-maker's first AND last name.
+Confirm: "Great. So [Rep Name] will call you at [time] tomorrow at [phone number], is that the best number? Their name is [Rep Name], so keep an eye out for the call. Thanks, [Prospect Name], have a great day." Reading back the phone number and time is the single biggest driver of show rate.
+Objections: acknowledge, one short line, back to the two-time close. Two attempts max, then thank them and move on.
+- "What's the catch?" -> "Great question, and that's exactly what the manager will walk you through. It only takes a few minutes. Does 10 or 2 work better?"
+- "I'm happy with my processor." -> "Totally understand, most people we talk to are. This isn't about switching today. It's just to show you how the charges can go to zero, so you can compare. Would tomorrow at 10 or 2 be better?"
+- "Just send me something." -> "I can, but every business is set up a little differently, so it's a lot quicker for the manager to spend five minutes with you than to guess in an email. Morning or afternoon better?"
+- "I'm busy." -> "That's exactly why we set a time. It's quick. Would early morning or later afternoon be easier?"
+- "I'm under contract." -> "No problem, the manager can look at that too. A lot of times it still makes sense. 10 or 2 tomorrow?"
+Disqualifiers (don't submit): no decision-maker confirmation; volume under ${money(MIN_VOLUME)}/month; business doesn't take cards.
+
+CONTEXT: scenario "${L.scenario.name}". Assigned rep: ${L.rep}. ${L.dq ? `Hidden disqualifier: ${L.dq}.` : 'No hidden disqualifier.'} ${L.cellPhone ? 'The prospect had a better cell number that only comes out on a read-back.' : ''} ${L.market.abbr !== 'CT' ? `Lead is in ${L.market.tz} time.` : ''}
+Outcome: ${state.booked ? `booked ${state.booked.time}` : 'not booked'}. Rebuttals used: ${state.rebuttals}. Script steps missed per tracker: ${state.missedSteps.join(', ') || 'none'}. ${state.decision ? `Setter chose to ${state.decision === 'submit' ? 'SUBMIT' : 'NOT submit'} the appointment.` : ''}
+
+Review ONLY the SETTER lines, in order. Judge each against the script: was it word for word where it should be, did it keep control and go back to the two-time close, or did it ramble, over-explain, pitch the product, accept a brush-off, or skip a step.
+
+Respond ONLY with raw JSON, no markdown, no code fences:
+{"strengths": ["<short phrase>"], "improve": ["<short phrase>"], "lines": [{"text": "<exact setter line>", "verdict": "strong"|"okay"|"weak", "note": "<one short specific sentence>", "better": "<the scripted line they should have used, or empty string if the line was strong>"}]}
+2-3 strengths and 2-3 improve items. Cover every SETTER line. Be specific to what was said.
+
+TRANSCRIPT:
+${transcript}`;
+    try {
+      const raw = await api({ max_tokens: 2500, messages: [{ role: 'user', content: prompt }] });
+      renderCoach(parseJSON(raw));
+    } catch(e){
+      el('coachPanel').innerHTML = `<div class="panel-title" style="margin-bottom:10px;">Coach notes</div><div class="coach-loading" style="font-style:italic;">Couldn’t load coaching feedback (${esc(e.message || 'unknown error')}). Use Review transcript to self-review.</div>`;
+    }
+  }
+  function renderCoach(d){
+    const li = a => (a || []).map(s => `<li>${esc(s)}</li>`).join('') || '<li>&mdash;</li>';
+    const lines = (d.lines || []).map(l => {
+      const v = ['strong','okay','weak'].includes(l.verdict) ? l.verdict : 'okay';
+      return `<div class="coach-line ${v}"><div class="cl-text"><span class="cl-tag">${v}</span>${esc(l.text)}</div><div class="cl-note">${esc(l.note)}</div>${l.better ? `<div class="cl-better">Script: ${esc(l.better)}</div>` : ''}</div>`;
+    }).join('');
+    el('coachPanel').innerHTML = `<div class="panel-title" style="margin-bottom:10px;">Coach notes</div>
+      <div class="coach-summary"><div class="coach-box strengths"><div class="k mono">STRENGTHS</div><ul>${li(d.strengths)}</ul></div>
+      <div class="coach-box improve"><div class="k mono">WORK ON</div><ul>${li(d.improve)}</ul></div></div>
+      <div class="coach-line-list">${lines}</div>`;
+  }
+
+  // ---------- drawer ----------
+  function toggleDrawer(open){ el('drawer').classList.toggle('open', open); el('drawer').setAttribute('aria-hidden', open ? 'false' : 'true'); }
+
+  // ---------- wiring ----------
+  el('saveKeyBtn').addEventListener('click', saveKey);
+  el('apiKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey(); });
+  el('startBtn').addEventListener('click', () => startCall(selectedScenario));
+  el('sendBtn').addEventListener('click', sendLine);
+  el('lineInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendLine(); });
+  el('endBtn').addEventListener('click', hangUp);
+  el('submitApptBtn').addEventListener('click', () => submitSheet(true));
+  el('noSubmitBtn').addEventListener('click', () => submitSheet(false));
+  el('scriptBtn').addEventListener('click', () => toggleDrawer(!el('drawer').classList.contains('open')));
+  el('closeDrawer').addEventListener('click', () => toggleDrawer(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleDrawer(false); });
+  let peekFrom = null;
+  el('viewTranscriptBtn').addEventListener('click', () => { peekFrom = 'sheet'; el('sheetScreen').classList.remove('active'); el('callScreen').classList.add('active'); el('endBtn').disabled = false; el('endBtn').textContent = 'Back to sheet'; });
+  el('reviewBtn').addEventListener('click', () => { peekFrom = 'score'; showScreen('call'); el('endBtn').disabled = false; el('endBtn').textContent = 'Back to score'; });
+  el('endBtn').addEventListener('click', () => {
+    if (!peekFrom) return;
+    const to = peekFrom; peekFrom = null;
+    el('endBtn').textContent = 'Hang up'; el('endBtn').disabled = true;
+    showScreen(to);
+  }, true);
+  el('callAgainBtn').addEventListener('click', () => { showScreen('start'); el('timerDisplay').textContent = '00:00'; });
+  el('sameAgainBtn').addEventListener('click', () => { startCall(lastScenarioId); });
+})();
+</script>
+</body>
+</html>
