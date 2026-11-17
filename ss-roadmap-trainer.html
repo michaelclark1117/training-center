@@ -68,6 +68,12 @@
   /* score */
   .score-top{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
   .big{font-size:56px;font-weight:800;color:var(--gold);line-height:1}
+  .grade{width:96px;height:96px;border-radius:14px;display:grid;place-items:center;font-size:56px;font-weight:900;border:3px solid var(--line);color:var(--muted)}
+  .grade.gA{border-color:var(--good);color:var(--good);background:rgba(63,179,127,.1)}
+  .grade.gB{border-color:var(--gold);color:var(--gold);background:var(--gold-soft)}
+  .grade.gC{border-color:var(--warn);color:var(--warn);background:rgba(224,163,58,.1)}
+  .grade.gD,.grade.gF{border-color:var(--bad);color:var(--bad);background:rgba(224,96,90,.1)}
+  .hist .g{font-weight:800;color:var(--text)}
   .verdict{font-size:18px;font-weight:700}
   .parts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
   .part{background:var(--navy);border:1px solid var(--line);border-radius:10px;padding:14px}
@@ -169,6 +175,7 @@
           <li><b>The Close.</b> Once you have all 7 must-know answers, recap their reason and need, give the savings in dollars, deliver the 8-to-5 care promise, then ask: "What's your Tax ID?"</li>
         </ol>
         <p class="note">Your scorecard grades each part of the roadmap plus objection handling, and includes line-by-line coaching.</p>
+        <p class="note"><b>Call grades:</b> A 90–100 · B 80–89 · C 70–79 · D 60–69 · F under 60</p>
       </div>
       <div class="card" style="margin-top:16px">
         <h3 style="margin-top:0;color:var(--gold)">Your recent calls</h3>
@@ -226,7 +233,11 @@
 <section id="score" class="hidden">
   <div class="card">
     <div class="score-top">
-      <div class="big" id="scOverall">--</div>
+      <div class="grade" id="scGrade">--</div>
+      <div>
+        <div class="big" id="scOverall">--</div>
+        <div class="note">out of 100</div>
+      </div>
       <div>
         <div class="verdict" id="scVerdict"></div>
         <div class="note" id="scOutcome"></div>
@@ -442,7 +453,12 @@ function renderHistory(){
   const ul = $('history'); ul.innerHTML='';
   let h=[]; try{ h = JSON.parse(load(HIST_STORE)||'[]'); }catch(e){}
   if(!h.length){ ul.appendChild(el('li',null,'No calls yet. Your scores will show up here.')); return; }
-  h.slice(-8).reverse().forEach(r=> ul.appendChild(el('li',null,`${r.date}: ${r.vertical} (${r.difficulty}), ${r.score}/100, ${r.outcome}`)));
+  h.slice(-8).reverse().forEach(r=>{
+    const li = el('li');
+    li.appendChild(el('span','g', (r.grade || gradeFor(r.score)) + ' '));
+    li.appendChild(document.createTextNode(`${r.date}: ${r.vertical} (${r.difficulty}), ${r.score}/100, ${r.outcome}`));
+    ul.appendChild(li);
+  });
 }
 
 /* ===================== UI: CALL ===================== */
@@ -547,7 +563,7 @@ async function endCall(){
   try{ speechSynthesis && speechSynthesis.cancel(); }catch(e){}
   if(!history.some(h=>h.role==='rep')){ show('setup'); return; }
   show('score');
-  $('scOverall').textContent='...'; $('scVerdict').textContent='Grading your call against the roadmap...';
+  $('scOverall').textContent='...'; $('scGrade').textContent='--'; $('scGrade').className='grade'; $('scVerdict').textContent='Grading your call against the roadmap...';
   $('scOutcome').textContent=''; $('scParts').innerHTML=''; $('scChecklist').innerHTML=''; $('scLines').innerHTML=''; $('scFix').textContent='';
   renderFacts();
 
@@ -595,7 +611,7 @@ Respond with ONLY a JSON object:
     const r = parseJSON(raw);
     renderScore(r);
     let h=[]; try{ h=JSON.parse(load(HIST_STORE)||'[]'); }catch(e){}
-    h.push({date:new Date().toLocaleDateString(), vertical:p.vertical, difficulty:p.difficulty, score:r.overall, outcome:outcomeLabel()});
+    h.push({date:new Date().toLocaleDateString(), vertical:p.vertical, difficulty:p.difficulty, score:r.overall, grade:gradeFor(r.overall), outcome:outcomeLabel()});
     store(HIST_STORE, JSON.stringify(h.slice(-50)));
   }catch(err){
     $('scOverall').textContent='!'; $('scVerdict').textContent='Grading failed: '+err.message;
@@ -604,7 +620,15 @@ Respond with ONLY a JSON object:
 
 function outcomeLabel(){ return {closed:'Closed (Tax ID)',callback_set:'Callback set with the decision-maker',lost:'Merchant hung up',ongoing:'Ended by rep'}[outcome]||outcome; }
 
+// Letter grade from the 0-100 score: A 90+, B 80-89, C 70-79, D 60-69, F under 60
+function gradeFor(score){
+  const s = Number(score)||0;
+  return s>=90 ? 'A' : s>=80 ? 'B' : s>=70 ? 'C' : s>=60 ? 'D' : 'F';
+}
+
 function renderScore(r){
+  const g = gradeFor(r.overall);
+  $('scGrade').textContent = g; $('scGrade').className = 'grade g' + g;
   $('scOverall').textContent = r.overall;
   $('scVerdict').textContent = r.verdict || '';
   $('scOutcome').textContent = 'Outcome: ' + outcomeLabel() + ' · ' + persona.vertical + ', ' + persona.difficulty;
