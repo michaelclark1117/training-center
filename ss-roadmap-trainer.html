@@ -69,10 +69,11 @@
   .score-top{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
   .big{font-size:56px;font-weight:800;color:var(--gold);line-height:1}
   .grade{width:96px;height:96px;border-radius:14px;display:grid;place-items:center;font-size:56px;font-weight:900;border:3px solid var(--line);color:var(--muted)}
-  .grade.gA{border-color:var(--good);color:var(--good);background:rgba(63,179,127,.1)}
-  .grade.gB{border-color:var(--gold);color:var(--gold);background:var(--gold-soft)}
-  .grade.gC{border-color:var(--warn);color:var(--warn);background:rgba(224,163,58,.1)}
-  .grade.gD,.grade.gF{border-color:var(--bad);color:var(--bad);background:rgba(224,96,90,.1)}
+  .grade small{font-size:18px;font-weight:700;opacity:.7;margin-left:2px}
+  .grade.top{border-color:var(--good);color:var(--good);background:rgba(63,179,127,.1)}
+  .grade.solid{border-color:var(--gold);color:var(--gold);background:var(--gold-soft)}
+  .grade.mid{border-color:var(--warn);color:var(--warn);background:rgba(224,163,58,.1)}
+  .grade.low{border-color:var(--bad);color:var(--bad);background:rgba(224,96,90,.1)}
   .hist .g{font-weight:800;color:var(--text)}
   .verdict{font-size:18px;font-weight:700}
   .parts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
@@ -175,7 +176,7 @@
           <li><b>The Close.</b> Once you have all 7 must-know answers, recap their reason and need, give the savings in dollars, deliver the 8-to-5 care promise, then ask: "What's your Tax ID?"</li>
         </ol>
         <p class="note">Your scorecard grades each part of the roadmap plus objection handling, and includes line-by-line coaching.</p>
-        <p class="note"><b>Call grades:</b> A 90–100 · B 80–89 · C 70–79 · D 60–69 · F under 60</p>
+        <p class="note"><b>Call grade, 1–10 (10 is best):</b> 9–10 textbook roadmap call · 7–8 solid, minor misses · 5–6 followed the roadmap with real gaps · 1–4 skipped major parts</p>
       </div>
       <div class="card" style="margin-top:16px">
         <h3 style="margin-top:0;color:var(--gold)">Your recent calls</h3>
@@ -234,10 +235,6 @@
   <div class="card">
     <div class="score-top">
       <div class="grade" id="scGrade">--</div>
-      <div>
-        <div class="big" id="scOverall">--</div>
-        <div class="note">out of 100</div>
-      </div>
       <div>
         <div class="verdict" id="scVerdict"></div>
         <div class="note" id="scOutcome"></div>
@@ -455,8 +452,9 @@ function renderHistory(){
   if(!h.length){ ul.appendChild(el('li',null,'No calls yet. Your scores will show up here.')); return; }
   h.slice(-8).reverse().forEach(r=>{
     const li = el('li');
-    li.appendChild(el('span','g', (r.grade || gradeFor(r.score)) + ' '));
-    li.appendChild(document.createTextNode(`${r.date}: ${r.vertical} (${r.difficulty}), ${r.score}/100, ${r.outcome}`));
+    const g = typeof r.grade === 'number' ? r.grade : toTen(r.score);
+    li.appendChild(el('span','g', g + '/10 '));
+    li.appendChild(document.createTextNode(`${r.date}: ${r.vertical} (${r.difficulty}), ${r.outcome}`));
     ul.appendChild(li);
   });
 }
@@ -563,7 +561,7 @@ async function endCall(){
   try{ speechSynthesis && speechSynthesis.cancel(); }catch(e){}
   if(!history.some(h=>h.role==='rep')){ show('setup'); return; }
   show('score');
-  $('scOverall').textContent='...'; $('scGrade').textContent='--'; $('scGrade').className='grade'; $('scVerdict').textContent='Grading your call against the roadmap...';
+  $('scGrade').textContent='...'; $('scGrade').className='grade'; $('scVerdict').textContent='Grading your call against the roadmap...';
   $('scOutcome').textContent=''; $('scParts').innerHTML=''; $('scChecklist').innerHTML=''; $('scLines').innerHTML=''; $('scFix').textContent='';
   renderFacts();
 
@@ -582,13 +580,13 @@ MERCHANT FACTS (hidden from the rep): ${p.owner}, ${p.business}, ${p.vertical}; 
 
 Respond with ONLY a JSON object:
 {
- "overall": 0-100,
+ "grade": 1-10,   // whole number, 10 is best. 10 = textbook roadmap call that closed or set the decision-maker callback; 8-9 = strong, minor misses; 6-7 = followed the roadmap with real gaps; 4-5 = skipped or rushed a major part; 1-3 = off the roadmap
  "verdict": "one punchy sentence",
  "parts": {
-   "pitch": {"score":0-10,"note":"1-2 sentences"},
-   "investigation": {"score":0-10,"note":"1-2 sentences"},
-   "close": {"score":0-10,"note":"1-2 sentences"},
-   "objections": {"score":0-10,"note":"1-2 sentences; if no objections came up, say so and score on general call control"}
+   "pitch": {"score":1-10,"note":"1-2 sentences"},
+   "investigation": {"score":1-10,"note":"1-2 sentences"},
+   "close": {"score":1-10,"note":"1-2 sentences"},
+   "objections": {"score":1-10,"note":"1-2 sentences; if no objections came up, say so and score on general call control"}
  },
  "checklist": [
    {"item":"Delivered the pitch line (who + why + Transact for Free, eliminate fees)","pass":bool,"note":""},
@@ -611,25 +609,24 @@ Respond with ONLY a JSON object:
     const r = parseJSON(raw);
     renderScore(r);
     let h=[]; try{ h=JSON.parse(load(HIST_STORE)||'[]'); }catch(e){}
-    h.push({date:new Date().toLocaleDateString(), vertical:p.vertical, difficulty:p.difficulty, score:r.overall, grade:gradeFor(r.overall), outcome:outcomeLabel()});
+    h.push({date:new Date().toLocaleDateString(), vertical:p.vertical, difficulty:p.difficulty, grade:clampTen(r.grade), outcome:outcomeLabel()});
     store(HIST_STORE, JSON.stringify(h.slice(-50)));
   }catch(err){
-    $('scOverall').textContent='!'; $('scVerdict').textContent='Grading failed: '+err.message;
+    $('scGrade').textContent='!'; $('scVerdict').textContent='Grading failed: '+err.message;
   }
 }
 
 function outcomeLabel(){ return {closed:'Closed (Tax ID)',callback_set:'Callback set with the decision-maker',lost:'Merchant hung up',ongoing:'Ended by rep'}[outcome]||outcome; }
 
-// Letter grade from the 0-100 score: A 90+, B 80-89, C 70-79, D 60-69, F under 60
-function gradeFor(score){
-  const s = Number(score)||0;
-  return s>=90 ? 'A' : s>=80 ? 'B' : s>=70 ? 'C' : s>=60 ? 'D' : 'F';
-}
+// Call grade is 1-10, 10 being the best
+function clampTen(n){ return Math.max(1, Math.min(10, Math.round(Number(n)||1))); }
+function toTen(score100){ return clampTen((Number(score100)||0)/10); }   // older saved calls were scored out of 100
+function gradeBand(g){ return g>=9 ? 'top' : g>=7 ? 'solid' : g>=5 ? 'mid' : 'low'; }
 
 function renderScore(r){
-  const g = gradeFor(r.overall);
-  $('scGrade').textContent = g; $('scGrade').className = 'grade g' + g;
-  $('scOverall').textContent = r.overall;
+  const g = clampTen(r.grade);
+  $('scGrade').textContent = g; $('scGrade').appendChild(el('small',null,'/10'));
+  $('scGrade').className = 'grade ' + gradeBand(g);
   $('scVerdict').textContent = r.verdict || '';
   $('scOutcome').textContent = 'Outcome: ' + outcomeLabel() + ' · ' + persona.vertical + ', ' + persona.difficulty;
   const names = {pitch:'Part 1 · Pitch',investigation:'Part 2 · Investigation',close:'Part 3 · Close',objections:'Objections'};
