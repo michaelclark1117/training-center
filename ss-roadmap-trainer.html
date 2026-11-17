@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SS Roadmap Trainer | Harlow Payments Dallas</title>
+<style>
+  :root{
+    --navy:#0B1F3A; --navy-2:#132C50; --navy-3:#1C3A66; --line:#2A4A78;
+    --gold:#C9A227; --gold-soft:rgba(201,162,39,.14);
+    --text:#EEF2F8; --muted:#9FB0C8; --good:#3FB37F; --warn:#E0A33A; --bad:#E0605A;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--navy);color:var(--text);font-size:15px;line-height:1.45}
+  header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line);background:var(--navy-2)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{width:38px;height:38px;border-radius:8px;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:800}
+  h1{font-size:18px;margin:0}
+  .sub{font-size:12px;color:var(--muted)}
+  a.back{color:var(--gold);font-size:13px;text-decoration:none}
+  main{max-width:1180px;margin:0 auto;padding:24px}
+  .card{background:var(--navy-2);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .hidden{display:none!important}
+  label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+  input,select,textarea{width:100%;background:var(--navy);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit}
+  textarea{resize:none}
+  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--navy-3);color:var(--text);padding:10px 16px}
+  button.gold{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:180px}
+  .setup-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+  .roadmap-mini li{margin:6px 0}
+  .toggle{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14px}
+  .toggle input{width:auto}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+  /* call screen */
+  .call-grid{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
+  .side>.card{margin-bottom:16px;padding:16px}
+  .side h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
+  .ces p{margin:4px 0;font-size:14px}
+  .stages{display:flex;gap:6px}
+  .stage{flex:1;text-align:center;padding:8px 4px;border-radius:8px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .stage.on{border-color:var(--gold);background:var(--gold-soft);color:var(--text);font-weight:700}
+  .stage.done{color:var(--good);border-color:var(--good)}
+  .mk{list-style:none;padding:0;margin:0}
+  .mk li{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:13px;border-bottom:1px dashed var(--line)}
+  .mk li:last-child{border-bottom:none}
+  .dot{flex:0 0 16px;height:16px;border-radius:50%;border:2px solid var(--line);margin-top:2px}
+  .mk li.got .dot{background:var(--good);border-color:var(--good)}
+  .mk .val{display:block;color:var(--muted);font-size:12px}
+  .flags{font-size:13px}
+  .flag{border-left:3px solid var(--warn);padding:6px 10px;margin:6px 0;background:rgba(224,163,58,.08);border-radius:0 6px 6px 0}
+  .flag.goodf{border-color:var(--good);background:rgba(63,179,127,.08)}
+  .chat{display:flex;flex-direction:column;height:calc(100vh - 170px);min-height:520px;padding:0}
+  .chat-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .timer{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+  .log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+  .msg{max-width:78%;padding:10px 14px;border-radius:12px;white-space:pre-wrap}
+  .msg.m{background:var(--navy-3);align-self:flex-start;border-top-left-radius:4px}
+  .msg.r{background:var(--gold-soft);border:1px solid rgba(201,162,39,.4);align-self:flex-end;border-top-right-radius:4px}
+  .who{font-size:11px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
+  .sys{align-self:center;font-size:12px;color:var(--muted);font-style:italic}
+  .composer{border-top:1px solid var(--line);padding:12px;display:flex;gap:8px;align-items:flex-end}
+  .composer textarea{height:64px}
+  .mic.rec{background:var(--bad);border-color:var(--bad)}
+  .typing{align-self:flex-start;color:var(--muted);font-size:13px}
+  /* score */
+  .score-top{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+  .big{font-size:56px;font-weight:800;color:var(--gold);line-height:1}
+  .verdict{font-size:18px;font-weight:700}
+  .parts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+  .part{background:var(--navy);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .part .n{font-size:12px;color:var(--muted);text-transform:uppercase}
+  .part .s{font-size:26px;font-weight:800}
+  .bar{height:6px;background:var(--line);border-radius:3px;margin:6px 0 8px;overflow:hidden}
+  .bar>i{display:block;height:100%;background:var(--gold)}
+  .part p{margin:0;font-size:13px;color:var(--muted)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+  .cl{list-style:none;padding:0;margin:0}
+  .cl li{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .cl .ic{flex:0 0 20px;font-weight:800}
+  .pass{color:var(--good)} .fail{color:var(--bad)}
+  .cl small{display:block;color:var(--muted)}
+  .lines .ln{padding:10px 12px;border-radius:8px;margin:8px 0;background:var(--navy);border-left:4px solid var(--line)}
+  .ln.strong{border-color:var(--good)} .ln.okay{border-color:var(--warn)} .ln.weak{border-color:var(--bad)}
+  .ln .q{font-style:italic}
+  .ln .t{font-size:11px;text-transform:uppercase;font-weight:700;letter-spacing:.05em}
+  .ln.strong .t{color:var(--good)} .ln.okay .t{color:var(--warn)} .ln.weak .t{color:var(--bad)}
+  .ln .c{font-size:13px;color:var(--muted);margin-top:4px}
+  .fix{border:2px solid var(--gold);background:var(--gold-soft);border-radius:10px;padding:14px 16px;margin-top:20px}
+  .facts td{padding:4px 10px 4px 0;font-size:13px;vertical-align:top}
+  .facts td:first-child{color:var(--muted);white-space:nowrap}
+  .hist li{font-size:13px;color:var(--muted);margin:4px 0}
+  .err{color:var(--bad);font-size:13px;margin-top:8px}
+  @media(max-width:900px){.setup-grid,.call-grid,.two{grid-template-columns:1fr}.parts{grid-template-columns:repeat(2,1fr)}.chat{height:70vh}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="mark">HP</div>
+    <div>
+      <h1>Solutions Specialist Roadmap Trainer</h1>
+      <div class="sub">Harlow Payments Dallas · Pitch → Investigation → Close</div>
+    </div>
+  </div>
+  <a class="back" href="index.html">← Training Center</a>
+</header>
+
+<main>
+<!-- ================= SETUP ================= -->
+<section id="setup">
+  <div class="setup-grid">
+    <div class="card">
+      <h2 style="margin-top:0">Set up your call</h2>
+      <p class="note" style="margin-top:0">You're calling a confirmed appointment. The AI plays the merchant, and you play the Solutions Specialist. Run the HPD Sales Roadmap from your pitch line to the Tax ID.</p>
+
+      <label for="apiKey">Anthropic API key</label>
+      <input id="apiKey" type="password" placeholder="sk-ant-..." autocomplete="off">
+      <div class="note">Your key is saved only in this browser.</div>
+
+      <div class="row">
+        <div>
+          <label for="vertical">Merchant type</label>
+          <select id="vertical"></select>
+        </div>
+        <div>
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty">
+            <option value="easy">Easy: friendly, 0–1 objections</option>
+            <option value="standard" selected>Standard: 2 objections</option>
+            <option value="tough">Tough: guarded, 3–4 objections</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="switchPath">Switch path</label>
+          <select id="switchPath">
+            <option value="random">Random</option>
+            <option value="yes">Path A: has switched before</option>
+            <option value="no">Path B: never switched</option>
+          </select>
+        </div>
+        <div>
+          <label for="dm">Decision-maker</label>
+          <select id="dm">
+            <option value="random">Random</option>
+            <option value="yes">Owner is the decision-maker</option>
+            <option value="no">Needs a partner to decide</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toggle"><input type="checkbox" id="liveCoach" checked><label for="liveCoach" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">Live coach: flag roadmap mistakes during the call (turn off for a certification run)</label></div>
+      <div class="toggle"><input type="checkbox" id="voiceOut"><label for="voiceOut" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">Read the merchant's lines out loud</label></div>
+
+      <div style="margin-top:20px"><button class="gold" id="startBtn">Dial the merchant</button></div>
+      <div class="err" id="setupErr"></div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--gold)">The roadmap</h3>
+        <ol class="roadmap-mini">
+          <li><b>The Pitch.</b> "This is ___ with HPD. I'm calling regarding our Transact for Free program, where we eliminate your fees."</li>
+          <li><b>The Investigation.</b> Ask open-ended questions only. Start with "Have you ever switched processors before?" Don't pitch.</li>
+          <li><b>The Close.</b> Once you have all 7 must-know answers, recap their reason and need, give the savings in dollars, deliver the 8-to-5 care promise, then ask: "What's your Tax ID?"</li>
+        </ol>
+        <p class="note">Your scorecard grades each part of the roadmap plus objection handling, and includes line-by-line coaching.</p>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h3 style="margin-top:0;color:var(--gold)">Your recent calls</h3>
+        <ul class="hist" id="history" style="padding-left:18px;margin:0"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CALL ================= -->
+<section id="call" class="hidden">
+  <div class="call-grid">
+    <div class="side">
+      <div class="card ces">
+        <h3>CES confirmation notes</h3>
+        <p><b id="cesName"></b></p>
+        <p id="cesBiz" class="note" style="margin-top:0"></p>
+        <p><span class="note">Card software:</span><br><span id="cesSoftware"></span></p>
+        <p><span class="note">"One thing I'd improve":</span><br><span id="cesImprove"></span></p>
+      </div>
+      <div class="card">
+        <h3>Where you are</h3>
+        <div class="stages">
+          <div class="stage" id="st-pitch">Pitch</div>
+          <div class="stage" id="st-investigation">Investigation</div>
+          <div class="stage" id="st-close">Close</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Must-know answers</h3>
+        <ul class="mk" id="mkList"></ul>
+      </div>
+      <div class="card" id="coachCard">
+        <h3>Live coach</h3>
+        <div class="flags" id="flags"><div class="note">Flags show up here as the call goes.</div></div>
+      </div>
+    </div>
+
+    <div class="card chat">
+      <div class="chat-head">
+        <div><b id="callTitle">On the call</b> <span class="timer" id="timer">00:00</span></div>
+        <button id="endBtn">End call &amp; score</button>
+      </div>
+      <div class="log" id="log"></div>
+      <div class="composer">
+        <textarea id="input" placeholder="Type what you'd say... (Enter to send, Shift+Enter for a new line)"></textarea>
+        <button class="mic" id="micBtn" title="Talk instead of type">🎤</button>
+        <button class="gold" id="sendBtn">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCORE ================= -->
+<section id="score" class="hidden">
+  <div class="card">
+    <div class="score-top">
+      <div class="big" id="scOverall">--</div>
+      <div>
+        <div class="verdict" id="scVerdict"></div>
+        <div class="note" id="scOutcome"></div>
+      </div>
+      <div style="margin-left:auto" class="row">
+        <button id="retryBtn">Call this merchant again</button>
+        <button class="gold" id="newBtn">New merchant</button>
+      </div>
+    </div>
+    <div class="parts" id="scParts"></div>
+    <div class="fix" id="scFix"></div>
+    <div class="two">
+      <div>
+        <h3 style="color:var(--gold)">Certification checklist</h3>
+        <ul class="cl" id="scChecklist"></ul>
+        <h3 style="color:var(--gold);margin-top:24px">What the merchant knew</h3>
+        <table class="facts" id="scFacts"></table>
+      </div>
+      <div class="lines">
+        <h3 style="color:var(--gold)">Line-by-line coaching</h3>
+        <div id="scLines"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+/* ===================== CONFIG ===================== */
+const MODEL = 'claude-sonnet-5';             // same model as the other HPD trainers
+const KEY_STORE = 'hpd_trainer_key';       // shared with the other HPD trainers
+const HIST_STORE = 'hpd_ss_roadmap_history';
+
+const MUST_KNOW = [
+  {k:'years',    label:'Time in business'},
+  {k:'volume',   label:'Monthly processing volume'},
+  {k:'ticket',   label:'Average ticket'},
+  {k:'accept',   label:'How they take cards today'},
+  {k:'services', label:'Other services they want'},
+  {k:'switched', label:'Switched before? Why?'},
+  {k:'decision', label:'Decision-maker?'},
+  {k:'fees',     label:'Current monthly fees (for the savings number)'}
+];
+
+const VERTICALS = {
+  restaurant:{label:'Restaurant', names:["Rosa's Cocina","Smokehouse 75","Pho Saigon Grill","Lucky Dragon Kitchen"], vol:[18000,45000], ticket:[22,48],
+    setups:['a Clover Station they got through their bank','a Toast POS','an older Verifone countertop terminal'],
+    software:['Clover','Toast','Verifone terminal'], services:['tableside payments so the card never leaves the table','online ordering payments'],
+    improve:['Checks take forever at the table','The fees keep creeping up','Nobody answers when the system goes down']},
+  auto:{label:'Auto repair', names:["Precision Auto Care","Main Street Tire & Lube","Lone Star Diesel","Mike's Garage"], vol:[25000,70000], ticket:[180,650],
+    setups:['a Heartland terminal at the front counter','Square on an iPad','a terminal through their shop management software'],
+    software:['Heartland','Square','Shop management software'], services:['a way to take payment out in the bays','text-to-pay invoices for customers who drop off cars'],
+    improve:['Big repair tickets get hit with big fees','Funding takes too long','Too many monthly fees on the statement']},
+  retail:{label:'Retail boutique', names:["Bluebonnet Boutique","Magnolia & Co.","The Gift Box","Sandra's Closet"], vol:[12000,35000], ticket:[35,90],
+    setups:['Square on a counter stand','Shopify POS','a Clover Mini'],
+    software:['Square','Shopify','Clover'], services:['a mobile device for markets and pop-up events','online store payments'],
+    improve:['Square fees are adding up','Need something for weekend markets','Want one system for in-store and online']},
+  salon:{label:'Salon / spa', names:["Glow Salon & Spa","Studio 214","Jennifer's Nail Bar","Bella Hair Co."], vol:[10000,30000], ticket:[45,120],
+    setups:['Square through their booking app','a countertop Dejavoo from another processor','Vagaro payments'],
+    software:['Square','Dejavoo terminal','Vagaro'], services:['card-on-file for no-show fees','a second device at the back station'],
+    improve:['Fees on every service','Stylists have to walk clients to the front to pay','Want to charge no-show fees']},
+  cstore:{label:'Convenience store', names:["Quick Stop 380","Corner Mart","Fuel & Go Express","Star Food Mart"], vol:[30000,80000], ticket:[12,25],
+    setups:['a countertop terminal from a local ISO','a Clover Station','a POS system from their wholesaler'],
+    software:['Countertop terminal','Clover','Wholesaler POS'], services:['a second checkout lane device','EBT acceptance on the same terminal'],
+    improve:['Small tickets get hit with big fees','The rep who signed them disappeared','Statement is impossible to read']},
+  contractor:{label:'Contractor / home service', names:["Reliable Plumbing","Texan HVAC Pros","Hill Country Roofing","Brothers Electric"], vol:[20000,60000], ticket:[250,1500],
+    setups:['Square on a phone','QuickBooks Payments invoices','checks and a keyed-in virtual terminal'],
+    software:['Square','QuickBooks Payments','Virtual terminal'], services:['a mobile device for techs in the field','emailed invoices customers can pay by card'],
+    improve:['Big jobs mean big fees','Techs need to collect on site','Waiting on checks']}
+};
+const FIRST = ['Maria','Mike','Sandra','Jennifer','Bob','Luis','Tracy','Daniel','Kim','Raj','Angela','Tony','Priya','Greg','Denise','Hector'];
+const SWITCH_YES_WHY = ['was paying too much','the rates went up after the first year','the old rep stopped answering the phone'];
+const SWITCH_YES_NOW = ["they've been taking good care of me",'it was fine at first but the fees are creeping again','honestly I never hear from them'];
+const SWITCH_NO_HIKE = ['called and complained until they knocked it back down','canceled and went with a competitor','just paid it, figured it was not worth the hassle'];
+const NOT_DM = ['my wife handles all the contracts and signs everything','my business partner has to sign off on anything like this','my husband does the books and makes these calls'];
+const OBJECTIONS = [
+  "I'm happy with my processor.",
+  "My customers won't like a fee.",
+  "I already build the fees into my prices.",
+  "I'm under contract.",
+  "This sounds too good to be true.",
+  "I need to talk to my partner first.",
+  "Just send me some information."
+];
+
+/* ===================== STATE ===================== */
+let persona = null, history = [], apiHistory = [], tracker = {}, stageReached = 'none', flagsSeen = new Set(), busy = false, timerInt = null, startTime = 0, outcome = 'ongoing';
+
+/* ===================== HELPERS ===================== */
+const $ = id => document.getElementById(id);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const rint = (lo,hi) => Math.round(lo + Math.random()*(hi-lo));
+const round = (n,to) => Math.round(n/to)*to;
+const money = n => '$' + Number(n).toLocaleString('en-US');
+function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+function parseJSON(text){
+  const s = text.indexOf('{'), e = text.lastIndexOf('}');
+  if(s<0||e<0) throw new Error('No JSON in reply');
+  return JSON.parse(text.slice(s,e+1));
+}
+
+async function callClaude(system, messages, maxTokens){
+  const key = $('apiKey').value.trim();
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:MODEL,max_tokens:maxTokens||700,system,messages})
+  });
+  if(!res.ok){
+    let msg = res.status + ' ' + res.statusText;
+    try{ const j = await res.json(); if(j.error&&j.error.message) msg = j.error.message; }catch(e){}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+}
+
+/* ===================== PERSONA ===================== */
+function buildPersona(){
+  const vkey = $('vertical').value === 'random' ? pick(Object.keys(VERTICALS)) : $('vertical').value;
+  const v = VERTICALS[vkey];
+  const diff = $('difficulty').value;
+  const sp = $('switchPath').value === 'random' ? (Math.random()<.5?'yes':'no') : $('switchPath').value;
+  const dm = $('dm').value === 'random' ? (Math.random()<.8?'yes':'no') : $('dm').value;
+  const idx = Math.floor(Math.random()*v.setups.length);
+  const volume = round(rint(v.vol[0],v.vol[1]),500);
+  const rate = 0.026 + Math.random()*0.012;
+  const nObj = diff==='easy' ? rint(0,1) : diff==='standard' ? 2 : rint(3,4);
+  let pool = OBJECTIONS.slice();
+  if(dm==='yes') pool = pool.filter(o=>!o.includes('partner'));
+  const objs = [];
+  while(objs.length<nObj && pool.length){ objs.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]); }
+  return {
+    vkey, vertical:v.label, difficulty:diff,
+    owner: pick(FIRST), business: pick(v.names),
+    years: rint(1,22), volume, ticket: rint(v.ticket[0],v.ticket[1]),
+    fees: round(volume*rate,5),
+    setup: v.setups[idx], software: v.software[idx],
+    service: pick(v.services), improve: pick(v.improve),
+    switched: sp, switchWhy: pick(SWITCH_YES_WHY), switchNow: pick(SWITCH_YES_NOW), hikeReaction: pick(SWITCH_NO_HIKE),
+    decision: dm, notDm: pick(NOT_DM),
+    objections: objs,
+    taxId: '8' + rint(1,9) + '-' + String(rint(1000000,9999999))
+  };
+}
+
+function merchantSystem(p){
+  const temperament = {
+    easy:'Friendly and open. You give full answers once asked and you are easy to win over if the rep is clear.',
+    standard:'Polite but busy. You give short answers until the rep asks good follow-up questions. You need a real reason before you commit.',
+    tough:'Guarded and skeptical. You get a lot of these calls. Give short answers, push back, and make the rep earn every answer. You only commit if the rep runs a clean, confident call.'
+  }[p.difficulty];
+  return `You are role-playing a small business owner on a PHONE CALL with a Solutions Specialist from HPD (Harlow Payments Dallas). This is a training simulation for the sales rep.
+
+WHO YOU ARE
+- Name: ${p.owner}, owner of ${p.business} (${p.vertical}).
+- In business ${p.years} years.
+- Process about ${money(p.volume)} a month in cards. Average ticket about ${money(p.ticket)}.
+- You currently take cards with ${p.setup}.
+- You pay roughly ${money(p.fees)} a month in processing fees (you know this as "about ${money(p.fees)}," not exact).
+- Something you'd like: ${p.service}.
+- Yesterday a confirmation caller asked what you'd improve, and you said: "${p.improve}".
+${p.switched==='yes'
+ ? `- You HAVE switched processors before. Why: you ${p.switchWhy}. How the current one has been: ${p.switchNow}.`
+ : `- You have NEVER switched processors. When a phone or cable bill jumped on you after a few months, you ${p.hikeReaction}.`}
+${p.decision==='yes'
+ ? `- You are the sole decision-maker.`
+ : `- You are NOT the only decision-maker: ${p.notDm}. You cannot give a Tax ID or sign without them. If the rep asks to set a time with that person on the line, agree to a specific time.`}
+- Your Tax ID (only give it if you decide to sign up): ${p.taxId}.
+
+CONTEXT: You agreed to this call yesterday, so you expect it. Their program is called "Transact for Free," and the pitch is that it eliminates your processing fees.
+
+TEMPERAMENT: ${temperament}
+
+OBJECTIONS: Raise these naturally at realistic moments (not all at once, never as a list), ${p.objections.length? p.objections.map(o=>`"${o}"`).join(', ') : 'none, unless the rep gives you a reason'}. If the rep handles one well (acknowledges it, answers briefly, asks you a question), let it go. If they argue or lecture, push harder.
+
+HOW TO PLAY IT
+- Speak ONLY as ${p.owner}. Never write lines for the rep. Never break character. Never coach.
+- Keep each reply to 1–3 short sentences, the way people talk on the phone.
+- Only share a fact when the rep asks about it, or a question naturally leads to it. Don't volunteer your volume, ticket, years or fees.
+- Answer open-ended questions with real detail. Answer yes/no questions briefly.
+- If the rep pitches features or explains the program for a long time before asking about your business, get impatient or skeptical.
+- If the rep says you'll save money but gives no dollar amount, ask "How much would I actually save?"
+- Agree to sign up and give your Tax ID only if ALL of these are true: the rep understood your situation, you've handled your objections, they told you what you'd save, and they asked for your info. On "tough," you also need to hear why their service is better than what you have now.
+- If the rep is rude, pushy or confusing, you can end the call politely.
+
+OUTPUT FORMAT: Respond with ONLY a JSON object, with no text before or after it:
+{
+ "merchant": "what ${p.owner} says out loud",
+ "stage": "pitch" | "investigation" | "close" | "none",   // which roadmap part the REP's last message was in
+ "uncovered": {"years":bool,"volume":bool,"ticket":bool,"accept":bool,"services":bool,"switched":bool,"decision":bool,"fees":bool},  // TRUE only if that fact has been clearly revealed by you at ANY point in the call so far
+ "values": {"years":"","volume":"","ticket":"","accept":"","services":"","switched":"","decision":"","fees":""},  // short note of what was revealed, empty string if not
+ "flag": "",          // if the REP's last message broke the roadmap, give one short coaching flag, e.g. "Pitched features during the Investigation. Ask a question instead." Empty if fine.
+ "good": "",          // if the REP's last message was a textbook roadmap move, a short note on why. Otherwise empty.
+ "outcome": "ongoing" | "closed" | "callback_set" | "lost"   // closed = you gave your Tax ID; callback_set = a specific time was booked with the decision-maker; lost = you ended the call
+}
+The first message you get is the phone ringing. Answer it naturally, e.g. "${p.business}, this is ${p.owner}." Use stage "none" for that turn.`;
+}
+
+/* ===================== UI: SETUP ===================== */
+function initSetup(){
+  const sel = $('vertical');
+  sel.appendChild(new Option('Random','random'));
+  Object.entries(VERTICALS).forEach(([k,v])=> sel.appendChild(new Option(v.label,k)));
+  const saved = load(KEY_STORE); if(saved) $('apiKey').value = saved;
+  renderHistory();
+}
+function renderHistory(){
+  const ul = $('history'); ul.innerHTML='';
+  let h=[]; try{ h = JSON.parse(load(HIST_STORE)||'[]'); }catch(e){}
+  if(!h.length){ ul.appendChild(el('li',null,'No calls yet. Your scores will show up here.')); return; }
+  h.slice(-8).reverse().forEach(r=> ul.appendChild(el('li',null,`${r.date}: ${r.vertical} (${r.difficulty}), ${r.score}/100, ${r.outcome}`)));
+}
+
+/* ===================== UI: CALL ===================== */
+function show(id){ ['setup','call','score'].forEach(s=>$(s).classList.toggle('hidden', s!==id)); window.scrollTo(0,0); }
+
+function renderTracker(){
+  const ul = $('mkList'); ul.innerHTML='';
+  MUST_KNOW.forEach(m=>{
+    const li = el('li', tracker[m.k]?.got ? 'got' : '');
+    li.appendChild(el('span','dot'));
+    const t = el('span',null,m.label);
+    if(tracker[m.k]?.got && tracker[m.k].val){ t.appendChild(el('span','val',tracker[m.k].val)); }
+    li.appendChild(t); ul.appendChild(li);
+  });
+  const order = ['pitch','investigation','close'];
+  const reachedIdx = order.indexOf(stageReached);
+  order.forEach((s,i)=>{
+    const d = $('st-'+s);
+    d.classList.toggle('on', i===reachedIdx);
+    d.classList.toggle('done', i<reachedIdx);
+  });
+}
+
+function addMsg(role, text){
+  const d = el('div','msg '+(role==='rep'?'r':'m'));
+  d.appendChild(el('div','who', role==='rep' ? 'You' : persona.owner));
+  d.appendChild(document.createTextNode(text));
+  $('log').appendChild(d); $('log').scrollTop = $('log').scrollHeight;
+}
+function addSys(text){ const d=el('div','sys',text); $('log').appendChild(d); $('log').scrollTop=$('log').scrollHeight; }
+function addFlag(text, good){
+  if(!$('liveCoach').checked || !text || flagsSeen.has(text)) return;
+  flagsSeen.add(text);
+  const box = $('flags'); if(box.querySelector('.note')) box.innerHTML='';
+  box.prepend(el('div','flag'+(good?' goodf':''), text));
+}
+function speak(text){
+  if(!$('voiceOut').checked || !('speechSynthesis' in window)) return;
+  try{ speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(text)); }catch(e){}
+}
+
+async function startCall(samePersona){
+  const key = $('apiKey').value.trim();
+  if(!key){ $('setupErr').textContent='Enter your Anthropic API key first.'; return; }
+  store(KEY_STORE,key); $('setupErr').textContent='';
+  if(!samePersona || !persona) persona = buildPersona();
+  history=[]; apiHistory=[]; tracker={}; stageReached='none'; flagsSeen=new Set(); outcome='ongoing';
+  $('log').innerHTML=''; $('flags').innerHTML='<div class="note">Flags show up here as the call goes.</div>';
+  $('coachCard').classList.toggle('hidden', !$('liveCoach').checked);
+  $('cesName').textContent = persona.owner + ', ' + persona.business;
+  $('cesBiz').textContent = persona.vertical + ' · ' + persona.difficulty + ' difficulty';
+  $('cesSoftware').textContent = persona.software;
+  $('cesImprove').textContent = '"' + persona.improve + '"';
+  $('callTitle').textContent = 'Calling ' + persona.business;
+  renderTracker(); show('call');
+  startTime = Date.now(); clearInterval(timerInt);
+  timerInt = setInterval(()=>{ const s=Math.floor((Date.now()-startTime)/1000); $('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
+  addSys('Ringing...');
+  await turn('[The phone rings. Answer it.]', true);
+}
+
+async function turn(repText, isRing){
+  if(busy) return; busy=true; setComposer(false);
+  if(!isRing){ addMsg('rep',repText); history.push({role:'rep',text:repText}); }
+  apiHistory.push({role:'user',content:repText});
+  const typing = el('div','typing', persona.owner + ' is talking...'); $('log').appendChild(typing);
+  try{
+    const raw = await callClaude(merchantSystem(persona), apiHistory, 700);
+    apiHistory.push({role:'assistant',content:raw});
+    let j; try{ j = parseJSON(raw); }catch(e){ j = {merchant: raw.trim(), stage:'none'}; }
+    typing.remove();
+    const said = (j.merchant||'').trim() || '...';
+    addMsg('merchant', said); history.push({role:'merchant',text:said}); speak(said);
+    if(j.uncovered){ MUST_KNOW.forEach(m=>{ if(j.uncovered[m.k]){ const prev=tracker[m.k]; tracker[m.k]={got:true,val:(j.values&&j.values[m.k])||(prev&&prev.val)||''}; } }); }
+    const order=['pitch','investigation','close'];
+    if(order.indexOf(j.stage) > order.indexOf(stageReached)) stageReached = j.stage;
+    renderTracker();
+    if(j.flag) addFlag(j.flag,false);
+    if(j.good) addFlag(j.good,true);
+    if(j.outcome && j.outcome!=='ongoing'){
+      outcome = j.outcome;
+      addSys({closed:'Tax ID received. Deal closed.',callback_set:'Callback with the decision-maker is booked.',lost:'The merchant ended the call.'}[outcome] || 'Call ended.');
+      setTimeout(endCall, 1200); busy=false; return;
+    }
+  }catch(err){
+    typing.remove(); addSys('Error: ' + err.message);
+    apiHistory.pop(); if(!isRing) history.pop();
+  }
+  busy=false; setComposer(true); $('input').focus();
+}
+
+function setComposer(on){ $('sendBtn').disabled=!on; $('input').disabled=!on; $('micBtn').disabled=!on; }
+
+function send(){
+  const t = $('input').value.trim(); if(!t||busy) return;
+  $('input').value=''; turn(t,false);
+}
+
+/* ===================== SCORING ===================== */
+async function endCall(){
+  clearInterval(timerInt);
+  try{ speechSynthesis && speechSynthesis.cancel(); }catch(e){}
+  if(!history.some(h=>h.role==='rep')){ show('setup'); return; }
+  show('score');
+  $('scOverall').textContent='...'; $('scVerdict').textContent='Grading your call against the roadmap...';
+  $('scOutcome').textContent=''; $('scParts').innerHTML=''; $('scChecklist').innerHTML=''; $('scLines').innerHTML=''; $('scFix').textContent='';
+  renderFacts();
+
+  const p = persona;
+  const transcript = history.map((h,i)=>`${i+1}. ${h.role==='rep'?'REP':'MERCHANT'}: ${h.text}`).join('\n');
+  const system = `You are the sales trainer at Harlow Payments Dallas (HPD), grading a new Solutions Specialist's role-play call against the HPD Sales Roadmap. Be direct and specific, like a sales manager who wants the rep to win. Quote the rep's actual words.
+
+THE HPD SALES ROADMAP
+Part 1, The Pitch: State who you are and why you're calling. Standard line: "This is ___ with HPD. I'm calling regarding our Transact for Free program, where we eliminate your fees." Short, word for word, then go straight to a question. No feature dumps.
+Part 2, The Investigation: Discovery only. Understand how the merchant prefers to take cards and their past experience with processors. Ask open-ended questions; do NOT explain or pitch services. Suggested opener: "Have you ever switched processors before?" If YES: "What made you switch?" → "Since you switched to save, what results have you seen?" → "Besides the cost savings, is there anything you like, or something you wish could be improved?" If NO: "How long have you been in business?" → compliment → "Have you ever signed up for a phone or cable service that started at one price, then suddenly increased?" → "What did you do when that happened?" Use the merchant's name.
+Part 3, The Close: Before closing, the rep must know: (1) years in business, (2) monthly volume, (3) average ticket, (4) how they currently accept cards, (5) additional services wanted, (6) switched before and why, (7) decision-maker. Then: confirm the merchant's reason in their words ("You switched to save money, right?"), confirm the need ("Would a mobile device be helpful?"), give the savings as a dollar amount ("you'd save ___ a month"), deliver the customer-care promise (most valuable aspect, want you with us 6 months, a year and beyond, earning your business every day, I'm your go-to person from 8 to 5, 24-hour service but call me first), then ask: "All I need is a bit of information to get started. What's your Tax ID?" and stop talking.
+Objections: Acknowledge, answer in 1–2 sentences, then ask a question to get back on the roadmap. Never argue or lecture.
+Language: always "Transact for Free," never "cash discount" or "dual pricing."
+
+MERCHANT FACTS (hidden from the rep): ${p.owner}, ${p.business}, ${p.vertical}; ${p.years} years; ${money(p.volume)}/mo; avg ticket ${money(p.ticket)}; takes cards with ${p.setup}; fees about ${money(p.fees)}/mo; wants ${p.service}; ${p.switched==='yes'?`switched before because they ${p.switchWhy}; now: ${p.switchNow}`:`never switched; on a price hike they ${p.hikeReaction}`}; decision-maker: ${p.decision==='yes'?'yes':'no ('+p.notDm+')'}; planned objections: ${p.objections.join(' | ')||'none'}; difficulty ${p.difficulty}. Call outcome: ${outcome}.
+
+Respond with ONLY a JSON object:
+{
+ "overall": 0-100,
+ "verdict": "one punchy sentence",
+ "parts": {
+   "pitch": {"score":0-10,"note":"1-2 sentences"},
+   "investigation": {"score":0-10,"note":"1-2 sentences"},
+   "close": {"score":0-10,"note":"1-2 sentences"},
+   "objections": {"score":0-10,"note":"1-2 sentences; if no objections came up, say so and score on general call control"}
+ },
+ "checklist": [
+   {"item":"Delivered the pitch line (who + why + Transact for Free, eliminate fees)","pass":bool,"note":""},
+   {"item":"Went straight to questions after the pitch","pass":bool,"note":""},
+   {"item":"Ran the Investigation with open-ended questions, no pitching","pass":bool,"note":""},
+   {"item":"Used the right switch path (yes or no) follow-ups","pass":bool,"note":""},
+   {"item":"Collected all 7 must-know answers before closing","pass":bool,"note":"list any missing"},
+   {"item":"Confirmed the merchant's reason and need in their words","pass":bool,"note":""},
+   {"item":"Gave the savings as a dollar amount","pass":bool,"note":""},
+   {"item":"Delivered the 8-to-5 customer-care promise","pass":bool,"note":""},
+   {"item":"Asked for the Tax ID, then stopped talking","pass":bool,"note":""},
+   {"item":"Handled objections and got back on the roadmap with a question","pass":bool,"note":""},
+   {"item":"Said 'Transact for Free', never 'cash discount' or 'dual pricing'","pass":bool,"note":""}
+ ],
+ "lines": [ {"n": <transcript line number of a REP line>, "tag":"strong"|"okay"|"weak", "note":"what worked, or the better line to say instead"} ],   // cover every REP line
+ "top_fix": "The single most important thing to change next call, with the exact words to use."
+}`;
+  try{
+    const raw = await callClaude(system, [{role:'user',content:'Transcript:\n'+transcript}], 4000);
+    const r = parseJSON(raw);
+    renderScore(r);
+    let h=[]; try{ h=JSON.parse(load(HIST_STORE)||'[]'); }catch(e){}
+    h.push({date:new Date().toLocaleDateString(), vertical:p.vertical, difficulty:p.difficulty, score:r.overall, outcome:outcomeLabel()});
+    store(HIST_STORE, JSON.stringify(h.slice(-50)));
+  }catch(err){
+    $('scOverall').textContent='!'; $('scVerdict').textContent='Grading failed: '+err.message;
+  }
+}
+
+function outcomeLabel(){ return {closed:'Closed (Tax ID)',callback_set:'Callback set with the decision-maker',lost:'Merchant hung up',ongoing:'Ended by rep'}[outcome]||outcome; }
+
+function renderScore(r){
+  $('scOverall').textContent = r.overall;
+  $('scVerdict').textContent = r.verdict || '';
+  $('scOutcome').textContent = 'Outcome: ' + outcomeLabel() + ' · ' + persona.vertical + ', ' + persona.difficulty;
+  const names = {pitch:'Part 1 · Pitch',investigation:'Part 2 · Investigation',close:'Part 3 · Close',objections:'Objections'};
+  Object.keys(names).forEach(k=>{
+    const pt = (r.parts||{})[k]||{score:0,note:''};
+    const d = el('div','part');
+    d.appendChild(el('div','n',names[k]));
+    d.appendChild(el('div','s',pt.score+'/10'));
+    const bar = el('div','bar'); const i=document.createElement('i'); i.style.width=(Math.max(0,Math.min(10,pt.score))*10)+'%'; bar.appendChild(i); d.appendChild(bar);
+    d.appendChild(el('p',null,pt.note));
+    $('scParts').appendChild(d);
+  });
+  $('scFix').innerHTML=''; const b=el('b',null,'Fix this next call: '); $('scFix').appendChild(b); $('scFix').appendChild(document.createTextNode(r.top_fix||''));
+  (r.checklist||[]).forEach(c=>{
+    const li = el('li');
+    li.appendChild(el('span','ic '+(c.pass?'pass':'fail'), c.pass?'✓':'✗'));
+    const t = el('span',null,c.item); if(c.note) t.appendChild(el('small',null,c.note));
+    li.appendChild(t); $('scChecklist').appendChild(li);
+  });
+  (r.lines||[]).forEach(l=>{
+    const h = history[(l.n||0)-1]; if(!h || h.role!=='rep') return;
+    const d = el('div','ln '+(l.tag||'okay'));
+    d.appendChild(el('div','t',l.tag||'okay'));
+    d.appendChild(el('div','q','"'+h.text+'"'));
+    d.appendChild(el('div','c',l.note||''));
+    $('scLines').appendChild(d);
+  });
+}
+
+function renderFacts(){
+  const p=persona, t=$('scFacts'); t.innerHTML='';
+  const rows=[
+    ['Merchant',p.owner+', '+p.business],['Years in business',p.years],['Monthly volume',money(p.volume)],['Average ticket',money(p.ticket)],
+    ['Takes cards with',p.setup],['Monthly fees (the savings)','about '+money(p.fees)],['Wanted',p.service],
+    ['Switched before?',p.switched==='yes'?('Yes. They '+p.switchWhy+'. Now: '+p.switchNow):('No. On a price hike they '+p.hikeReaction)],
+    ['Decision-maker?',p.decision==='yes'?'Yes':'No: '+p.notDm],['Planned objections',p.objections.join(' / ')||'None']
+  ];
+  rows.forEach(([a,b])=>{ const tr=el('tr'); tr.appendChild(el('td',null,a)); tr.appendChild(el('td',null,String(b))); t.appendChild(tr); });
+}
+
+/* ===================== VOICE INPUT ===================== */
+let recog=null, recording=false;
+(function initMic(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ $('micBtn').classList.add('hidden'); return; }
+  recog = new SR(); recog.lang='en-US'; recog.interimResults=true; recog.continuous=true;
+  let base='';
+  recog.onresult = e=>{ let txt=''; for(let i=e.resultIndex;i<e.results.length;i++) txt+=e.results[i][0].transcript; $('input').value=(base+' '+txt).trim(); if(e.results[e.results.length-1].isFinal) base=$('input').value; };
+  recog.onend = ()=>{ recording=false; $('micBtn').classList.remove('rec'); };
+  $('micBtn').onclick = ()=>{
+    if(recording){ recog.stop(); return; }
+    base=$('input').value; try{ recog.start(); recording=true; $('micBtn').classList.add('rec'); }catch(e){}
+  };
+})();
+
+/* ===================== WIRING ===================== */
+$('startBtn').onclick = ()=>startCall(false);
+$('sendBtn').onclick = ()=>{ if(recording) recog.stop(); send(); };
+$('input').addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); if(recording) recog.stop(); send(); } });
+$('endBtn').onclick = ()=>{ if(!busy) endCall(); };
+$('retryBtn').onclick = ()=>startCall(true);
+$('newBtn').onclick = ()=>{ renderHistory(); show('setup'); };
+initSetup();
+</script>
+</body>
+</html>
