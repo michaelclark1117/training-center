@@ -171,12 +171,12 @@
       <div class="card">
         <h3 style="margin-top:0;color:var(--gold)">The roadmap</h3>
         <ol class="roadmap-mini">
-          <li><b>The Pitch.</b> Who we are and why you're calling: "Hi [Name], this is [Rep] with Harlow Payments. We're a merchant services company out of Plano, and we work with businesses all over the country. I'm calling about our Transact for Free program, where we eliminate your credit card processing fees." Then explain how it works (a small technology fee on card payments covers the cost: a $30 sale on a card rings up $31.20), and go straight to "Have you ever switched processors before?"</li>
+          <li><b>The Pitch.</b> Say who you are and why you're calling, explain Transact for Free your way, then get to a question like "Have you ever switched processors before?"</li>
           <li><b>The Investigation.</b> Ask open-ended questions only. Start with "Have you ever switched processors before?" Don't pitch.</li>
           <li><b>The Close.</b> Once you have all 7 must-know answers, recap their reason and need, give the savings in dollars, deliver the 8-to-5 care promise, then ask: "What's your Tax ID?"</li>
         </ol>
-        <p class="note">Your scorecard grades each part of the roadmap plus objection handling, and includes line-by-line coaching.</p>
-        <p class="note"><b>Call grade, 1–10 (10 is best):</b> 9–10 textbook roadmap call · 7–8 solid, minor misses · 5–6 followed the roadmap with real gaps · 1–4 skipped major parts</p>
+        <p class="note">Use your own words. The scorecard grades what matters most: overcoming objections, selling yourself, and making the case for why HPD is the right processor. You also get line-by-line coaching.</p>
+        <p class="note"><b>Call grade, 1–10 (10 is best):</b> 9–10 beat every objection and made the case for HPD · 7–8 solid, minor misses · 5–6 an objection stalled the call · 1–4 lost control of the call</p>
       </div>
       <div class="card" style="margin-top:16px">
         <h3 style="margin-top:0;color:var(--gold)">Your recent calls</h3>
@@ -442,11 +442,11 @@ ${p.decision==='yes'
  : `- You are NOT the only decision-maker: ${p.notDm}. You cannot give a Tax ID or sign without them. If the rep asks to set a time with that person on the line, agree to a specific time.`}
 - Your Tax ID (only give it if you decide to sign up): ${p.taxId}.
 
-CONTEXT: You agreed to this call yesterday, so you expect it. Their program is called "Transact for Free." It eliminates your processing fees by adding a small technology fee to card payments (a $30 card sale rings up $31.20). A good pitch tells you who Harlow Payments is, why they're calling and how the program works in about 30 seconds, then asks you a question. If the pitch rambles well past that, get impatient.
+CONTEXT: You agreed to this call yesterday, so you expect it. Their program is called "Transact for Free." It eliminates your processing fees by adding a small technology fee to card payments (a $30 card sale rings up $31.20). A good pitch tells you who they are (HPD, also called Harlow Payments), why they're calling and how the program works, in their own words, then asks you a question. If the pitch rambles on for a long time, get impatient.
 
 TEMPERAMENT: ${temperament}
 
-OBJECTIONS: Raise these naturally at realistic moments (not all at once, never as a list), ${p.objections.length? p.objections.map(o=>`"${o}"`).join(', ') : 'none, unless the rep gives you a reason'}. If the rep handles one well (acknowledges it, answers briefly, asks you a question), let it go. If they argue or lecture, push harder. If the first rebuttal is weak, repeat the objection once more before letting it go.
+OBJECTIONS: Raise these naturally at realistic moments (not all at once, never as a list), ${p.objections.length? p.objections.map(o=>`"${o}"`).join(', ') : 'none, unless the rep gives you a reason'}. If the rep handles one well in any words (takes it seriously, gives you a good reason, keeps you talking), let it go. Respond to how convincing the rep is, not whether they use a particular script. If they argue or lecture, push harder. If the first rebuttal is weak, repeat the objection once more before letting it go.
 HOW TO PLAY EACH OBJECTION:
 ${OBJECTION_GUIDE}
 
@@ -457,7 +457,7 @@ HOW TO PLAY IT
 - Answer open-ended questions with real detail. Answer yes/no questions briefly.
 - If the rep pitches features or explains the program for a long time before asking about your business, get impatient or skeptical.
 - If the rep says you'll save money but gives no dollar amount, ask "How much would I actually save?"
-- Agree to sign up and give your Tax ID only if ALL of these are true: the rep understood your situation, you've handled your objections, they told you what you'd save, and they asked for your info. On "tough," you also need to hear why their service is better than what you have now.
+- Agree to sign up and give your Tax ID only if ALL of these are true: the rep understood your situation, you've handled your objections, they told you what you'd save, and they asked for your info. On "tough," you also need to hear a convincing reason why HPD is better for you than what you have now. "HPD" and "Harlow Payments" are the same company.
 - If the rep is rude, pushy or confusing, you can end the call politely.
 
 OUTPUT FORMAT: Respond with ONLY a JSON object, with no text before or after it:
@@ -466,8 +466,8 @@ OUTPUT FORMAT: Respond with ONLY a JSON object, with no text before or after it:
  "stage": "pitch" | "investigation" | "close" | "none",   // which roadmap part the REP's last message was in
  "uncovered": {"years":bool,"volume":bool,"ticket":bool,"accept":bool,"services":bool,"switched":bool,"decision":bool,"fees":bool},  // TRUE only if that fact has been clearly revealed by you at ANY point in the call so far
  "values": {"years":"","volume":"","ticket":"","accept":"","services":"","switched":"","decision":"","fees":""},  // short note of what was revealed, empty string if not
- "flag": "",          // if the REP's last message broke the roadmap, give one short coaching flag, e.g. "Pitched features during the Investigation. Ask a question instead." Empty if fine.
- "good": "",          // if the REP's last message was a textbook roadmap move, a short note on why. Otherwise empty.
+ "flag": "",          // only if the REP's last message would really hurt a real call (e.g. argued with you, dumped a long pitch, ignored your objection), give one short coaching flag. Never flag wording, a skipped scripted line, or "HPD" vs "Harlow". Empty if fine.
+ "good": "",          // if the REP's last message was a strong move (handled an objection well, sold themselves or HPD convincingly), a short note on why. Otherwise empty.
  "outcome": "ongoing" | "closed" | "callback_set" | "lost"   // closed = you gave your Tax ID; callback_set = a specific time was booked with the decision-maker; lost = you ended the call
 }
 The first message you get is the phone ringing. Answer it naturally, e.g. "${p.business}, this is ${p.owner}." Use stage "none" for that turn.`;
@@ -604,11 +604,17 @@ async function endCall(){
   const transcript = history.map((h,i)=>`${i+1}. ${h.role==='rep'?'REP':'MERCHANT'}: ${h.text}`).join('\n');
   const system = `You are the sales trainer at Harlow Payments Dallas (HPD), grading a new Solutions Specialist's role-play call against the HPD Sales Roadmap. Be direct and specific, like a sales manager who wants the rep to win. Quote the rep's actual words.
 
+HOW TO GRADE (most important):
+- Grade results, not wording. The scripts below are examples. The rep may use their own words, and any wording that gets the job done gets full credit. Never mark a rep down for not saying a line word for word.
+- "HPD," "Harlow" and "Harlow Payments" are the same company. Mentioning Plano is optional. There is more than one good way to explain Transact for Free; any clear, accurate explanation counts.
+- What matters most: (1) overcoming the merchant's objections and keeping the call alive, (2) the rep selling themselves (confident, likable, the merchant's go-to person), and (3) making good arguments for why HPD is the right processor for this merchant (eliminating their fees, local, personal service, a real person to call). Weight the grade toward these.
+- Don't nitpick. Only coach on things that would actually change the outcome of a real call.
+
 THE HPD SALES ROADMAP
-Part 1, The Pitch: Tell the merchant who we are and why we're calling, and explain Transact for Free. Word for word: "Hi [Name], this is [Rep] with Harlow Payments. We're a merchant services company out of Plano, and we work with businesses all over the country. I'm calling about our Transact for Free program, where we eliminate your credit card processing fees." Then explain it: "Here's how it works. Instead of you paying fees every time a customer uses a card, a small technology fee on card payments covers the cost. So a $30 sale on a card rings up $31.20, and that $1.20 pays for the processing, not you. The terminal does it automatically, and the money you're paying your processor today stays in your pocket." Then: "About a third of small businesses already run their card fees this way, and I'm your go-to person from 8 to 5 if anything ever comes up." Keep it under about 30 seconds, then go straight to a question: "Have you ever switched processors before?" No long feature dumps beyond this.
+Part 1, The Pitch: Tell the merchant who we are and why we're calling, and explain Transact for Free. Example wording (the rep can use their own words): "Hi [Name], this is [Rep] with Harlow Payments. We're a merchant services company out of Plano, and we work with businesses all over the country. I'm calling about our Transact for Free program, where we eliminate your credit card processing fees." Then explain it: "Here's how it works. Instead of you paying fees every time a customer uses a card, a small technology fee on card payments covers the cost. So a $30 sale on a card rings up $31.20, and that $1.20 pays for the processing, not you. The terminal does it automatically, and the money you're paying your processor today stays in your pocket." Then: "About a third of small businesses already run their card fees this way, and I'm your go-to person from 8 to 5 if anything ever comes up." Keep it short, then get to a question such as "Have you ever switched processors before?" No long feature dumps.
 Part 2, The Investigation: Discovery only. Understand how the merchant prefers to take cards and their past experience with processors. Ask open-ended questions; do NOT explain or pitch services. Suggested opener: "Have you ever switched processors before?" If YES: "What made you switch?" → "Since you switched to save, what results have you seen?" → "Besides the cost savings, is there anything you like, or something you wish could be improved?" If NO: "How long have you been in business?" → compliment → "Have you ever signed up for a phone or cable service that started at one price, then suddenly increased?" → "What did you do when that happened?" Use the merchant's name.
 Part 3, The Close: Before closing, the rep must know: (1) years in business, (2) monthly volume, (3) average ticket, (4) how they currently accept cards, (5) additional services wanted, (6) switched before and why, (7) decision-maker. Then: confirm the merchant's reason in their words ("You switched to save money, right?"), confirm the need ("Would a mobile device be helpful?"), give the savings as a dollar amount ("you'd save ___ a month"), deliver the customer-care promise (most valuable aspect, want you with us 6 months, a year and beyond, earning your business every day, I'm your go-to person from 8 to 5, 24-hour service but call me first), then ask: "All I need is a bit of information to get started. What's your Tax ID?" and stop talking.
-Objections: Acknowledge, answer in 1–2 sentences, then ask a question to get back on the roadmap. Never argue or lecture. HPD's rebuttal cards for the six common objections:
+Objections: Acknowledge, answer in 1–2 sentences, then ask a question to get back on the roadmap. Never argue or lecture. HPD's rebuttal cards for the six common objections. These are examples of what works, not required wording. Any rebuttal that overcomes the objection gets full credit:
 - "Not interested": separate "not interested in switching" from "not interested in knowing what you pay"; offer to make the fees visible. Back on the roadmap with "Have you ever switched processors before?"
 - "Busy": shrink the ask to about 90 seconds and ask if that's fair. Back on the roadmap with "Have you ever switched processors before?"
 - "Just switched": "What made you switch?" then "Since you switched to save, what results have you seen?" The decision to stay is also a decision; make it an informed one.
@@ -621,7 +627,7 @@ MERCHANT FACTS (hidden from the rep): ${p.owner}, ${p.business}, ${p.vertical}; 
 
 Respond with ONLY a JSON object:
 {
- "grade": 1-10,   // whole number, 10 is best. 10 = textbook roadmap call that closed or set the decision-maker callback; 8-9 = strong, minor misses; 6-7 = followed the roadmap with real gaps; 4-5 = skipped or rushed a major part; 1-3 = off the roadmap
+ "grade": 1-10,   // whole number, 10 is best. 10 = overcame every objection, sold themselves and HPD well, and closed or set the decision-maker callback; 8-9 = strong, minor misses; 6-7 = good effort but let an objection stall the call or made a weak case for HPD; 4-5 = got stuck on objections or never made the case for HPD; 1-3 = lost control of the call. Do not take points off for wording or for skipping a scripted line if the call still moved forward.
  "verdict": "one punchy sentence",
  "parts": {
    "pitch": {"score":1-10,"note":"1-2 sentences"},
@@ -630,18 +636,18 @@ Respond with ONLY a JSON object:
    "objections": {"score":1-10,"note":"1-2 sentences; if no objections came up, say so and score on general call control"}
  },
  "checklist": [
-   {"item":"Delivered the pitch: who we are (Harlow Payments, Plano), why we're calling (Transact for Free eliminates your fees)","pass":bool,"note":""},
-   {"item":"Explained how Transact for Free works (technology fee on card payments, the $30 to $31.20 example)","pass":bool,"note":""},
-   {"item":"Went straight to questions after the pitch","pass":bool,"note":""},
+   {"item":"Said who they are and why they're calling (HPD / Harlow, Transact for Free), in any words","pass":bool,"note":""},
+   {"item":"Explained Transact for Free clearly and accurately, in any words","pass":bool,"note":""},
+   {"item":"Got to questions quickly instead of a long pitch","pass":bool,"note":""},
    {"item":"Ran the Investigation with open-ended questions, no pitching","pass":bool,"note":""},
-   {"item":"Used the right switch path (yes or no) follow-ups","pass":bool,"note":""},
+   {"item":"Followed up based on whether they'd switched before","pass":bool,"note":""},
    {"item":"Collected all 7 must-know answers before closing","pass":bool,"note":"list any missing"},
-   {"item":"Confirmed the merchant's reason and need in their words","pass":bool,"note":""},
+   {"item":"Confirmed the merchant's reason and need","pass":bool,"note":""},
    {"item":"Gave the savings as a dollar amount","pass":bool,"note":""},
-   {"item":"Delivered the 8-to-5 customer-care promise","pass":bool,"note":""},
+   {"item":"Sold themselves and HPD: personal service, a go-to person, why HPD is the right processor","pass":bool,"note":""},
    {"item":"Asked for the Tax ID, then stopped talking","pass":bool,"note":""},
-   {"item":"Handled objections and got back on the roadmap with a question","pass":bool,"note":""},
-   {"item":"Used the HPD rebuttal for each objection (see the rebuttal cards above)","pass":bool,"note":"name any objection handled off-card"},
+   {"item":"Overcame each objection and kept the call moving (own words are fine)","pass":bool,"note":"name any objection that stalled the call"},
+   {"item":"Made a good argument for why HPD is the right processor for this merchant","pass":bool,"note":""},
    {"item":"Said 'Transact for Free', never 'cash discount' or 'dual pricing'","pass":bool,"note":""}
  ],
  "lines": [ {"n": <transcript line number of a REP line>, "tag":"strong"|"okay"|"weak", "note":"what worked, or the better line to say instead"} ],   // cover every REP line
