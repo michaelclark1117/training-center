@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SS Call Trainer | Harlow Payments Dallas</title>
+<title>SS Roadmap Trainer | Harlow Payments Dallas</title>
 <style>
   :root{
     --navy:#0B1F3A; --navy-2:#132C50; --navy-3:#1C3A66; --line:#2A4A78;
@@ -39,16 +39,10 @@
   .side>.card{margin-bottom:16px;padding:16px}
   .side h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
   .ces p{margin:4px 0;font-size:14px}
-  .stages{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .stages{display:flex;gap:6px}
   .stage{flex:1;text-align:center;padding:8px 4px;border-radius:8px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
   .stage.on{border-color:var(--gold);background:var(--gold-soft);color:var(--text);font-weight:700}
   .stage.done{color:var(--good);border-color:var(--good)}
-  .meters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-  .meter{border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
-  .meter b{display:block;font-size:22px}
-  .meter span{font-size:11px;color:var(--muted)}
-  .meter.ok b{color:var(--good)} .meter.warn b{color:var(--warn)} .meter.bad b{color:var(--bad)}
-  .mk li.star{border-top:1px solid var(--gold);margin-top:4px;padding-top:8px}
   .mk{list-style:none;padding:0;margin:0}
   .mk li{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:13px;border-bottom:1px dashed var(--line)}
   .mk li:last-child{border-bottom:none}
@@ -83,7 +77,6 @@
   .hist .g{font-weight:800;color:var(--text)}
   .verdict{font-size:18px;font-weight:700}
   .parts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
-  .parts .part:last-child{grid-column:span 1}
   .part{background:var(--navy);border:1px solid var(--line);border-radius:10px;padding:14px}
   .part .n{font-size:12px;color:var(--muted);text-transform:uppercase}
   .part .s{font-size:26px;font-weight:800}
@@ -115,8 +108,8 @@
   <div class="brand">
     <div class="mark">HP</div>
     <div>
-      <h1>Solutions Specialist Call Trainer</h1>
-      <div class="sub">Harlow Payments Dallas · Open → Diagnose → Quantify → Reframe → Show the plan → Close</div>
+      <h1>Solutions Specialist Roadmap Trainer</h1>
+      <div class="sub">Harlow Payments Dallas · Pitch → Investigation → Close</div>
     </div>
   </div>
   <a class="back" href="index.html">← Training Center</a>
@@ -128,7 +121,7 @@
   <div class="setup-grid">
     <div class="card">
       <h2 style="margin-top:0">Set up your call</h2>
-      <p class="note" style="margin-top:0">You're calling a confirmed appointment. The AI plays the merchant, and you play the Solutions Specialist. Run the 6-stage call from the Rep Playbook, from the opener to the Tax ID.</p>
+      <p class="note" style="margin-top:0">You're calling a confirmed appointment. The AI plays the merchant, and you play the Solutions Specialist. Run the HPD Sales Roadmap from your pitch line to the Tax ID.</p>
 
       <label for="apiKey">Anthropic API key</label>
       <input id="apiKey" type="password" placeholder="sk-ant-..." autocomplete="off">
@@ -150,11 +143,11 @@
       </div>
       <div class="row">
         <div>
-          <label for="switchPath">Processor history</label>
+          <label for="switchPath">Switch path</label>
           <select id="switchPath">
             <option value="random">Random</option>
-            <option value="yes">Has switched before</option>
-            <option value="no">Never switched</option>
+            <option value="yes">Path A: has switched before</option>
+            <option value="no">Path B: never switched</option>
           </select>
         </div>
         <div>
@@ -167,7 +160,7 @@
         </div>
       </div>
 
-      <div class="toggle"><input type="checkbox" id="liveCoach" checked><label for="liveCoach" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">Live coach: flag mistakes during the call (turn off for a certification run)</label></div>
+      <div class="toggle"><input type="checkbox" id="liveCoach" checked><label for="liveCoach" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">Live coach: flag roadmap mistakes during the call (turn off for a certification run)</label></div>
       <div class="toggle"><input type="checkbox" id="voiceOut"><label for="voiceOut" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">Read the merchant's lines out loud</label></div>
 
       <div style="margin-top:20px"><button class="gold" id="startBtn">Dial the merchant</button></div>
@@ -176,17 +169,14 @@
 
     <div>
       <div class="card">
-        <h3 style="margin-top:0;color:var(--gold)">The call</h3>
+        <h3 style="margin-top:0;color:var(--gold)">The roadmap</h3>
         <ol class="roadmap-mini">
-          <li><b>Open.</b> Give the reason for the call, ask for ten minutes, and get a "Fair enough?"</li>
-          <li><b>Diagnose.</b> Ask open questions ("Walk me through...") and say "Tell me more about that." Talk less than half the call.</li>
-          <li><b>Quantify.</b> Get the merchant to say their yearly fee out loud.</li>
-          <li><b>Reframe.</b> Turn the fee into a choice they can stop making, framed as a yearly loss.</li>
-          <li><b>Show the plan.</b> Bring up the customer fear before they do: signage, receipts with both prices, a staff line, a 30-day check-in.</li>
-          <li><b>Close.</b> Recap, ask for the legal name and Tax ID, then stop talking.</li>
+          <li><b>The Pitch.</b> Who we are and why you're calling: "Hi [Name], this is [Rep] with Harlow Payments. We're a merchant services company out of Plano, and we work with businesses all over the country. I'm calling about our Transact for Free program, where we eliminate your credit card processing fees." Then explain how it works (a small technology fee on card payments covers the cost: a $30 sale on a card rings up $31.20), and go straight to "Have you ever switched processors before?"</li>
+          <li><b>The Investigation.</b> Ask open-ended questions only. Start with "Have you ever switched processors before?" Don't pitch.</li>
+          <li><b>The Close.</b> Once you have all 7 must-know answers, recap their reason and need, give the savings in dollars, deliver the 8-to-5 care promise, then ask: "What's your Tax ID?"</li>
         </ol>
-        <p class="note">Your scorecard grades all 6 stages plus objection handling, and includes line-by-line coaching.</p>
-        <p class="note"><b>Call grade, 1–10 (10 is best):</b> 9–10 textbook call · 7–8 solid, minor misses · 5–6 ran the stages with real gaps · 1–4 skipped major stages</p>
+        <p class="note">Your scorecard grades each part of the roadmap plus objection handling, and includes line-by-line coaching.</p>
+        <p class="note"><b>Call grade, 1–10 (10 is best):</b> 9–10 textbook roadmap call · 7–8 solid, minor misses · 5–6 followed the roadmap with real gaps · 1–4 skipped major parts</p>
       </div>
       <div class="card" style="margin-top:16px">
         <h3 style="margin-top:0;color:var(--gold)">Your recent calls</h3>
@@ -210,20 +200,13 @@
       <div class="card">
         <h3>Where you are</h3>
         <div class="stages">
-          <div class="stage" id="st-open">Open</div>
-          <div class="stage" id="st-diagnose">Diagnose</div>
-          <div class="stage" id="st-quantify">Quantify</div>
-          <div class="stage" id="st-reframe">Reframe</div>
-          <div class="stage" id="st-plan">The plan</div>
+          <div class="stage" id="st-pitch">Pitch</div>
+          <div class="stage" id="st-investigation">Investigation</div>
           <div class="stage" id="st-close">Close</div>
-        </div>
-        <div class="meters">
-          <div class="meter" id="mTalk"><b id="talkShare">0%</b><span>Your talk share (aim under 50%)</span></div>
-          <div class="meter" id="mQs"><b id="qCount">0</b><span>Questions asked (aim 11–14)</span></div>
         </div>
       </div>
       <div class="card">
-        <h3>Discovery answers</h3>
+        <h3>Must-know answers</h3>
         <ul class="mk" id="mkList"></ul>
       </div>
       <div class="card" id="coachCard">
@@ -265,7 +248,7 @@
     <div class="fix" id="scFix"></div>
     <div class="two">
       <div>
-        <h3 style="color:var(--gold)">Playbook checklist</h3>
+        <h3 style="color:var(--gold)">Certification checklist</h3>
         <ul class="cl" id="scChecklist"></ul>
         <h3 style="color:var(--gold);margin-top:24px">What the merchant knew</h3>
         <table class="facts" id="scFacts"></table>
@@ -286,17 +269,15 @@ const KEY_STORE = 'hpd_trainer_key';       // shared with the other HPD trainers
 const HIST_STORE = 'hpd_ss_roadmap_history';
 
 const MUST_KNOW = [
-  {k:'accept',   label:'How customers pay (card share)'},
-  {k:'current',  label:'Current processor and how long'},
+  {k:'years',    label:'Time in business'},
+  {k:'volume',   label:'Monthly processing volume'},
+  {k:'ticket',   label:'Average ticket'},
+  {k:'accept',   label:'How they take cards today'},
+  {k:'services', label:'Other services they want'},
   {k:'switched', label:'Switched before? Why?'},
-  {k:'volume',   label:'Monthly card volume'},
-  {k:'ticket',   label:'Typical sale'},
-  {k:'fees',     label:'Monthly fees'},
-  {k:'improve',  label:'One thing they would change'},
-  {k:'decision', label:'Who else decides'},
-  {k:'yearly',   label:'Merchant said the yearly fee out loud', star:true}
+  {k:'decision', label:'Decision-maker?'},
+  {k:'fees',     label:'Current monthly fees (for the savings number)'}
 ];
-const STAGES = ['open','diagnose','quantify','reframe','plan','close'];
 
 const VERTICALS = {
   restaurant:{label:'Restaurant', names:["Rosa's Cocina","Smokehouse 75","Pho Saigon Grill","Lucky Dragon Kitchen"], vol:[18000,45000], ticket:[22,48],
@@ -330,14 +311,13 @@ const SWITCH_YES_NOW = ["they've been taking good care of me",'it was fine at fi
 const SWITCH_NO_HIKE = ['called and complained until they knocked it back down','canceled and went with a competitor','just paid it, figured it was not worth the hassle'];
 const NOT_DM = ['my wife handles all the contracts and signs everything','my business partner has to sign off on anything like this','my husband does the books and makes these calls'];
 const OBJECTIONS = [
-  "My customers will hate it.",
-  "My competitor down the street doesn't charge it.",
-  "I already build the fees into my prices.",
   "I'm happy with my processor.",
+  "My customers won't like a fee.",
+  "I already build the fees into my prices.",
   "I'm under contract.",
-  "Is this even legal?",
-  "I need to think about it.",
-  "I need to talk to my partner."
+  "This sounds too good to be true.",
+  "I need to talk to my partner first.",
+  "Just send me some information."
 ];
 
 /* ===================== STATE ===================== */
@@ -427,7 +407,6 @@ function buildPersona(){
     service: pick(v.services), improve: pick(v.improve),
     switched: sp, switchWhy: pick(SWITCH_YES_WHY), switchNow: pick(SWITCH_YES_NOW), hikeReaction: pick(SWITCH_NO_HIKE),
     decision: dm, notDm: pick(NOT_DM),
-    cardShare: rint(65,92), tenure: rint(2,9),
     objections: objs,
     taxId: '8' + rint(1,9) + '-' + String(rint(1000000,9999999))
   };
@@ -445,10 +424,10 @@ WHO YOU ARE
 - Name: ${p.owner}, owner of ${p.business} (${p.vertical}).
 - In business ${p.years} years.
 - Process about ${money(p.volume)} a month in cards. Average ticket about ${money(p.ticket)}.
-- You currently take cards with ${p.setup}, and have been with that processor about ${p.tenure} years. About ${p.cardShare}% of your customers pay by card.
+- You currently take cards with ${p.setup}.
 - You pay roughly ${money(p.fees)} a month in processing fees (you know this as "about ${money(p.fees)}," not exact).
 - Something you'd like: ${p.service}.
-- Yesterday a confirmation caller asked what you'd improve, and you said: "${p.improve}". If the rep asks what you'd change, say this.
+- Yesterday a confirmation caller asked what you'd improve, and you said: "${p.improve}".
 ${p.switched==='yes'
  ? `- You HAVE switched processors before. Why: you ${p.switchWhy}. How the current one has been: ${p.switchNow}.`
  : `- You have NEVER switched processors. When a phone or cable bill jumped on you after a few months, you ${p.hikeReaction}.`}
@@ -457,9 +436,7 @@ ${p.decision==='yes'
  : `- You are NOT the only decision-maker: ${p.notDm}. You cannot give a Tax ID or sign without them. If the rep asks to set a time with that person on the line, agree to a specific time.`}
 - Your Tax ID (only give it if you decide to sign up): ${p.taxId}.
 
-CONTEXT: You agreed to this call yesterday, so you expect it. Their program is called "Transact for Free," and the pitch is that it eliminates your processing fees. The posted price becomes the card price and cash customers get a discount.
-
-YOUR HIDDEN WORRY: Your biggest real worry is how your customers will react to paying more with a card. Don't lead with it. If the rep brings it up before you do and gives a concrete plan (signs at the door and counter, receipts that show both prices, a line your staff can say, a check-in after 30 days), you relax. If the rep never brings it up, raise it yourself before you agree to anything: "Won't my customers be upset?" If the rep brushes it off or says "customers won't notice," you don't believe them.
+CONTEXT: You agreed to this call yesterday, so you expect it. Their program is called "Transact for Free." It eliminates your processing fees by adding a small technology fee to card payments (a $30 card sale rings up $31.20). A good pitch tells you who Harlow Payments is, why they're calling and how the program works in about 30 seconds, then asks you a question. If the pitch rambles well past that, get impatient.
 
 TEMPERAMENT: ${temperament}
 
@@ -471,21 +448,18 @@ HOW TO PLAY IT
 - Only share a fact when the rep asks about it, or a question naturally leads to it. Don't volunteer your volume, ticket, years or fees.
 - Answer open-ended questions with real detail. Answer yes/no questions briefly.
 - If the rep pitches features or explains the program for a long time before asking about your business, get impatient or skeptical.
-- If the rep asks what your fees add up to over a year, work it out out loud ("That's... about ${money(p.fees*12)} a year"). That number hits you hard. If the rep just tells you a yearly number instead, be a little skeptical ("Is that right?").
 - If the rep says you'll save money but gives no dollar amount, ask "How much would I actually save?"
-- If you ask "Is this even legal?" and the rep offers to have HPD's compliance team walk you through it, that's fine. If they lecture you on rules, get more skeptical.
-- If the rep asks for a decision too early, before they understand your business, push back.
-- Agree to sign up and give your legal business name and Tax ID only if ALL of these are true: the rep understood your situation, the yearly fee number was said out loud, your worry about customers was handled, your objections were handled, and the rep asked for your info. On "tough," the rep must also stay calm and confident when you hesitate.
+- Agree to sign up and give your Tax ID only if ALL of these are true: the rep understood your situation, you've handled your objections, they told you what you'd save, and they asked for your info. On "tough," you also need to hear why their service is better than what you have now.
 - If the rep is rude, pushy or confusing, you can end the call politely.
 
 OUTPUT FORMAT: Respond with ONLY a JSON object, with no text before or after it:
 {
  "merchant": "what ${p.owner} says out loud",
- "stage": "open" | "diagnose" | "quantify" | "reframe" | "plan" | "close" | "none",   // which call stage the REP's last message was in ("plan" = handling the customer-reaction fear)
- "uncovered": {"accept":bool,"current":bool,"switched":bool,"volume":bool,"ticket":bool,"fees":bool,"improve":bool,"decision":bool,"yearly":bool},  // TRUE only if that fact has been clearly revealed by you at ANY point in the call so far. "yearly" = TRUE only if YOU (the merchant) said your yearly fee number out loud
- "values": {"accept":"","current":"","switched":"","volume":"","ticket":"","fees":"","improve":"","decision":"","yearly":""},  // short note of what was revealed, empty string if not
- "flag": "",          // if the REP's last message broke the playbook, give one short coaching flag, e.g. "You explained the program during Diagnose. Ask a question instead." or "You told them the yearly number. Ask them to work it out." Empty if fine.
- "good": "",          // if the REP's last message was a textbook playbook move, a short note on why. Otherwise empty.
+ "stage": "pitch" | "investigation" | "close" | "none",   // which roadmap part the REP's last message was in
+ "uncovered": {"years":bool,"volume":bool,"ticket":bool,"accept":bool,"services":bool,"switched":bool,"decision":bool,"fees":bool},  // TRUE only if that fact has been clearly revealed by you at ANY point in the call so far
+ "values": {"years":"","volume":"","ticket":"","accept":"","services":"","switched":"","decision":"","fees":""},  // short note of what was revealed, empty string if not
+ "flag": "",          // if the REP's last message broke the roadmap, give one short coaching flag, e.g. "Pitched features during the Investigation. Ask a question instead." Empty if fine.
+ "good": "",          // if the REP's last message was a textbook roadmap move, a short note on why. Otherwise empty.
  "outcome": "ongoing" | "closed" | "callback_set" | "lost"   // closed = you gave your Tax ID; callback_set = a specific time was booked with the decision-maker; lost = you ended the call
 }
 The first message you get is the phone ringing. Answer it naturally, e.g. "${p.business}, this is ${p.owner}." Use stage "none" for that turn.`;
@@ -518,35 +492,19 @@ function show(id){ ['setup','call','score'].forEach(s=>$(s).classList.toggle('hi
 function renderTracker(){
   const ul = $('mkList'); ul.innerHTML='';
   MUST_KNOW.forEach(m=>{
-    const li = el('li', (tracker[m.k]?.got ? 'got' : '') + (m.star ? ' star' : ''));
+    const li = el('li', tracker[m.k]?.got ? 'got' : '');
     li.appendChild(el('span','dot'));
     const t = el('span',null,m.label);
     if(tracker[m.k]?.got && tracker[m.k].val){ t.appendChild(el('span','val',tracker[m.k].val)); }
     li.appendChild(t); ul.appendChild(li);
   });
-  const reachedIdx = STAGES.indexOf(stageReached);
-  STAGES.forEach((s,i)=>{
+  const order = ['pitch','investigation','close'];
+  const reachedIdx = order.indexOf(stageReached);
+  order.forEach((s,i)=>{
     const d = $('st-'+s);
     d.classList.toggle('on', i===reachedIdx);
     d.classList.toggle('done', i<reachedIdx);
   });
-  const ts = talkShare(), qs = questionCount();
-  $('talkShare').textContent = ts + '%';
-  $('mTalk').className = 'meter ' + (ts===0 ? '' : ts < 50 ? 'ok' : ts < 60 ? 'warn' : 'bad');
-  $('qCount').textContent = qs;
-  $('mQs').className = 'meter ' + (qs >= 11 && qs <= 14 ? 'ok' : qs > 14 ? 'warn' : '');
-}
-
-// Share of the call's words spoken by the rep
-function talkShare(){
-  const w = t => (t.trim().match(/\S+/g)||[]).length;
-  let r=0, m=0;
-  history.forEach(h=>{ if(h.role==='rep') r+=w(h.text); else m+=w(h.text); });
-  return (r+m) ? Math.round(100*r/(r+m)) : 0;
-}
-// Number of questions the rep has asked (question marks in rep lines)
-function questionCount(){
-  return history.filter(h=>h.role==='rep').reduce((n,h)=>n+((h.text.match(/\?/g)||[]).length),0);
 }
 
 function addMsg(role, text){
@@ -600,7 +558,8 @@ async function turn(repText, isRing){
     const said = (j.merchant||'').trim() || '...';
     addMsg('merchant', said); history.push({role:'merchant',text:said}); speak(said);
     if(j.uncovered){ MUST_KNOW.forEach(m=>{ if(j.uncovered[m.k]){ const prev=tracker[m.k]; tracker[m.k]={got:true,val:(j.values&&j.values[m.k])||(prev&&prev.val)||''}; } }); }
-    if(STAGES.indexOf(j.stage) > STAGES.indexOf(stageReached)) stageReached = j.stage;
+    const order=['pitch','investigation','close'];
+    if(order.indexOf(j.stage) > order.indexOf(stageReached)) stageReached = j.stage;
     renderTracker();
     if(j.flag) addFlag(j.flag,false);
     if(j.good) addFlag(j.good,true);
@@ -629,57 +588,46 @@ async function endCall(){
   try{ speechSynthesis && speechSynthesis.cancel(); }catch(e){}
   if(!history.some(h=>h.role==='rep')){ show('setup'); return; }
   show('score');
-  $('scGrade').textContent='...'; $('scGrade').className='grade'; $('scVerdict').textContent='Grading your call against the playbook...';
+  $('scGrade').textContent='...'; $('scGrade').className='grade'; $('scVerdict').textContent='Grading your call against the roadmap...';
   $('scOutcome').textContent=''; $('scParts').innerHTML=''; $('scChecklist').innerHTML=''; $('scLines').innerHTML=''; $('scFix').textContent='';
   renderFacts();
 
   const p = persona;
   const transcript = history.map((h,i)=>`${i+1}. ${h.role==='rep'?'REP':'MERCHANT'}: ${h.text}`).join('\n');
-  const system = `You are the sales trainer at Harlow Payments Dallas (HPD), grading a new Solutions Specialist's role-play call against the HPD Rep Playbook for selling Transact for Free. Be direct and specific, like a sales manager who wants the rep to win. Quote the rep's actual words.
+  const system = `You are the sales trainer at Harlow Payments Dallas (HPD), grading a new Solutions Specialist's role-play call against the HPD Sales Roadmap. Be direct and specific, like a sales manager who wants the rep to win. Quote the rep's actual words.
 
-THE PLAYBOOK: A 6-STAGE CALL
-1. Open (about 30 seconds): "Hi [Name], this is [rep] with Harlow Payments. We set this call up yesterday about cutting out your card processing fees. Do you have about ten minutes?" Then: "I'll ask a few questions about how you take cards today. If it makes sense, I'll show you exactly what you'd keep. If it doesn't, I'll tell you that too. Fair enough?"
-2. Diagnose (5-7 minutes, rep talks under 40%): open questions that get long answers ("Walk me through...", "Help me understand...", "Talk to me about..."), followed by "Tell me more about that." Learn: how customers pay and the card share; current processor and how long; whether they've switched before and why; monthly card volume and typical sale; what they pay in fees; the one thing they'd change; who else decides. No pitching or explaining. Top reps ask about 11-14 targeted questions spread across the call, not front-loaded like a checklist.
-3. Quantify (1-2 minutes): get the MERCHANT to say the yearly fee out loud ("What does that add up to over a year?"), then: "If someone told you to write a check for [yearly] to your processor every January, would you do it?" A number the rep states gets argued with; a number the merchant says gets believed.
-4. Reframe (1-2 minutes): fee as a choice, not a cost of doing business; about a third of small businesses have stopped paying it; the gas station card price / cash price comparison; "The real question isn't whether you can afford to switch. It's whether you want to keep paying [yearly] a year when you don't have to. Does that make sense?" Loss framing (yearly loss) beats gain framing (monthly savings).
-5. Show the plan (2-3 minutes): bring up the customer-reaction fear BEFORE the merchant does ("The question most owners ask me at this point is, 'Won't my customers be upset?'"), then the 4-part plan: signage at the door and counter, receipts that show both prices, one line staff can say, and the rep as direct contact with a 30-day check-in.
-6. Close (1 minute): recap the yearly amount they'd keep, the thing they wanted to improve, and the rep as direct contact; ask "What's the legal name on the business, and your Tax ID?"; then STOP TALKING. If they hesitate: "What part of this are you still thinking about?" Answer that one point, then ask again.
-Objections: acknowledge, ASK FIRST, answer in 1-2 sentences, confirm. Never argue. For "Is this even legal?" the rep asks what they've heard and offers HPD's compliance team; the rep should not lecture on rules.
-Never say: "There's no risk." "Customers won't notice."
+THE HPD SALES ROADMAP
+Part 1, The Pitch: Tell the merchant who we are and why we're calling, and explain Transact for Free. Word for word: "Hi [Name], this is [Rep] with Harlow Payments. We're a merchant services company out of Plano, and we work with businesses all over the country. I'm calling about our Transact for Free program, where we eliminate your credit card processing fees." Then explain it: "Here's how it works. Instead of you paying fees every time a customer uses a card, a small technology fee on card payments covers the cost. So a $30 sale on a card rings up $31.20, and that $1.20 pays for the processing, not you. The terminal does it automatically, and the money you're paying your processor today stays in your pocket." Then: "About a third of small businesses already run their card fees this way, and I'm your go-to person from 8 to 5 if anything ever comes up." Keep it under about 30 seconds, then go straight to a question: "Have you ever switched processors before?" No long feature dumps beyond this.
+Part 2, The Investigation: Discovery only. Understand how the merchant prefers to take cards and their past experience with processors. Ask open-ended questions; do NOT explain or pitch services. Suggested opener: "Have you ever switched processors before?" If YES: "What made you switch?" → "Since you switched to save, what results have you seen?" → "Besides the cost savings, is there anything you like, or something you wish could be improved?" If NO: "How long have you been in business?" → compliment → "Have you ever signed up for a phone or cable service that started at one price, then suddenly increased?" → "What did you do when that happened?" Use the merchant's name.
+Part 3, The Close: Before closing, the rep must know: (1) years in business, (2) monthly volume, (3) average ticket, (4) how they currently accept cards, (5) additional services wanted, (6) switched before and why, (7) decision-maker. Then: confirm the merchant's reason in their words ("You switched to save money, right?"), confirm the need ("Would a mobile device be helpful?"), give the savings as a dollar amount ("you'd save ___ a month"), deliver the customer-care promise (most valuable aspect, want you with us 6 months, a year and beyond, earning your business every day, I'm your go-to person from 8 to 5, 24-hour service but call me first), then ask: "All I need is a bit of information to get started. What's your Tax ID?" and stop talking.
+Objections: Acknowledge, answer in 1–2 sentences, then ask a question to get back on the roadmap. Never argue or lecture.
 Language: always "Transact for Free," never "cash discount" or "dual pricing."
 
-MEASURED BY THE TRAINER APP: rep talk share by words = ${talkShare()}%; questions asked by the rep = ${questionCount()}.
-
-MERCHANT FACTS (hidden from the rep): ${p.owner}, ${p.business}, ${p.vertical}; ${p.years} years; ${money(p.volume)}/mo in cards (${p.cardShare}% of customers pay by card); typical sale ${money(p.ticket)}; takes cards with ${p.setup} for about ${p.tenure} years; fees about ${money(p.fees)}/mo (about ${money(p.fees*12)}/yr); would change: "${p.improve}"; wants ${p.service}; ${p.switched==='yes'?`switched before because they ${p.switchWhy}; now: ${p.switchNow}`:`never switched; on a price hike they ${p.hikeReaction}`}; decision-maker: ${p.decision==='yes'?'yes':'no ('+p.notDm+')'}; planned objections: ${p.objections.join(' | ')||'none'}; hidden worry: customer reaction; difficulty ${p.difficulty}. Call outcome: ${outcome}.
+MERCHANT FACTS (hidden from the rep): ${p.owner}, ${p.business}, ${p.vertical}; ${p.years} years; ${money(p.volume)}/mo; avg ticket ${money(p.ticket)}; takes cards with ${p.setup}; fees about ${money(p.fees)}/mo; wants ${p.service}; ${p.switched==='yes'?`switched before because they ${p.switchWhy}; now: ${p.switchNow}`:`never switched; on a price hike they ${p.hikeReaction}`}; decision-maker: ${p.decision==='yes'?'yes':'no ('+p.notDm+')'}; planned objections: ${p.objections.join(' | ')||'none'}; difficulty ${p.difficulty}. Call outcome: ${outcome}.
 
 Respond with ONLY a JSON object:
 {
- "grade": 1-10,   // whole number, 10 is best. 10 = textbook 6-stage call that closed or booked the decision-maker; 8-9 = strong, minor misses; 6-7 = ran the stages with real gaps; 4-5 = skipped or rushed a major stage; 1-3 = off the playbook
+ "grade": 1-10,   // whole number, 10 is best. 10 = textbook roadmap call that closed or set the decision-maker callback; 8-9 = strong, minor misses; 6-7 = followed the roadmap with real gaps; 4-5 = skipped or rushed a major part; 1-3 = off the roadmap
  "verdict": "one punchy sentence",
  "parts": {
-   "open": {"score":1-10,"note":"1-2 sentences"},
-   "diagnose": {"score":1-10,"note":"1-2 sentences"},
-   "quantify": {"score":1-10,"note":"1-2 sentences"},
-   "reframe": {"score":1-10,"note":"1-2 sentences"},
-   "plan": {"score":1-10,"note":"1-2 sentences"},
+   "pitch": {"score":1-10,"note":"1-2 sentences"},
+   "investigation": {"score":1-10,"note":"1-2 sentences"},
    "close": {"score":1-10,"note":"1-2 sentences"},
    "objections": {"score":1-10,"note":"1-2 sentences; if no objections came up, say so and score on general call control"}
  },
  "checklist": [
-   {"item":"Open: gave the reason for the call and got a \\"fair enough\\"","pass":bool,"note":""},
-   {"item":"Diagnose: open questions with \\"tell me more\\" follow-ups, no pitching","pass":bool,"note":""},
-   {"item":"Talked less than half the call","pass":bool,"note":"use the measured talk share"},
-   {"item":"Asked about 11 to 14 questions, spread across the call","pass":bool,"note":"use the measured count; note if front-loaded"},
-   {"item":"Collected the discovery answers","pass":bool,"note":"list any missing"},
-   {"item":"The merchant said the yearly fee out loud","pass":bool,"note":""},
-   {"item":"Framed the fee as a yearly loss and a choice, and got agreement","pass":bool,"note":""},
-   {"item":"Brought up the customer-reaction fear before the merchant did","pass":bool,"note":""},
-   {"item":"Gave the plan: signage, receipts with both prices, a staff line, a 30-day check-in","pass":bool,"note":""},
-   {"item":"Recapped, then asked for the legal name and Tax ID","pass":bool,"note":""},
-   {"item":"Stayed silent after the ask, and on hesitation asked what they're still thinking about","pass":bool,"note":""},
-   {"item":"Objections: acknowledged, asked first, answered in 1 to 2 sentences, confirmed","pass":bool,"note":""},
-   {"item":"Never said \\"There's no risk\\" or \\"Customers won't notice\\"","pass":bool,"note":""},
-   {"item":"Said \\"Transact for Free\\", never \\"cash discount\\" or \\"dual pricing\\"","pass":bool,"note":""}
+   {"item":"Delivered the pitch: who we are (Harlow Payments, Plano), why we're calling (Transact for Free eliminates your fees)","pass":bool,"note":""},
+   {"item":"Explained how Transact for Free works (technology fee on card payments, the $30 to $31.20 example)","pass":bool,"note":""},
+   {"item":"Went straight to questions after the pitch","pass":bool,"note":""},
+   {"item":"Ran the Investigation with open-ended questions, no pitching","pass":bool,"note":""},
+   {"item":"Used the right switch path (yes or no) follow-ups","pass":bool,"note":""},
+   {"item":"Collected all 7 must-know answers before closing","pass":bool,"note":"list any missing"},
+   {"item":"Confirmed the merchant's reason and need in their words","pass":bool,"note":""},
+   {"item":"Gave the savings as a dollar amount","pass":bool,"note":""},
+   {"item":"Delivered the 8-to-5 customer-care promise","pass":bool,"note":""},
+   {"item":"Asked for the Tax ID, then stopped talking","pass":bool,"note":""},
+   {"item":"Handled objections and got back on the roadmap with a question","pass":bool,"note":""},
+   {"item":"Said 'Transact for Free', never 'cash discount' or 'dual pricing'","pass":bool,"note":""}
  ],
  "lines": [ {"n": <transcript line number of a REP line>, "tag":"strong"|"okay"|"weak", "note":"what worked, or the better line to say instead"} ],   // cover every REP line
  "top_fix": "The single most important thing to change next call, with the exact words to use."
@@ -712,8 +660,8 @@ function renderScore(r){
   $('scGrade').textContent = g; $('scGrade').appendChild(el('small',null,'/10'));
   $('scGrade').className = 'grade ' + gradeBand(g);
   $('scVerdict').textContent = r.verdict || '';
-  $('scOutcome').textContent = 'Outcome: ' + outcomeLabel() + ' · ' + persona.vertical + ', ' + persona.difficulty + ' · Talk share ' + talkShare() + '% · ' + questionCount() + ' questions';
-  const names = {open:'1 · Open',diagnose:'2 · Diagnose',quantify:'3 · Quantify',reframe:'4 · Reframe',plan:'5 · Show the plan',close:'6 · Close',objections:'Objections'};
+  $('scOutcome').textContent = 'Outcome: ' + outcomeLabel() + ' · ' + persona.vertical + ', ' + persona.difficulty;
+  const names = {pitch:'Part 1 · Pitch',investigation:'Part 2 · Investigation',close:'Part 3 · Close',objections:'Objections'};
   Object.keys(names).forEach(k=>{
     const pt = (r.parts||{})[k]||{score:0,note:''};
     const d = el('div','part');
@@ -744,9 +692,9 @@ function renderFacts(){
   const p=persona, t=$('scFacts'); t.innerHTML='';
   const rows=[
     ['Merchant',p.owner+', '+p.business],['Years in business',p.years],['Monthly volume',money(p.volume)],['Average ticket',money(p.ticket)],
-    ['Takes cards with',p.setup+' (about '+p.tenure+' years)'],['Card share',p.cardShare+'% of customers'],['Monthly fees','about '+money(p.fees)+' (about '+money(p.fees*12)+' a year)'],['Would change','"'+p.improve+'"'],['Wanted',p.service],
+    ['Takes cards with',p.setup],['Monthly fees (the savings)','about '+money(p.fees)],['Wanted',p.service],
     ['Switched before?',p.switched==='yes'?('Yes. They '+p.switchWhy+'. Now: '+p.switchNow):('No. On a price hike they '+p.hikeReaction)],
-    ['Decision-maker?',p.decision==='yes'?'Yes':'No: '+p.notDm],['Planned objections',p.objections.join(' / ')||'None'],['Hidden worry','How customers will react to the card price']
+    ['Decision-maker?',p.decision==='yes'?'Yes':'No: '+p.notDm],['Planned objections',p.objections.join(' / ')||'None']
   ];
   rows.forEach(([a,b])=>{ const tr=el('tr'); tr.appendChild(el('td',null,a)); tr.appendChild(el('td',null,String(b))); t.appendChild(tr); });
 }
