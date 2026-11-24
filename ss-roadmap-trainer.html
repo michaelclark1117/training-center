@@ -311,14 +311,20 @@ const SWITCH_YES_NOW = ["they've been taking good care of me",'it was fine at fi
 const SWITCH_NO_HIKE = ['called and complained until they knocked it back down','canceled and went with a competitor','just paid it, figured it was not worth the hassle'];
 const NOT_DM = ['my wife handles all the contracts and signs everything','my business partner has to sign off on anything like this','my husband does the books and makes these calls'];
 const OBJECTIONS = [
-  "I'm happy with my processor.",
-  "My customers won't like a fee.",
-  "I already build the fees into my prices.",
-  "I'm under contract.",
-  "This sounds too good to be true.",
-  "I need to talk to my partner first.",
-  "Just send me some information."
+  "I'm not interested.",
+  "I'm busy right now.",
+  "I just switched processors.",
+  "I'm in a contract.",
+  "A family member (or a friend) handles this for me.",
+  "I'm happy with what I have."
 ];
+// How the merchant plays each objection, and what a good rebuttal sounds like (from the HPD rebuttal cards)
+const OBJECTION_GUIDE = `- "I'm not interested.": a reflex. You let it go if the rep separates "not interested in switching" from "not interested in knowing what you pay" and asks you a question.
+- "I'm busy right now.": you really are a little busy. You give the rep 90 seconds if they ask for a short, specific amount of time. If they ramble, you push for a callback.
+- "I just switched processors.": say it like you just went through the hassle (only if you have switched before). You open up if the rep asks what made you switch and what results you've seen since.
+- "I'm in a contract.": you don't know the exact end date or early termination fee off the top of your head. You soften if the rep asks about them and offers to do the math with you. If they promise to buy out your contract, get suspicious.
+- "A family member (or a friend) handles this for me.": if you are not the only decision-maker, it's the family member who decides; otherwise it's a friend who set up your processing. You let it go if the rep respects that person and asks whether they know your current rate or have offered to take your fees to zero, or offers to get the decision-maker on the call. If the rep knocks your friend or family, get defensive.
+- "I'm happy with what I have.": you like your processor's service. You soften if the rep agrees, then asks when you last checked what you're actually paying. If they argue that you shouldn't be happy, push back.`;
 
 /* ===================== STATE ===================== */
 let persona = null, history = [], apiHistory = [], tracker = {}, stageReached = 'none', flagsSeen = new Set(), busy = false, timerInt = null, startTime = 0, outcome = 'ongoing';
@@ -395,7 +401,7 @@ function buildPersona(){
   const rate = 0.026 + Math.random()*0.012;
   const nObj = diff==='easy' ? rint(0,1) : diff==='standard' ? 2 : rint(3,4);
   let pool = OBJECTIONS.slice();
-  if(dm==='yes') pool = pool.filter(o=>!o.includes('partner'));
+  if(sp==='no') pool = pool.filter(o=>!o.includes('just switched'));
   const objs = [];
   while(objs.length<nObj && pool.length){ objs.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]); }
   return {
@@ -440,7 +446,9 @@ CONTEXT: You agreed to this call yesterday, so you expect it. Their program is c
 
 TEMPERAMENT: ${temperament}
 
-OBJECTIONS: Raise these naturally at realistic moments (not all at once, never as a list), ${p.objections.length? p.objections.map(o=>`"${o}"`).join(', ') : 'none, unless the rep gives you a reason'}. If the rep handles one well (acknowledges it, answers briefly, asks you a question), let it go. If they argue or lecture, push harder.
+OBJECTIONS: Raise these naturally at realistic moments (not all at once, never as a list), ${p.objections.length? p.objections.map(o=>`"${o}"`).join(', ') : 'none, unless the rep gives you a reason'}. If the rep handles one well (acknowledges it, answers briefly, asks you a question), let it go. If they argue or lecture, push harder. If the first rebuttal is weak, repeat the objection once more before letting it go.
+HOW TO PLAY EACH OBJECTION:
+${OBJECTION_GUIDE}
 
 HOW TO PLAY IT
 - Speak ONLY as ${p.owner}. Never write lines for the rep. Never break character. Never coach.
@@ -600,7 +608,13 @@ THE HPD SALES ROADMAP
 Part 1, The Pitch: Tell the merchant who we are and why we're calling, and explain Transact for Free. Word for word: "Hi [Name], this is [Rep] with Harlow Payments. We're a merchant services company out of Plano, and we work with businesses all over the country. I'm calling about our Transact for Free program, where we eliminate your credit card processing fees." Then explain it: "Here's how it works. Instead of you paying fees every time a customer uses a card, a small technology fee on card payments covers the cost. So a $30 sale on a card rings up $31.20, and that $1.20 pays for the processing, not you. The terminal does it automatically, and the money you're paying your processor today stays in your pocket." Then: "About a third of small businesses already run their card fees this way, and I'm your go-to person from 8 to 5 if anything ever comes up." Keep it under about 30 seconds, then go straight to a question: "Have you ever switched processors before?" No long feature dumps beyond this.
 Part 2, The Investigation: Discovery only. Understand how the merchant prefers to take cards and their past experience with processors. Ask open-ended questions; do NOT explain or pitch services. Suggested opener: "Have you ever switched processors before?" If YES: "What made you switch?" → "Since you switched to save, what results have you seen?" → "Besides the cost savings, is there anything you like, or something you wish could be improved?" If NO: "How long have you been in business?" → compliment → "Have you ever signed up for a phone or cable service that started at one price, then suddenly increased?" → "What did you do when that happened?" Use the merchant's name.
 Part 3, The Close: Before closing, the rep must know: (1) years in business, (2) monthly volume, (3) average ticket, (4) how they currently accept cards, (5) additional services wanted, (6) switched before and why, (7) decision-maker. Then: confirm the merchant's reason in their words ("You switched to save money, right?"), confirm the need ("Would a mobile device be helpful?"), give the savings as a dollar amount ("you'd save ___ a month"), deliver the customer-care promise (most valuable aspect, want you with us 6 months, a year and beyond, earning your business every day, I'm your go-to person from 8 to 5, 24-hour service but call me first), then ask: "All I need is a bit of information to get started. What's your Tax ID?" and stop talking.
-Objections: Acknowledge, answer in 1–2 sentences, then ask a question to get back on the roadmap. Never argue or lecture.
+Objections: Acknowledge, answer in 1–2 sentences, then ask a question to get back on the roadmap. Never argue or lecture. HPD's rebuttal cards for the six common objections:
+- "Not interested": separate "not interested in switching" from "not interested in knowing what you pay"; offer to make the fees visible. Back on the roadmap with "Have you ever switched processors before?"
+- "Busy": shrink the ask to about 90 seconds and ask if that's fair. Back on the roadmap with "Have you ever switched processors before?"
+- "Just switched": "What made you switch?" then "Since you switched to save, what results have you seen?" The decision to stay is also a decision; make it an informed one.
+- "In a contract": ask when it ends and what the early termination fee is, and do the math with them (if the fee is less than two or three months of savings, staying costs more). Never promise a buyout. Back on the roadmap with "How long have you been with them?"
+- "A family member or friend handles this": never attack the relationship. Ask whether the friend knows the current effective rate or has offered to take the fees to zero. If a family member makes the decision, get them on the call. Back on the roadmap with "Have you ever switched processors before?"
+- "Happy with what I have": happy is emotional, overcharging is mathematical. Agree, then ask when they last checked their effective rate. Back on the roadmap with "Besides the cost savings, is there anything you like, or something you wish could be improved?"
 Language: always "Transact for Free," never "cash discount" or "dual pricing."
 
 MERCHANT FACTS (hidden from the rep): ${p.owner}, ${p.business}, ${p.vertical}; ${p.years} years; ${money(p.volume)}/mo; avg ticket ${money(p.ticket)}; takes cards with ${p.setup}; fees about ${money(p.fees)}/mo; wants ${p.service}; ${p.switched==='yes'?`switched before because they ${p.switchWhy}; now: ${p.switchNow}`:`never switched; on a price hike they ${p.hikeReaction}`}; decision-maker: ${p.decision==='yes'?'yes':'no ('+p.notDm+')'}; planned objections: ${p.objections.join(' | ')||'none'}; difficulty ${p.difficulty}. Call outcome: ${outcome}.
@@ -627,6 +641,7 @@ Respond with ONLY a JSON object:
    {"item":"Delivered the 8-to-5 customer-care promise","pass":bool,"note":""},
    {"item":"Asked for the Tax ID, then stopped talking","pass":bool,"note":""},
    {"item":"Handled objections and got back on the roadmap with a question","pass":bool,"note":""},
+   {"item":"Used the HPD rebuttal for each objection (see the rebuttal cards above)","pass":bool,"note":"name any objection handled off-card"},
    {"item":"Said 'Transact for Free', never 'cash discount' or 'dual pricing'","pass":bool,"note":""}
  ],
  "lines": [ {"n": <transcript line number of a REP line>, "tag":"strong"|"okay"|"weak", "note":"what worked, or the better line to say instead"} ],   // cover every REP line
